@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="STM32F103C8T6 Hal库配置# Hal图形化配置# 1.System内核配置# 下载器用 ST-Link：选 Serial Wire 2.RCC 系统时钟配置# 开启LSE,HSE外部时钟 时钟树配置 3.GPIO配置# 配置对应输入输出模式和开启引脚，标签和具体功能 4.USART配置# Hal常用函数# GPIO &amp; EXTI# HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);	//写高低电平 HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_15);	//电平翻转 HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);	//读取电平，有返回值 //中断回调函数 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);	__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_1); __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_1);USART# HAL_UART_Transmit(); 串口发送数据，使用超时管理机制 HAL_UART_Receive(); 串口接收数据，使用超时管理机制 HAL_UART_Transmit_IT(); 串口中断模式发送 HAL_UART_Receive_IT(); 串口中断模式接收 HAL_UART_Transmit_DMA(); 串口DMA模式发送 HAL_UART_Transmit_DMA(); 串口DMA模式接收 //重定向 c 库函数 printf 到串口 USARTx，重定向后可使用 printf 函数 int fputc(int ch, FILE *f) { HAL_UART_Transmit(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } //重定向 c 库函数 scanf 到串口 USARTx，重写向后可使用 scanf、getchar 等函数 int fgetc(FILE *f) { int ch; /* 等待串口输入数据 */ while (__HAL_UART_GET_FLAG(&amp;UartHandle, UART_FLAG_RXNE) == RESET); HAL_UART_Receive(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } HAL_UART_GetState(&amp;huart1); //中断回调函数 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart); //发送完成回调函数 void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart); //发送完成过半 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart); //接收完成回调函数 void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart); //接收完成过半 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart); //错误处理回调函数 __HAL_UART_ENABLE_IT(&amp;huart1, UART_IT_IDLE);	//使能中断 __HAL_UART_GET_FLAG(&amp;huart1,UART_FLAG_IDLE);	//过去中断标志位	__HAL_UART_CLEAR_FLAG(&amp;huart1, UART_FLAG_RXNE); //中断标志位清零 /*中断标志位 接收缓冲区非空标志位 (USART_FLAG_RXNE) 发送缓冲区空标志位 (USART_FLAG_TXE) 发送完毕标志位 (USART_FLAG_TC) 奇偶校验错误标志位 (USART_FLAG_PE) 帧错误标志位 (USART_FLAG_FE) 噪声错误标志位 (USART_FLAG_NE) 串口空闲标志位 (USART_FLAG_IDLE) LIN 帧标志位 (USART_FLAG_LBD)*/ ">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://Patchouli-ovo.github.io/docs/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/">
+	<meta property="og:site_name" content="n">
+	<meta property="og:title" content="STM32F103">
+	<meta property="og:description" content="STM32F103C8T6 Hal库配置# Hal图形化配置# 1.System内核配置# 下载器用 ST-Link：选 Serial Wire 2.RCC 系统时钟配置# 开启LSE,HSE外部时钟 时钟树配置 3.GPIO配置# 配置对应输入输出模式和开启引脚，标签和具体功能 4.USART配置# Hal常用函数# GPIO &amp; EXTI# HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);	//写高低电平 HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_15);	//电平翻转 HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);	//读取电平，有返回值 //中断回调函数 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);	__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_1); __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_1);USART# HAL_UART_Transmit(); 串口发送数据，使用超时管理机制 HAL_UART_Receive(); 串口接收数据，使用超时管理机制 HAL_UART_Transmit_IT(); 串口中断模式发送 HAL_UART_Receive_IT(); 串口中断模式接收 HAL_UART_Transmit_DMA(); 串口DMA模式发送 HAL_UART_Transmit_DMA(); 串口DMA模式接收 //重定向 c 库函数 printf 到串口 USARTx，重定向后可使用 printf 函数 int fputc(int ch, FILE *f) { HAL_UART_Transmit(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } //重定向 c 库函数 scanf 到串口 USARTx，重写向后可使用 scanf、getchar 等函数 int fgetc(FILE *f) { int ch; /* 等待串口输入数据 */ while (__HAL_UART_GET_FLAG(&amp;UartHandle, UART_FLAG_RXNE) == RESET); HAL_UART_Receive(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } HAL_UART_GetState(&amp;huart1); //中断回调函数 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart); //发送完成回调函数 void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart); //发送完成过半 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart); //接收完成回调函数 void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart); //接收完成过半 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart); //错误处理回调函数 __HAL_UART_ENABLE_IT(&amp;huart1, UART_IT_IDLE);	//使能中断 __HAL_UART_GET_FLAG(&amp;huart1,UART_FLAG_IDLE);	//过去中断标志位	__HAL_UART_CLEAR_FLAG(&amp;huart1, UART_FLAG_RXNE); //中断标志位清零 /*中断标志位 接收缓冲区非空标志位 (USART_FLAG_RXNE) 发送缓冲区空标志位 (USART_FLAG_TXE) 发送完毕标志位 (USART_FLAG_TC) 奇偶校验错误标志位 (USART_FLAG_PE) 帧错误标志位 (USART_FLAG_FE) 噪声错误标志位 (USART_FLAG_NE) 串口空闲标志位 (USART_FLAG_IDLE) LIN 帧标志位 (USART_FLAG_LBD)*/">
+	<meta property="og:locale" content="en">
+	<meta property="og:type" content="article">
+		<meta property="article:section" content="docs">
+
+
+	<meta itemprop="name" content="STM32F103">
+	<meta itemprop="description" content="STM32F103C8T6 Hal库配置# Hal图形化配置# 1.System内核配置# 下载器用 ST-Link：选 Serial Wire 2.RCC 系统时钟配置# 开启LSE,HSE外部时钟 时钟树配置 3.GPIO配置# 配置对应输入输出模式和开启引脚，标签和具体功能 4.USART配置# Hal常用函数# GPIO &amp; EXTI# HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);	//写高低电平 HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_15);	//电平翻转 HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);	//读取电平，有返回值 //中断回调函数 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);	__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_1); __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_1);USART# HAL_UART_Transmit(); 串口发送数据，使用超时管理机制 HAL_UART_Receive(); 串口接收数据，使用超时管理机制 HAL_UART_Transmit_IT(); 串口中断模式发送 HAL_UART_Receive_IT(); 串口中断模式接收 HAL_UART_Transmit_DMA(); 串口DMA模式发送 HAL_UART_Transmit_DMA(); 串口DMA模式接收 //重定向 c 库函数 printf 到串口 USARTx，重定向后可使用 printf 函数 int fputc(int ch, FILE *f) { HAL_UART_Transmit(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } //重定向 c 库函数 scanf 到串口 USARTx，重写向后可使用 scanf、getchar 等函数 int fgetc(FILE *f) { int ch; /* 等待串口输入数据 */ while (__HAL_UART_GET_FLAG(&amp;UartHandle, UART_FLAG_RXNE) == RESET); HAL_UART_Receive(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } HAL_UART_GetState(&amp;huart1); //中断回调函数 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart); //发送完成回调函数 void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart); //发送完成过半 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart); //接收完成回调函数 void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart); //接收完成过半 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart); //错误处理回调函数 __HAL_UART_ENABLE_IT(&amp;huart1, UART_IT_IDLE);	//使能中断 __HAL_UART_GET_FLAG(&amp;huart1,UART_FLAG_IDLE);	//过去中断标志位	__HAL_UART_CLEAR_FLAG(&amp;huart1, UART_FLAG_RXNE); //中断标志位清零 /*中断标志位 接收缓冲区非空标志位 (USART_FLAG_RXNE) 发送缓冲区空标志位 (USART_FLAG_TXE) 发送完毕标志位 (USART_FLAG_TC) 奇偶校验错误标志位 (USART_FLAG_PE) 帧错误标志位 (USART_FLAG_FE) 噪声错误标志位 (USART_FLAG_NE) 串口空闲标志位 (USART_FLAG_IDLE) LIN 帧标志位 (USART_FLAG_LBD)*/">
+	<meta itemprop="wordCount" content="1643">
+
+<title>STM32F103 • n</title>
+<link rel="icon" href="/favicon.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="https://Patchouli-ovo.github.io/docs/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/">
+<link rel="stylesheet" href="/book.min.b40f9323c2bd696e72b5634db2fe9e4547a911d3de99a6af1fd8fd0348bda410.css" integrity="sha256-tA&#43;TI8K9aW5ytWNNsv6eRUepEdPemaavH9j9A0i9pBA=" crossorigin="anonymous">
+
+
+  
+</head>
+<body dir="ltr" class="book-kind-page book-type-docs">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    
+<aside class="book-menu">
+  <div class="book-menu-content">
+    
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><span>n</span>
+  </a>
+</h2>
+
+
+
+
+
+
+
+
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/" class="active">
+      STM32F103</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E7%AB%A0%E8%8A%82%E4%BA%8C/" class="">
+      章节二</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E7%AB%A0%E8%8A%82%E4%B8%89/" class="">
+      章节三</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E7%AB%A0%E8%8A%82%E5%9B%9B/" class="">
+      章节四</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E7%AB%A0%E8%8A%82%E4%BA%94/" class="">
+      章节五</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+
+  </div>
+</aside>
+ 
+
+    <div class="book-page">
+      <header class="book-header hidden">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>STM32F103</h3>
+
+  <label for="toc-control">
+    
+    <img src="/icons/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#hal图形化配置">Hal图形化配置</a>
+      <ul>
+        <li><a href="#1system内核配置">1.System内核配置</a></li>
+        <li><a href="#2rcc-系统时钟配置">2.RCC 系统时钟配置</a></li>
+        <li><a href="#3gpio配置">3.GPIO配置</a></li>
+        <li><a href="#4usart配置">4.USART配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#hal常用函数">Hal常用函数</a>
+      <ul>
+        <li><a href="#gpio--exti">GPIO &amp; EXTI</a></li>
+        <li><a href="#usart">USART</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#stm32工程文件配置">STM32工程文件配置</a></li>
+    <li><a href="#stm32系统架构">STM32系统架构</a></li>
+    <li><a href="#存储器映像">存储器映像</a></li>
+    <li><a href="#复位与时钟控制rcc">复位与时钟控制(RCC)</a>
+      <ul>
+        <li><a href="#stm32时钟树">STM32时钟树</a></li>
+        <li><a href="#stm32时钟树结构">STM32时钟树结构</a></li>
+        <li><a href="#rcc的寄存器配置">RCC的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#alt-text"><img src="image-127.png" alt="alt text"> <img src="image-128.png" alt="alt text"></a></li>
+    <li><a href="#gpio">GPIO</a>
+      <ul>
+        <li><a href="#gpio的基本结构">GPIO的基本结构</a></li>
+        <li><a href="#gpio的8种工作模式">GPIO的8种工作模式</a></li>
+        <li><a href="#外设的gpio配置">外设的GPIO配置</a></li>
+        <li><a href="#stm32f103c8t6引脚定义">STM32F103C8T6引脚定义</a></li>
+        <li><a href="#gpio的寄存器配置">GPIO的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#alt-text-1"><img src="image-149.png" alt="alt text"></a></li>
+    <li><a href="#afio">AFIO</a>
+      <ul>
+        <li><a href="#afio的寄存器配置">AFIO的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#中断">中断</a>
+      <ul>
+        <li><a href="#中断向量表">中断向量表</a></li>
+        <li><a href="#中断体系架构">中断体系架构</a></li>
+        <li><a href="#nvic嵌套向量中断控制器">NVIC嵌套向量中断控制器</a></li>
+        <li><a href="#exti外部中断控制器">EXTI外部中断控制器</a></li>
+        <li><a href="#exti的寄存器配置">EXTI的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#alt-text-2"><img src="image-166.png" alt="alt text"></a></li>
+    <li><a href="#定时器tim">定时器(TIM)</a>
+      <ul>
+        <li><a href="#基本定时器">基本定时器</a></li>
+        <li><a href="#通用定时器">通用定时器</a></li>
+        <li><a href="#高级定时器">高级定时器</a></li>
+        <li><a href="#系统滴答定时器systick">系统滴答定时器(SysTick)</a></li>
+      </ul>
+    </li>
+    <li><a href="#直接存储器访问dma">直接存储器访问(DMA)</a>
+      <ul>
+        <li><a href="#dma概念">DMA概念</a></li>
+        <li><a href="#dma结构图">DMA结构图</a></li>
+        <li><a href="#dma请求映像">DMA请求映像</a></li>
+        <li><a href="#dma的寄存器配置">DMA的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#模拟-数字转换器adc">模拟-数字转换器(ADC)</a>
+      <ul>
+        <li><a href="#adc概念">ADC概念</a></li>
+        <li><a href="#adc结构图">ADC结构图</a></li>
+        <li><a href="#adc输入引脚通道">ADC输入引脚通道</a></li>
+        <li><a href="#adc转换模式">ADC转换模式</a></li>
+        <li><a href="#adc的寄存器配置">ADC的寄存器配置</a></li>
+        <li><a href="#adc单通道转换代码示例">ADC单通道转换代码示例</a></li>
+        <li><a href="#adc连续扫描示例代码">ADC连续扫描示例代码</a></li>
+      </ul>
+    </li>
+    <li><a href="#备份寄存器bkp">备份寄存器(BKP)</a>
+      <ul>
+        <li><a href="#bkp概念">BKP概念</a></li>
+        <li><a href="#bkp的基本结构">BKP的基本结构</a></li>
+        <li><a href="#bkp的寄存器配置">BKP的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#实时时钟rtc">实时时钟(RTC)</a>
+      <ul>
+        <li><a href="#unix时间戳概念">Unix时间戳概念</a></li>
+        <li><a href="#rtc概念">RTC概念</a></li>
+        <li><a href="#rtc结构图">RTC结构图</a></li>
+        <li><a href="#rtc的寄存器配置">RTC的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#通讯协议">通讯协议</a>
+      <ul>
+        <li><a href="#usart-2">USART</a></li>
+      </ul>
+    </li>
+    <li><a href="#alt-text-3"><img src="image-279.png" alt="alt text"> <img src="image-280.png" alt="alt text"></a>
+      <ul>
+        <li><a href="#spi-1">SPI</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"><h1 id="stm32f103c8t6-hal库配置">STM32F103C8T6 Hal库配置<a class="anchor" href="#stm32f103c8t6-hal%e5%ba%93%e9%85%8d%e7%bd%ae">#</a></h1>
+<h2 id="hal图形化配置">Hal图形化配置<a class="anchor" href="#hal%e5%9b%be%e5%bd%a2%e5%8c%96%e9%85%8d%e7%bd%ae">#</a></h2>
+<h3 id="1system内核配置">1.System内核配置<a class="anchor" href="#1system%e5%86%85%e6%a0%b8%e9%85%8d%e7%bd%ae">#</a></h3>
+<p><strong>下载器用 ST-Link：选 Serial Wire</strong>
+<img src="https://raw.githubusercontent.com/Patchouli-ovo/hugo-img/main/STM32F103/image.png" alt="" /></p>
+<hr>
+<p><br><br></p>
+<h3 id="2rcc-系统时钟配置">2.RCC 系统时钟配置<a class="anchor" href="#2rcc-%e7%b3%bb%e7%bb%9f%e6%97%b6%e9%92%9f%e9%85%8d%e7%bd%ae">#</a></h3>
+<p><strong>开启LSE,HSE外部时钟</strong>
+<img src="https://raw.githubusercontent.com/Patchouli-ovo/hugo-img/main/STM32F103/image-1.png" alt="" />
+<strong>时钟树配置</strong>
+<img src="https://raw.githubusercontent.com/Patchouli-ovo/hugo-img/main/STM32F103/image-2.png" alt="" /></p>
+<hr>
+<p><br><br></p>
+<h3 id="3gpio配置">3.GPIO配置<a class="anchor" href="#3gpio%e9%85%8d%e7%bd%ae">#</a></h3>
+<p><strong>配置对应输入输出模式和开启引脚，标签和具体功能</strong>
+<img src="image-3.png" alt="alt text" />
+<img src="image-4.png" alt="alt text" /></p>
+<h3 id="4usart配置">4.USART配置<a class="anchor" href="#4usart%e9%85%8d%e7%bd%ae">#</a></h3>
+<p><img src="image-5.png" alt="alt text" /></p>
+<hr>
+<p><br><br></p>
+<h2 id="hal常用函数">Hal常用函数<a class="anchor" href="#hal%e5%b8%b8%e7%94%a8%e5%87%bd%e6%95%b0">#</a></h2>
+<h3 id="gpio--exti">GPIO &amp; EXTI<a class="anchor" href="#gpio--exti">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">HAL_GPIO_WritePin</span>(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);		<span style="color:#75715e">//写高低电平
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">HAL_GPIO_TogglePin</span>(GPIOE, GPIO_PIN_15);			<span style="color:#75715e">//电平翻转
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">HAL_GPIO_ReadPin</span>(GPIOC, GPIO_PIN_4);				<span style="color:#75715e">//读取电平，有返回值
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//中断回调函数
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">HAL_GPIO_EXTI_Callback</span>(<span style="color:#66d9ef">uint16_t</span> GPIO_Pin);					
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">__HAL_GPIO_EXTI_GET_IT</span>(GPIO_PIN_1);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">__HAL_GPIO_EXTI_CLEAR_IT</span>(GPIO_PIN_1);</span></span></code></pre></div><h3 id="usart">USART<a class="anchor" href="#usart">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">HAL_UART_Transmit</span>();        <span style="color:#960050;background-color:#1e0010">串口发送数据，使用超时管理机制</span> 
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">HAL_UART_Receive</span>();         <span style="color:#960050;background-color:#1e0010">串口接收数据，使用超时管理机制</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">HAL_UART_Transmit_IT</span>();     <span style="color:#960050;background-color:#1e0010">串口中断模式发送</span>  
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">HAL_UART_Receive_IT</span>();      <span style="color:#960050;background-color:#1e0010">串口中断模式接收</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">HAL_UART_Transmit_DMA</span>();    <span style="color:#960050;background-color:#1e0010">串口</span>DMA模式发送
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">HAL_UART_Transmit_DMA</span>();    <span style="color:#960050;background-color:#1e0010">串口</span>DMA模式接收 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//重定向 c 库函数 printf 到串口 USARTx，重定向后可使用 printf 函数
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">fputc</span>(<span style="color:#66d9ef">int</span> ch, FILE <span style="color:#f92672">*</span>f)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">HAL_UART_Transmit</span>(<span style="color:#f92672">&amp;</span>UartHandle, (<span style="color:#66d9ef">uint8_t</span> <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>ch, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0xFFFF</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> (ch);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//重定向 c 库函数 scanf 到串口 USARTx，重写向后可使用 scanf、getchar 等函数
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">fgetc</span>(FILE <span style="color:#f92672">*</span>f)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> ch;
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">/* 等待串口输入数据 */</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">while</span> (<span style="color:#a6e22e">__HAL_UART_GET_FLAG</span>(<span style="color:#f92672">&amp;</span>UartHandle, UART_FLAG_RXNE) <span style="color:#f92672">==</span> RESET);
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">HAL_UART_Receive</span>(<span style="color:#f92672">&amp;</span>UartHandle, (<span style="color:#66d9ef">uint8_t</span> <span style="color:#f92672">*</span>)<span style="color:#f92672">&amp;</span>ch, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0xFFFF</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> (ch);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">HAL_UART_GetState</span>(<span style="color:#f92672">&amp;</span>huart1);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//中断回调函数
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">HAL_UART_TxCpltCallback</span>(UART_HandleTypeDef <span style="color:#f92672">*</span>huart);        <span style="color:#75715e">//发送完成回调函数
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">HAL_UART_TxHalfCpltCallback</span>(UART_HandleTypeDef <span style="color:#f92672">*</span>huart);    <span style="color:#75715e">//发送完成过半
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">HAL_UART_RxCpltCallback</span>(UART_HandleTypeDef <span style="color:#f92672">*</span>huart);        <span style="color:#75715e">//接收完成回调函数
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">HAL_UART_RxHalfCpltCallback</span>(UART_HandleTypeDef <span style="color:#f92672">*</span>huart);    <span style="color:#75715e">//接收完成过半
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">HAL_UART_ErrorCallback</span>(UART_HandleTypeDef <span style="color:#f92672">*</span>huart);         <span style="color:#75715e">//错误处理回调函数
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">__HAL_UART_ENABLE_IT</span>(<span style="color:#f92672">&amp;</span>huart1, UART_IT_IDLE);				<span style="color:#75715e">//使能中断
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">__HAL_UART_GET_FLAG</span>(<span style="color:#f92672">&amp;</span>huart1,UART_FLAG_IDLE);				<span style="color:#75715e">//过去中断标志位						
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">__HAL_UART_CLEAR_FLAG</span>(<span style="color:#f92672">&amp;</span>huart1, UART_FLAG_RXNE); 			<span style="color:#75715e">//中断标志位清零
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/*中断标志位
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">接收缓冲区非空标志位 (USART_FLAG_RXNE)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">发送缓冲区空标志位 (USART_FLAG_TXE)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">发送完毕标志位 (USART_FLAG_TC)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">奇偶校验错误标志位 (USART_FLAG_PE)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">帧错误标志位 (USART_FLAG_FE)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">噪声错误标志位 (USART_FLAG_NE)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">串口空闲标志位 (USART_FLAG_IDLE)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">LIN 帧标志位 (USART_FLAG_LBD)*/</span></span></span></code></pre></div><hr>
+<p><br><br></p>
+<h1 id="stm32f103c8t6数据手册">STM32F103C8T6数据手册<a class="anchor" href="#stm32f103c8t6%e6%95%b0%e6%8d%ae%e6%89%8b%e5%86%8c">#</a></h1>
+<h2 id="stm32工程文件配置">STM32工程文件配置<a class="anchor" href="#stm32%e5%b7%a5%e7%a8%8b%e6%96%87%e4%bb%b6%e9%85%8d%e7%bd%ae">#</a></h2>
+<p><strong>配置启动文件</strong>
+复制对应的文件并放入自己创建的start文件夹中
+<img src="image-10.png" alt="alt text" />
+<img src="image-11.png" alt="alt text" />
+<img src="image-12.png" alt="alt text" />
+<img src="image-13.png" alt="alt text" /></p>
+<p><strong>创建工程</strong>
+<img src="image-14.png" alt="alt text" />
+添加自己创建的对应文件夹
+<img src="image-15.png" alt="alt text" />
+<img src="image-16.png" alt="alt text" /></p>
+<p>选择ST-link下载器
+<img src="image-17.png" alt="alt text" /></p>
+<p>勾选下载后自动复位运行新程序
+<img src="image-18.png" alt="alt text" /></p>
+<p>配置芯片型号宏定义
+<img src="image-54.png" alt="alt text" /></p>
+<hr>
+<p><br><br></p>
+<h2 id="stm32系统架构">STM32系统架构<a class="anchor" href="#stm32%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84">#</a></h2>
+<p><strong>图中APB1与APB2位置顺序反了</strong>
+<img src="image-203.png" alt="alt text" />
+<strong>三个被动单元</strong>(被动接收数据)</p>
+<ul>
+<li><strong>内部SRAM</strong> 存储程序执行时的变量</li>
+<li><strong>内部闪存存储器</strong> 存储下载的程序和程序执行时用到的常量</li>
+<li><strong>AHB到APBx的桥</strong> 高级高性能系统总线接(高级外设总线)APB2，72MHZ；接APB1，36MHZ</li>
+</ul>
+<p><strong>四个主动单元</strong></p>
+<ul>
+<li><strong>M3内核与DCode总线</strong> M3内核通过Dcode总线连接总线矩阵与闪存存储器的数据接口连接，实现FLASH常量加载和调试访问</li>
+<li><strong>M3内核与System总线</strong> 连接到总线矩阵控制整个内部数据的传输</li>
+<li><strong>通用DMA1</strong> 通过DMA总线连接到总线矩阵上，降低CPU负担，实现内存与外设的直接数据传输</li>
+<li><strong>通用DMA2</strong></li>
+</ul>
+<p><strong>其他单元</strong></p>
+<ul>
+<li><strong>ICode总线</strong> 内核通过Icode总线连接FLASH，实现指令的读取</li>
+<li><strong>FSMC(灵活的静态存储器控制器)</strong> 用来拓展外部SRAM，FLASH，连接LCD屏幕等</li>
+</ul>
+<hr>
+<p><br><br></p>
+<h2 id="存储器映像">存储器映像<a class="anchor" href="#%e5%ad%98%e5%82%a8%e5%99%a8%e6%98%a0%e5%83%8f">#</a></h2>
+<p><img src="image-205.png" alt="alt text" /></p>
+<hr>
+<p><br><br></p>
+<h2 id="复位与时钟控制rcc">复位与时钟控制(RCC)<a class="anchor" href="#%e5%a4%8d%e4%bd%8d%e4%b8%8e%e6%97%b6%e9%92%9f%e6%8e%a7%e5%88%b6rcc">#</a></h2>
+<h3 id="stm32时钟树">STM32时钟树<a class="anchor" href="#stm32%e6%97%b6%e9%92%9f%e6%a0%91">#</a></h3>
+<p><img src="image-106.png" alt="alt text" />
+<strong>1. 高速内部时钟（HSI）</strong>
+来源：HSI是STM32F10内部集成的RC振荡器产生的时钟信号。
+频率：通常为8MHz，但可以通过PLL（锁相环）进行倍频以提高系统时钟频率。
+特点：HSI时钟在芯片上电后即可立即使用，无需外部元件，适用于对时钟精度要求不高的场合。
+应用：常用于系统启动时的默认时钟源，以及在HSE不可用时的备用时钟源。
+<strong>2. 高速外部时钟（HSE）</strong>
+来源：HSE是外部提供的时钟信号，通常通过晶体振荡器或陶瓷谐振器产生。
+频率：HSE的频率范围通常为4MHz至16MHz，具体频率取决于所使用的外部晶体或谐振器。
+特点：HSE时钟具有较高的精度和稳定性，适用于对时钟精度要求较高的应用。
+应用：常作为系统时钟的主要来源，通过PLL倍频后提供给CPU和其他高速外设使用。
+<strong>3. 低速内部时钟（LSI）</strong>
+来源：LSI是STM32F10内部集成的另一个RC振荡器产生的时钟信号，专门用于低功耗模式下的时钟需求。
+频率：通常为40kHz左右，具体频率可能因芯片型号和工艺而异。
+特点：LSI时钟的精度较低，但功耗也相对较低，适用于对时钟精度要求不高但需要低功耗的场合。
+应用：常用于独立看门狗（IWDG）和RTC（实时时钟）的时钟源，以及在低功耗模式下维持系统基本功能的时钟需求。
+<strong>4. 低速外部时钟（LSE）</strong>
+来源：LSE是外部提供的低速时钟信号，通常通过32.768kHz的晶体振荡器产生。
+频率：固定为32.768kHz，这是为了与RTC的计时需求相匹配。
+特点：LSE时钟具有极高的精度和稳定性，适用于需要精确计时的应用。
+应用：专门用于RTC的时钟源，提供精确的时间基准，以实现日历、闹钟和定时功能。</p>
+<h3 id="stm32时钟树结构">STM32时钟树结构<a class="anchor" href="#stm32%e6%97%b6%e9%92%9f%e6%a0%91%e7%bb%93%e6%9e%84">#</a></h3>
+<p><img src="image-107.png" alt="alt text" /></p>
+<ul>
+<li><strong>OSC(外部晶振输入输出引脚)</strong> <strong>HSE/LSE(高/低速外部时钟源4-16MHz/32.768kHz)</strong></li>
+<li><strong>MCO(主时钟输出引脚)</strong> <strong>HSI(内部高速时钟源8MHz)</strong> <strong>LSI(低速内部时钟源40kHz)</strong></li>
+<li><strong>PLL(锁相环倍频器)</strong></li>
+</ul>
+<p>在STM32中有3种不同的时钟源驱动系统时钟SyStem</p>
+<ol>
+<li>HSI</li>
+<li>HSE</li>
+<li>PLL倍频时钟</li>
+</ol>
+<p>还有两种2级时钟</p>
+<ol>
+<li>LSI(独立看门狗)</li>
+<li>LSE(RTC实时时钟)</li>
+</ol>
+<p><strong>AHB总线时钟直连(HCLK)</strong>
+1.内部FLASH
+2.内部SRAM
+3.DMA
+4.CRC硬件校验单元</p>
+<p><strong>内部RC震荡产生的时钟不够稳定，一般作为启动上电时钟，应该用外部HSE时钟倍频后时钟作为系统时钟</strong></p>
+<h3 id="rcc的寄存器配置">RCC的寄存器配置<a class="anchor" href="#rcc%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
+<h4 id="时钟控制寄存器rcc_cr">时钟控制寄存器(RCC_CR)<a class="anchor" href="#%e6%97%b6%e9%92%9f%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8rcc_cr">#</a></h4>
+<p><img src="image-108.png" alt="alt text" />
+<img src="image-109.png" alt="alt text" /></p>
+<h4 id="时钟配置寄存器rcc_cfgr">时钟配置寄存器(RCC_CFGR)<a class="anchor" href="#%e6%97%b6%e9%92%9f%e9%85%8d%e7%bd%ae%e5%af%84%e5%ad%98%e5%99%a8rcc_cfgr">#</a></h4>
+<p><img src="image-110.png" alt="alt text" />
+<img src="image-111.png" alt="alt text" />
+<img src="image-112.png" alt="alt text" /></p>
+<h4 id="时钟中断寄存器rcc_cir">时钟中断寄存器(RCC_CIR)<a class="anchor" href="#%e6%97%b6%e9%92%9f%e4%b8%ad%e6%96%ad%e5%af%84%e5%ad%98%e5%99%a8rcc_cir">#</a></h4>
+<p><img src="image-113.png" alt="alt text" />
+<img src="image-114.png" alt="alt text" />
+<img src="image-115.png" alt="alt text" /></p>
+<h4 id="apb2外设复位寄存器rcc_apb2rstr">APB2外设复位寄存器(RCC_APB2RSTR)<a class="anchor" href="#apb2%e5%a4%96%e8%ae%be%e5%a4%8d%e4%bd%8d%e5%af%84%e5%ad%98%e5%99%a8rcc_apb2rstr">#</a></h4>
+<p><img src="image-116.png" alt="alt text" />
+<img src="image-117.png" alt="alt text" />
+<img src="image-118.png" alt="alt text" /></p>
+<h4 id="ahb外设时钟使能寄存器rcc_ahbenr">AHB外设时钟使能寄存器(RCC_AHBENR)<a class="anchor" href="#ahb%e5%a4%96%e8%ae%be%e6%97%b6%e9%92%9f%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8rcc_ahbenr">#</a></h4>
+<p><img src="image-119.png" alt="alt text" />
+<img src="image-120.png" alt="alt text" /></p>
+<h4 id="apb2外设时钟使能寄存器rcc_apb2enr">APB2外设时钟使能寄存器(RCC_APB2ENR)<a class="anchor" href="#apb2%e5%a4%96%e8%ae%be%e6%97%b6%e9%92%9f%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8rcc_apb2enr">#</a></h4>
+<p><img src="image-121.png" alt="alt text" />
+<img src="image-122.png" alt="alt text" /></p>
+<h4 id="apb1外设时钟使能寄存器rcc_apb1enr">APB1外设时钟使能寄存器(RCC_APB1ENR)<a class="anchor" href="#apb1%e5%a4%96%e8%ae%be%e6%97%b6%e9%92%9f%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8rcc_apb1enr">#</a></h4>
+<p><img src="image-123.png" alt="alt text" />
+<img src="image-124.png" alt="alt text" />
+<img src="image-125.png" alt="alt text" /></p>
+<h4 id="备份域控制寄存器rcc_bdcr">备份域控制寄存器(RCC_BDCR)<a class="anchor" href="#%e5%a4%87%e4%bb%bd%e5%9f%9f%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8rcc_bdcr">#</a></h4>
+<p><img src="image-126.png" alt="alt text" /></p>
+<h4 id="控制状态寄存器rcc_csr">控制/状态寄存器(RCC_CSR)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8rcc_csr">#</a></h4>
+<h2 id="alt-text"><img src="image-127.png" alt="alt text" />
+<img src="image-128.png" alt="alt text" /><a class="anchor" href="#alt-text">#</a></h2>
+<p><br><br></p>
+<h2 id="gpio">GPIO<a class="anchor" href="#gpio">#</a></h2>
+<h3 id="gpio的基本结构">GPIO的基本结构<a class="anchor" href="#gpio%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%bb%93%e6%9e%84">#</a></h3>
+<p><img src="image-129.png" alt="alt text" /></p>
+<h3 id="gpio的8种工作模式">GPIO的8种工作模式<a class="anchor" href="#gpio%e7%9a%848%e7%a7%8d%e5%b7%a5%e4%bd%9c%e6%a8%a1%e5%bc%8f">#</a></h3>
+<p><img src="image-7.png" alt="alt text" /></p>
+<p>复位期间和刚复位后，复用功能未开启，I/O端口被配置成<strong>浮空输入模式</strong>(CNFx[1:0]=01b，
+MODEx[1:0]=00b)。
+复位后，JTAG引脚被置于输入上拉或下拉模式：</p>
+<ul>
+<li><strong>PA15：JTDI置于上拉模式</strong></li>
+<li><strong>PA14：JTCK置于下拉模式</strong></li>
+<li><strong>PA13：JTMS置于上拉模式</strong></li>
+<li><strong>PB4： JNTRST置于上拉模式</strong></li>
+</ul>
+<h3 id="外设的gpio配置">外设的GPIO配置<a class="anchor" href="#%e5%a4%96%e8%ae%be%e7%9a%84gpio%e9%85%8d%e7%bd%ae">#</a></h3>
+<h4 id="高级寄存器tim1tim8">高级寄存器TIM1/TIM8<a class="anchor" href="#%e9%ab%98%e7%ba%a7%e5%af%84%e5%ad%98%e5%99%a8tim1tim8">#</a></h4>
+<p><img src="image-130.png" alt="alt text" /></p>
+<h4 id="通用定时器tim2345">通用定时器TIM2/3/4/5<a class="anchor" href="#%e9%80%9a%e7%94%a8%e5%ae%9a%e6%97%b6%e5%99%a8tim2345">#</a></h4>
+<p><img src="image-131.png" alt="alt text" /></p>
+<h4 id="usart-1">USART<a class="anchor" href="#usart-1">#</a></h4>
+<p><img src="image-132.png" alt="alt text" /></p>
+<h4 id="spi">SPI<a class="anchor" href="#spi">#</a></h4>
+<p><img src="image-133.png" alt="alt text" /></p>
+<h4 id="i2s">I2S<a class="anchor" href="#i2s">#</a></h4>
+<p><img src="image-134.png" alt="alt text" /></p>
+<h4 id="i2c">I2C<a class="anchor" href="#i2c">#</a></h4>
+<p><img src="image-135.png" alt="alt text" /></p>
+<h4 id="bxcan">BxCAN<a class="anchor" href="#bxcan">#</a></h4>
+<p><img src="image-136.png" alt="alt text" /></p>
+<h4 id="usb">USB<a class="anchor" href="#usb">#</a></h4>
+<p><img src="image-137.png" alt="alt text" /></p>
+<h4 id="全速usb-otg引脚配置">全速USB OTG引脚配置<a class="anchor" href="#%e5%85%a8%e9%80%9fusb-otg%e5%bc%95%e8%84%9a%e9%85%8d%e7%bd%ae">#</a></h4>
+<p><img src="image-138.png" alt="alt text" /></p>
+<h4 id="sdio">SDIO<a class="anchor" href="#sdio">#</a></h4>
+<p><img src="image-139.png" alt="alt text" /></p>
+<h4 id="adcdac">ADC/DAC<a class="anchor" href="#adcdac">#</a></h4>
+<p><img src="image-140.png" alt="alt text" /></p>
+<h4 id="fsmc">FSMC<a class="anchor" href="#fsmc">#</a></h4>
+<p><img src="image-141.png" alt="alt text" /></p>
+<h4 id="其他io功能">其他I/O功能<a class="anchor" href="#%e5%85%b6%e4%bb%96io%e5%8a%9f%e8%83%bd">#</a></h4>
+<p><img src="image-142.png" alt="alt text" /></p>
+<h3 id="stm32f103c8t6引脚定义">STM32F103C8T6引脚定义<a class="anchor" href="#stm32f103c8t6%e5%bc%95%e8%84%9a%e5%ae%9a%e4%b9%89">#</a></h3>
+<p><img src="STM32F103C8T6%e5%bc%95%e8%84%9a%e5%ae%9a%e4%b9%89.png" alt="alt text" /></p>
+<h3 id="gpio的寄存器配置">GPIO的寄存器配置<a class="anchor" href="#gpio%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
+<h4 id="端口配置低寄存器gpiox_crl">端口配置低寄存器(GPIOx_CRL)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e9%85%8d%e7%bd%ae%e4%bd%8e%e5%af%84%e5%ad%98%e5%99%a8gpiox_crl">#</a></h4>
+<p><img src="image-143.png" alt="alt text" /></p>
+<h4 id="端口配置高寄存器gpiox_crh">端口配置高寄存器(GPIOx_CRH)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e9%85%8d%e7%bd%ae%e9%ab%98%e5%af%84%e5%ad%98%e5%99%a8gpiox_crh">#</a></h4>
+<p><img src="image-144.png" alt="alt text" /></p>
+<h4 id="端口输入数据寄存器gpiox_idr">端口输入数据寄存器(GPIOx_IDR)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e8%be%93%e5%85%a5%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8gpiox_idr">#</a></h4>
+<p><img src="image-145.png" alt="alt text" /></p>
+<h4 id="端口输出数据寄存器gpiox_odr">端口输出数据寄存器(GPIOx_ODR)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e8%be%93%e5%87%ba%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8gpiox_odr">#</a></h4>
+<p><img src="image-146.png" alt="alt text" /></p>
+<h4 id="端口位设置清除寄存器gpiox_bsrr">端口位设置/清除寄存器(GPIOx_BSRR)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e4%bd%8d%e8%ae%be%e7%bd%ae%e6%b8%85%e9%99%a4%e5%af%84%e5%ad%98%e5%99%a8gpiox_bsrr">#</a></h4>
+<p><img src="image-147.png" alt="alt text" /></p>
+<h4 id="端口位清除寄存器gpiox_brr">端口位清除寄存器(GPIOx_BRR)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e4%bd%8d%e6%b8%85%e9%99%a4%e5%af%84%e5%ad%98%e5%99%a8gpiox_brr">#</a></h4>
+<p><img src="image-148.png" alt="alt text" /></p>
+<h4 id="端口配置锁定寄存器gpiox_lckr">端口配置锁定寄存器(GPIOx_LCKR)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e9%85%8d%e7%bd%ae%e9%94%81%e5%ae%9a%e5%af%84%e5%ad%98%e5%99%a8gpiox_lckr">#</a></h4>
+<h2 id="alt-text-1"><img src="image-149.png" alt="alt text" /><a class="anchor" href="#alt-text-1">#</a></h2>
+<p><br><br></p>
+<h2 id="afio">AFIO<a class="anchor" href="#afio">#</a></h2>
+<p><strong>复用功能 IO 控制器(Alternate Function I/O)</strong>
+作用：</p>
+<ul>
+<li>控制引脚复用功能重映射（把串口、定时器、SPI 换到别的引脚）</li>
+<li>管理 JTAG/SWD 调试引脚开关（释放 PA15、PB3、PB4 做普通 GPIO）</li>
+<li>外部中断 EXTI 引脚通道分配（选择哪个 GPIO 映射到中断线）</li>
+</ul>
+<h3 id="afio的寄存器配置">AFIO的寄存器配置<a class="anchor" href="#afio%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
+<h4 id="事件控制寄存器afio_evcr">事件控制寄存器(AFIO_EVCR)<a class="anchor" href="#%e4%ba%8b%e4%bb%b6%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8afio_evcr">#</a></h4>
+<p><img src="image-150.png" alt="alt text" /></p>
+<h4 id="复用重映射和调试io配置寄存器afio_mapr">复用重映射和调试I/O配置寄存器(AFIO_MAPR)<a class="anchor" href="#%e5%a4%8d%e7%94%a8%e9%87%8d%e6%98%a0%e5%b0%84%e5%92%8c%e8%b0%83%e8%af%95io%e9%85%8d%e7%bd%ae%e5%af%84%e5%ad%98%e5%99%a8afio_mapr">#</a></h4>
+<p><img src="image-151.png" alt="alt text" />
+<img src="image-152.png" alt="alt text" />
+<img src="image-153.png" alt="alt text" />
+<img src="image-154.png" alt="alt text" /></p>
+<h4 id="外部中断配置寄存器1-4afio_exticr1">外部中断配置寄存器1-4(AFIO_EXTICR1)<a class="anchor" href="#%e5%a4%96%e9%83%a8%e4%b8%ad%e6%96%ad%e9%85%8d%e7%bd%ae%e5%af%84%e5%ad%98%e5%99%a81-4afio_exticr1">#</a></h4>
+<p><img src="image-157.png" alt="alt text" />
+<img src="image-156.png" alt="alt text" />
+<img src="image-158.png" alt="alt text" />
+<img src="image-159.png" alt="alt text" />
+<img src="image-160.png" alt="alt text" /></p>
+<hr>
+<p><br><br></p>
+<h2 id="中断">中断<a class="anchor" href="#%e4%b8%ad%e6%96%ad">#</a></h2>
+<h3 id="中断向量表">中断向量表<a class="anchor" href="#%e4%b8%ad%e6%96%ad%e5%90%91%e9%87%8f%e8%a1%a8">#</a></h3>
+<ul>
+<li>向量表本质：一块连续内存，是一张地址索引表，每个格子 4 字节（刚好存 1 个 32 位函数指针）</li>
+<li>表里存什么：只存中断服务函数的入口地址，不存函数代码。</li>
+<li>存储位置（STM32F1 闪存启动）</li>
+<li>向量表基地址固定：0x08000000；</li>
+<li>工作流程</li>
+<li>中断触发 → CPU 根据中断号算出向量表对应地址 → 读出该 4 字节里存放的函数地址 → 跳转到该地址执行中断函数。</li>
+<li>向量表：目录，只记录函数在哪，体积很小；</li>
+<li>中断服务函数：真正代码，放在 Flash 其他区域，长度无限制。</li>
+</ul>
+<p><img src="image-23.png" alt="alt text" />
+<img src="image-24.png" alt="alt text" />
+<img src="image-25.png" alt="alt text" />
+<img src="image-26.png" alt="alt text" /></p>
+<hr>
+<p><br><br></p>
+<h3 id="中断体系架构">中断体系架构<a class="anchor" href="#%e4%b8%ad%e6%96%ad%e4%bd%93%e7%b3%bb%e6%9e%b6%e6%9e%84">#</a></h3>
+<p><img src="image-27.png" alt="alt text" /></p>
+<hr>
+<p><br><br></p>
+<h3 id="nvic嵌套向量中断控制器">NVIC嵌套向量中断控制器<a class="anchor" href="#nvic%e5%b5%8c%e5%a5%97%e5%90%91%e9%87%8f%e4%b8%ad%e6%96%ad%e6%8e%a7%e5%88%b6%e5%99%a8">#</a></h3>
+<h4 id="nvic概念">NVIC概念<a class="anchor" href="#nvic%e6%a6%82%e5%bf%b5">#</a></h4>
+<p>嵌套向量中断控制器管理着包括内核异常，外部中断等所有中断。由NVIC决定哪个中断的处理程序交给CPU来执行。</p>
+<p>中断优先级
+NVIC为了方便管理中断，可以通过软件给每个中断设置优先级。NVIC用4个位来控制优先级，值小的优先级高。把优先级分为两种：抢占优先级和响应优先级。
+规则：</p>
+<ul>
+<li>优先级值越小，优先级越高。</li>
+<li>如果不设置优先级，则默认优先级为0。</li>
+<li>先比较抢占优先级。抢占优先级高的可以打断抢占优先级低的。</li>
+<li>若抢占优先级一样，再比较响应优先级。但是响应优先级不会导致中断嵌套。</li>
+<li>若抢占优先级一样的同时挂起，则优先处理响应抢占优先级高的。</li>
+<li>若挂起的优先级（抢占和响应）都一样，则查找中断向量表，值小的先响应。</li>
+<li>NVIC对优先级分了5组，在程序中先对中断进行分组，而且分组只能分一次，若多次分，只有最后一次生效。</li>
+</ul>
+<p><img src="image-28.png" alt="alt text" />
+<img src="image-29.png" alt="alt text" /></p>
+<h4 id="nvic库函数配置">NVIC库函数配置<a class="anchor" href="#nvic%e5%ba%93%e5%87%bd%e6%95%b0%e9%85%8d%e7%bd%ae">#</a></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">NVIC_SetPriorityGrouping</span>(<span style="color:#ae81ff">5</span>);	<span style="color:#75715e">//设置NVIC优先级分组为2位抢占优先级，2位响应优先级
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">NVIC_SetPriority</span>(EXTI1_IRQn, <span style="color:#ae81ff">0x20</span>);	<span style="color:#75715e">//设置EXTI1通道优先级抢占优先级0，响应优先级2
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">NVIC_EnableIRQ</span>(EXTI1_IRQn);		<span style="color:#75715e">//打开中断通道
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">NVIC_SetPriorityGrouping</span>(<span style="color:#ae81ff">5</span>);	<span style="color:#75715e">//设置NVIC优先级分组为2位抢占优先级,2位响应优先级
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">NVIC_SetPriority</span>(EXTI1_IRQn, <span style="color:#ae81ff">0x21</span>);	<span style="color:#75715e">//设置EXTI1通道优先级为3
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">NVIC_EnableIRQ</span>(EXTI1_IRQn);		<span style="color:#75715e">//打开中断通道
+</span></span></span></code></pre></div><h3 id="exti外部中断控制器">EXTI外部中断控制器<a class="anchor" href="#exti%e5%a4%96%e9%83%a8%e4%b8%ad%e6%96%ad%e6%8e%a7%e5%88%b6%e5%99%a8">#</a></h3>
+<p><img src="image-30.png" alt="alt text" />
+AFIO输入信号进入边沿检测电路，通过上升沿下降沿触发选择寄存器选择中断触发方式，
+产生的中断信号在请求挂起寄存器挂起，与中断屏蔽寄存器相与后输出至NVIC中断控制器
+中断请求挂起寄存器在产生中断后要手动清除</p>
+<h3 id="exti的寄存器配置">EXTI的寄存器配置<a class="anchor" href="#exti%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
+<h4 id="中断屏蔽寄存器exti_imr">中断屏蔽寄存器(EXTI_IMR)<a class="anchor" href="#%e4%b8%ad%e6%96%ad%e5%b1%8f%e8%94%bd%e5%af%84%e5%ad%98%e5%99%a8exti_imr">#</a></h4>
+<p><img src="image-161.png" alt="alt text" /></p>
+<h4 id="事件屏蔽寄存器exti_emr">事件屏蔽寄存器(EXTI_EMR)<a class="anchor" href="#%e4%ba%8b%e4%bb%b6%e5%b1%8f%e8%94%bd%e5%af%84%e5%ad%98%e5%99%a8exti_emr">#</a></h4>
+<p><img src="image-162.png" alt="alt text" /></p>
+<h4 id="上升沿触发选择寄存器exti_rtsr">上升沿触发选择寄存器(EXTI_RTSR)<a class="anchor" href="#%e4%b8%8a%e5%8d%87%e6%b2%bf%e8%a7%a6%e5%8f%91%e9%80%89%e6%8b%a9%e5%af%84%e5%ad%98%e5%99%a8exti_rtsr">#</a></h4>
+<p><img src="image-163.png" alt="alt text" /></p>
+<h4 id="下降沿触发选择寄存器exti_ftsr">下降沿触发选择寄存器(EXTI_FTSR)<a class="anchor" href="#%e4%b8%8b%e9%99%8d%e6%b2%bf%e8%a7%a6%e5%8f%91%e9%80%89%e6%8b%a9%e5%af%84%e5%ad%98%e5%99%a8exti_ftsr">#</a></h4>
+<p><img src="image-164.png" alt="alt text" /></p>
+<h4 id="软件中断事件寄存器exti_swier">软件中断事件寄存器(EXTI_SWIER)<a class="anchor" href="#%e8%bd%af%e4%bb%b6%e4%b8%ad%e6%96%ad%e4%ba%8b%e4%bb%b6%e5%af%84%e5%ad%98%e5%99%a8exti_swier">#</a></h4>
+<p><img src="image-165.png" alt="alt text" /></p>
+<h4 id="挂起寄存器exti_pr">挂起寄存器(EXTI_PR)<a class="anchor" href="#%e6%8c%82%e8%b5%b7%e5%af%84%e5%ad%98%e5%99%a8exti_pr">#</a></h4>
+<h2 id="alt-text-2"><img src="image-166.png" alt="alt text" /><a class="anchor" href="#alt-text-2">#</a></h2>
+<p><br><br></p>
+<h2 id="定时器tim">定时器(TIM)<a class="anchor" href="#%e5%ae%9a%e6%97%b6%e5%99%a8tim">#</a></h2>
+<ul>
+<li>定时器可以对输入的时钟进行计数，并在计数值到达设定值触发中断</li>
+<li>定时器包含16位计数器，预分频器，自动重装寄存器的时基单元，在72MHz时钟下最大有59.65s定时
+<img src="image-62.png" alt="alt text" /></li>
+</ul>
+<hr>
+<p><br><br></p>
+<h3 id="基本定时器">基本定时器<a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e5%ae%9a%e6%97%b6%e5%99%a8">#</a></h3>
+<h4 id="基本定时器概念">基本定时器概念<a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e5%ae%9a%e6%97%b6%e5%99%a8%e6%a6%82%e5%bf%b5">#</a></h4>
+<p>基本定时器TIM6和TIM7各包含一个16位自动装载计数器，由APB1驱动时钟，由各自的可编程预分频器驱动。
+这2个定时器是互相独立的，不共享任何资源。
+这个2个基本定时器<strong>只能向上计数</strong>，由于没有外部IO，所以<strong>只能计时，不能对外部脉冲进行计数。</strong></p>
+<p><img src="image-63.png" alt="alt text" /></p>
+<p><strong>时基单元</strong>包含：
+● 计数器寄存器(TIMx_CNT)
+● 预分频寄存器(TIMx_PSC)
+● 自动重装载寄存器(TIMx_ARR)
+自动重装载寄存器由预装载寄存器和影子寄存器组成，存放实际值的是影子寄存器，预装载寄存器能缓存更新值并在下一次定时器溢出时更新影子寄存器。</p>
+<h4 id="计算定时时间">计算定时时间<a class="anchor" href="#%e8%ae%a1%e7%ae%97%e5%ae%9a%e6%97%b6%e6%97%b6%e9%97%b4">#</a></h4>
+<p>计时器一次计时多久溢出
+<strong>1. 求计数器的时钟频率</strong>
+<img src="image-49.png" alt="alt text" /></p>
+<p><strong>2.计数器的周期是多少，求累加一次的总时间</strong>
+<img src="image-50.png" alt="alt text" /></p>
+<p><strong>3.计数器累加多少次产生一次更新事件</strong>
+<img src="image-51.png" alt="alt text" /></p>
+<p><strong>4.定时时间</strong>
+<img src="image-52.png" alt="alt text" /></p>
+<p><img src="image-53.png" alt="alt text" /></p>
+<h4 id="基本定时器的定时中断">基本定时器的定时中断<a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e5%ae%9a%e6%97%b6%e5%99%a8%e7%9a%84%e5%ae%9a%e6%97%b6%e4%b8%ad%e6%96%ad">#</a></h4>
+<h5 id="基本定时器的寄存器配置">基本定时器的寄存器配置<a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e5%ae%9a%e6%97%b6%e5%99%a8%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h5>
+<h6 id="控制寄存器1timx_cr1">控制寄存器1(TIMx_CR1)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a81timx_cr1">#</a></h6>
+<p><img src="image-167.png" alt="alt text" />
+<img src="image-168.png" alt="alt text" /></p>
+<h6 id="控制寄存器2timx_cr2">控制寄存器2(TIMx_CR2)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a82timx_cr2">#</a></h6>
+<p><img src="image-169.png" alt="alt text" /></p>
+<h6 id="dma中断使能寄存器timx_dier">DMA/中断使能寄存器(TIMx_DIER)<a class="anchor" href="#dma%e4%b8%ad%e6%96%ad%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8timx_dier">#</a></h6>
+<p><img src="image-170.png" alt="alt text" />
+<img src="image-171.png" alt="alt text" /></p>
+<h6 id="状态寄存器timx_sr">状态寄存器(TIMx_SR)<a class="anchor" href="#%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8timx_sr">#</a></h6>
+<p><img src="image-172.png" alt="alt text" /></p>
+<h6 id="事件产生寄存器timx_egr">事件产生寄存器(TIMx_EGR)<a class="anchor" href="#%e4%ba%8b%e4%bb%b6%e4%ba%a7%e7%94%9f%e5%af%84%e5%ad%98%e5%99%a8timx_egr">#</a></h6>
+<p><img src="image-173.png" alt="alt text" /></p>
+<h6 id="计数器timx_cnt">计数器(TIMx_CNT)<a class="anchor" href="#%e8%ae%a1%e6%95%b0%e5%99%a8timx_cnt">#</a></h6>
+<p><img src="image-174.png" alt="alt text" /></p>
+<h6 id="预分频器timx_psc">预分频器(TIMx_PSC)<a class="anchor" href="#%e9%a2%84%e5%88%86%e9%a2%91%e5%99%a8timx_psc">#</a></h6>
+<p><img src="image-175.png" alt="alt text" /></p>
+<h6 id="自动重装载寄存器timx_arr">自动重装载寄存器(TIMx_ARR)<a class="anchor" href="#%e8%87%aa%e5%8a%a8%e9%87%8d%e8%a3%85%e8%bd%bd%e5%af%84%e5%ad%98%e5%99%a8timx_arr">#</a></h6>
+<p><img src="image-176.png" alt="alt text" /></p>
+<h5 id="基本定时器定时中断配置代码示例">基本定时器定时中断配置代码示例<a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e5%ae%9a%e6%97%b6%e5%99%a8%e5%ae%9a%e6%97%b6%e4%b8%ad%e6%96%ad%e9%85%8d%e7%bd%ae%e4%bb%a3%e7%a0%81%e7%a4%ba%e4%be%8b">#</a></h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __DRIVER_TIM6_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define __DRIVER_TIM6_H
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;stm32f10x.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;Driver_LED.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Driver_TIM6_Init</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;Driver_TIM6.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @description: 给定时器6进行初始化
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @return {*}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Driver_TIM6_Init</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 1. 给定时器6开启时钟*/</span>
+</span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB1ENR <span style="color:#f92672">|=</span> RCC_APB1ENR_TIM6EN;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 2. 设置预分频值: 分频值7199表示7200分频。分频后频率10K，周期100us */</span>
+</span></span><span style="display:flex;"><span>    TIM6<span style="color:#f92672">-&gt;</span>PSC <span style="color:#f92672">=</span> <span style="color:#ae81ff">7200</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    3. 设置自动重转载寄存器的值，决定中断发生的频率。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">        假设设置为9999，表示计数器计数10000次发生一次中断。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">        计数一次100us，10000次1000000us，正好1s
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    */</span>
+</span></span><span style="display:flex;"><span>    TIM6<span style="color:#f92672">-&gt;</span>ARR <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 4. 使能更新中断 */</span>
+</span></span><span style="display:flex;"><span>    TIM6<span style="color:#f92672">-&gt;</span>DIER <span style="color:#f92672">|=</span> TIM_DIER_UIE;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* NVIC配置 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 5. 设置中断优先级分组 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">NVIC_SetPriorityGrouping</span>(<span style="color:#ae81ff">3</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 6. 设置中断优先级 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">NVIC_SetPriority</span>(TIM6_IRQn, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 7. 使能定时器6的中断 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">NVIC_EnableIRQ</span>(TIM6_IRQn);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 8. 使能计数器 */</span>
+</span></span><span style="display:flex;"><span>    TIM6<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">|=</span> TIM_CR1_CEN;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @description: TIM6的中断服务函数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @return {*}
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">TIM6_IRQHandler</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    TIM6<span style="color:#f92672">-&gt;</span>SR <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_SR_UIF;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Drviver_LED_Toggle</span>(LED_1);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;1s</span><span style="color:#ae81ff">\r\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><hr>
+<p><br><br></p>
+<h3 id="通用定时器">通用定时器<a class="anchor" href="#%e9%80%9a%e7%94%a8%e5%ae%9a%e6%97%b6%e5%99%a8">#</a></h3>
+<h4 id="通用定时器概念">通用定时器概念<a class="anchor" href="#%e9%80%9a%e7%94%a8%e5%ae%9a%e6%97%b6%e5%99%a8%e6%a6%82%e5%bf%b5">#</a></h4>
+<ul>
+<li>通用定时器不仅具有基本的定时中断功能，还包含内外时钟源选择，输入捕获，输出比较，编码器接口，主从触发模式等多种功能</li>
+</ul>
+<h4 id="计数模式">计数模式<a class="anchor" href="#%e8%ae%a1%e6%95%b0%e6%a8%a1%e5%bc%8f">#</a></h4>
+<ul>
+<li>向上自增模式：向上自增到自动重装寄存器值后一位溢出</li>
+<li>向下自减模式： 向下自减到0再溢出</li>
+<li>中央对齐模式： 从0向上增到自动重装寄存器值 - 1后一位溢出，再向下减到0时溢出</li>
+</ul>
+<h4 id="时钟源选择">时钟源选择<a class="anchor" href="#%e6%97%b6%e9%92%9f%e6%ba%90%e9%80%89%e6%8b%a9">#</a></h4>
+<ul>
+<li>内部时钟(CK_INT)</li>
+<li>外部时钟模式1：外部输入脚(TIx)</li>
+<li>外部时钟模式2：外部触发输入(ETR)</li>
+<li>内部触发输入(ITRx)：使用一个定时器作为另一个定时器的预分频器，如可以配置一个定时器Timer1而作为另一个定时器Timer2的预分频器。</li>
+</ul>
+<p><img src="image-48.png" alt="alt text" /></p>
+<h4 id="定时器定时中断示例代码">定时器定时中断示例代码<a class="anchor" href="#%e5%ae%9a%e6%97%b6%e5%99%a8%e5%ae%9a%e6%97%b6%e4%b8%ad%e6%96%ad%e7%a4%ba%e4%be%8b%e4%bb%a3%e7%a0%81">#</a></h4>
+<h5 id="定时器定时中断示例代码-1">定时器定时中断示例代码<a class="anchor" href="#%e5%ae%9a%e6%97%b6%e5%99%a8%e5%ae%9a%e6%97%b6%e4%b8%ad%e6%96%ad%e7%a4%ba%e4%be%8b%e4%bb%a3%e7%a0%81-1">#</a></h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __TIM2_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define __TIM2_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;stm32f10x.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">uint8_t</span> LedFlag;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyTim2_Init</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;Tim2.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyTim2_Init</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 1. 给定时器2开启时钟*/</span>
+</span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB1ENR <span style="color:#f92672">|=</span> RCC_APB1ENR_TIM2EN;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 2. 设置预分频值: 分频值7199表示7200分频。分频后频率10K，周期100us */</span>
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>PSC <span style="color:#f92672">=</span> <span style="color:#ae81ff">7200</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    3. 设置自动重转载寄存器的值，决定中断发生的频率。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">        假设设置为9999，表示计数器计数10000次发生一次中断。
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">        计数一次100us，10000次1000000us，正好1s
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">    */</span>
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>ARR <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 4. 使能更新中断 */</span>
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>DIER <span style="color:#f92672">|=</span> TIM_DIER_UIE;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 5. 打开自动重装寄存器预装载*/</span>
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">|=</span> TIM_CR1_ARPE;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 6. 选择向上计数模式*/</span>
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CR1_DIR;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* NVIC配置 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 7. 设置中断优先级分组 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">NVIC_SetPriorityGrouping</span>(<span style="color:#ae81ff">3</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 8. 设置中断优先级 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">NVIC_SetPriority</span>(TIM2_IRQn, <span style="color:#ae81ff">3</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 9. 使能定时器6的中断 */</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">NVIC_EnableIRQ</span>(TIM2_IRQn);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 10. 使能计数器 */</span>
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">|=</span> TIM_CR1_CEN;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">TIM2_IRQHandler</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/* 11. 清空中断标记位*/</span>
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>SR <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_SR_UIF;
+</span></span><span style="display:flex;"><span>    LedFlag <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><h4 id="定时器输出比较">定时器输出比较<a class="anchor" href="#%e5%ae%9a%e6%97%b6%e5%99%a8%e8%be%93%e5%87%ba%e6%af%94%e8%be%83">#</a></h4>
+<h5 id="pwm原理脉冲宽度调制">PWM原理(脉冲宽度调制)<a class="anchor" href="#pwm%e5%8e%9f%e7%90%86%e8%84%89%e5%86%b2%e5%ae%bd%e5%ba%a6%e8%b0%83%e5%88%b6">#</a></h5>
+<p><strong>利用数字输出对模拟电路进行控制，常用于电机调控，LED亮度调节</strong></p>
+<p><strong>利用定时器输出比较功能控制方波的输出</strong>
+<img src="image-66.png" alt="alt text" /></p>
+<h5 id="pwm控制led呼吸灯代码示例">PWM控制LED呼吸灯代码示例<a class="anchor" href="#pwm%e6%8e%a7%e5%88%b6led%e5%91%bc%e5%90%b8%e7%81%af%e4%bb%a3%e7%a0%81%e7%a4%ba%e4%be%8b">#</a></h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __PWM_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define __PWM_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;stm32f10x.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyPwm_Init</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyPwm_SetDutyCycle</span>(<span style="color:#66d9ef">uint8_t</span> DutyCycle);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;Pwm.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyPwm_Init</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB1ENR <span style="color:#f92672">|=</span> RCC_APB1ENR_TIM2EN;
+</span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB2ENR <span style="color:#f92672">|=</span> RCC_APB2ENR_IOPAEN;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>GPIO_CRL_CNF0;
+</span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">|=</span> GPIO_CRL_CNF0_1;
+</span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">|=</span> GPIO_CRL_MODE0;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>PSC <span style="color:#f92672">=</span> <span style="color:#ae81ff">7200</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>ARR <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CR1_DIR;
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">|=</span> TIM_CR1_ARPE;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CCMR1_CC1S;
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">|=</span> TIM_CCMR1_OC1PE;
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CCMR1_OC1M;
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">|=</span> TIM_CCMR1_OC1M_2;
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">|=</span> TIM_CCMR1_OC1M_1;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CCR1 <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CCER <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CCER_CC1P;
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CCER <span style="color:#f92672">|=</span> TIM_CCER_CC1E;
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">|=</span> TIM_CR1_CEN;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyPwm_SetDutyCycle</span>(<span style="color:#66d9ef">uint8_t</span> DutyCycle)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    TIM2<span style="color:#f92672">-&gt;</span>CCR1 <span style="color:#f92672">=</span> DutyCycle;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><hr>
+<p><br><br></p>
+<h4 id="定时器输入捕获">定时器输入捕获<a class="anchor" href="#%e5%ae%9a%e6%97%b6%e5%99%a8%e8%be%93%e5%85%a5%e6%8d%95%e8%8e%b7">#</a></h4>
+<h5 id="输入捕获概念">输入捕获概念<a class="anchor" href="#%e8%be%93%e5%85%a5%e6%8d%95%e8%8e%b7%e6%a6%82%e5%bf%b5">#</a></h5>
+<p>捕获输入通道上信号的的上升沿和下降沿
+多用于测量PWM的周期和频率，和占空比
+<img src="image-85.png" alt="alt text" /></p>
+<p>假设对计数器时钟做72MHz分频，则计数器时钟频率为1MHz，计数器累加一次1us
+ARR自动重装值设65535，避免溢出</p>
+<ol>
+<li>
+<p>若测量的频率大于16HZ(小于65535us) 16 &lt; x &lt; 1M
+当第一个上升沿到来时，重置计数器的值
+第二个上升沿到来时，计数器的值存入捕获寄存器，即得到周期</p>
+</li>
+<li>
+<p>若测量频率超过1MHZ
+可测量第1个上升沿到第n个上升沿之间的间隔</p>
+</li>
+</ol>
+<h5 id="定时器输入捕获pwm周期频率示例代码">定时器输入捕获PWM周期频率示例代码<a class="anchor" href="#%e5%ae%9a%e6%97%b6%e5%99%a8%e8%be%93%e5%85%a5%e6%8d%95%e8%8e%b7pwm%e5%91%a8%e6%9c%9f%e9%a2%91%e7%8e%87%e7%a4%ba%e4%be%8b%e4%bb%a3%e7%a0%81">#</a></h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __TIM3_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define __TIM3_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;stm32f10x.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyTIM3_Init</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyTIM3_GetPWMCycle</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyTIM3_GetPWMFreq</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;TIM3.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyTIM3_Init</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB1ENR <span style="color:#f92672">|=</span> RCC_APB1ENR_TIM3EN;
+</span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB2ENR <span style="color:#f92672">|=</span> RCC_APB2ENR_IOPAEN;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// TIM3_CH1配置为浮空输入模式
+</span></span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>GPIO_CRL_CNF6;
+</span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">|=</span> GPIO_CRL_CNF6_0;
+</span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>GPIO_CRL_MODE6;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/*时基部分配置*/</span>
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>PSC <span style="color:#f92672">=</span> <span style="color:#ae81ff">72</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>ARR <span style="color:#f92672">=</span> <span style="color:#ae81ff">65536</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CR1_DIR;
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">|=</span> TIM_CR1_ARPE;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/*输入捕获部分*/</span>
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CR2_TI1S;      <span style="color:#75715e">// 把CH1链接到TI1上
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCER <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CCER_CC1P;   <span style="color:#75715e">// 上升沿捕获
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCER <span style="color:#f92672">|=</span> TIM_CCER_CC1E;    <span style="color:#75715e">// 开启捕获使能
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CCMR1_CC1S; <span style="color:#75715e">// 通道1配置为输入，并把信号映射到IC1上
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">|=</span> TIM_CCMR1_CC1S_0;
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CCMR1_IC1PSC; <span style="color:#75715e">// 输入预分频器不分频
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>DIER <span style="color:#f92672">|=</span> TIM_DIER_CC1IE; <span style="color:#75715e">// 开启捕获中断
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">NVIC_SetPriorityGrouping</span>(<span style="color:#ae81ff">3</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">NVIC_SetPriority</span>(TIM3_IRQn, <span style="color:#ae81ff">3</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">NVIC_EnableIRQ</span>(TIM3_IRQn);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">|=</span> TIM_CR1_CEN; <span style="color:#75715e">// 开启计数器
+</span></span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyTIM3_GetPWMCycle</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> TIM3<span style="color:#f92672">-&gt;</span>CCR1 <span style="color:#f92672">/</span> <span style="color:#ae81ff">1000.0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyTIM3_GetPWMFreq</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1000000.0</span> <span style="color:#f92672">/</span> TIM3<span style="color:#f92672">-&gt;</span>CCR1;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">TIM3_IRQHandler</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>SR <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_SR_CC1IF; <span style="color:#75715e">// 清除中断标志位
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CNT <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><h4 id="定时器触发输入和从模式">定时器触发输入和从模式<a class="anchor" href="#%e5%ae%9a%e6%97%b6%e5%99%a8%e8%a7%a6%e5%8f%91%e8%be%93%e5%85%a5%e5%92%8c%e4%bb%8e%e6%a8%a1%e5%bc%8f">#</a></h4>
+<p><img src="image-102.png" alt="alt text" />
+<strong>触发输入信号类型(信号进入从模式控制器实现不同功能)</strong>
+<strong>1.ITR0-4来源于其他定时器的TRGO信号，经过芯片内部连接，来到本定时器的ITR0/1/2/3，内部连接是定死的，不能更改</strong>
+<img src="image-103.png" alt="alt text" /></p>
+<p><strong>2.来源于外部触发脚ETR，经过极性选择，边沿检测，预分频器和输入滤波，成为TRGI信号</strong></p>
+<p><strong>3.来源于定时器自身通道1信号，经过输入滤波器和边缘检测器，得到TI1F_ED信号，上升沿和下降沿都会产生TI1F_ED信号，经信号选择器最终成为TRGI信号</strong></p>
+<p><strong>4.来源于定时器自身通道1或通道2信号，经过输入滤波器和边沿检测器，得到TI1FP1和TI2FP2信号，是上升沿或下降沿其中一种，最终成为TRGI信号，可用来同时测量PWM的频率和占空比</strong></p>
+<h5 id="pwm输入模式">PWM输入模式<a class="anchor" href="#pwm%e8%be%93%e5%85%a5%e6%a8%a1%e5%bc%8f">#</a></h5>
+<p><strong>该模式是输入捕获模式的一个特例，以信号从通道1输入为例</strong></p>
+<ul>
+<li><strong>经过输入滤波器和边沿检测器得到2路信号：TI1FP1和TI1FP2，TI1FP1和TI1FP2极性相反，一个得到输入的上升沿(TI1FP1)，一个得到输入的下降沿(TI1FP2)。</strong></li>
+<li><strong>TI1FP1得到IC1信号，在通道1，用来测量周期</strong></li>
+<li><strong>TI1FP2得到IC2信号，在通道2，用来测量高电平时间</strong></li>
+<li><strong>TI1FP1作为触发输入信号，开启从模式中的复位模式</strong>
+<img src="image-104.png" alt="alt text" />
+<img src="image-105.png" alt="alt text" /></li>
+</ul>
+<h5 id="pwm输入模式配置示例代码">PWM输入模式配置示例代码<a class="anchor" href="#pwm%e8%be%93%e5%85%a5%e6%a8%a1%e5%bc%8f%e9%85%8d%e7%bd%ae%e7%a4%ba%e4%be%8b%e4%bb%a3%e7%a0%81">#</a></h5>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __TIM3_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define __TIM3_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;stm32f10x.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyTIM3_Init</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyTIM3_GetPWMCycle</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyTIM3_GetPWMFreq</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyTIM3_GetPWMDuty</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;TIM3.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyTIM3_Init</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB1ENR <span style="color:#f92672">|=</span> RCC_APB1ENR_TIM3EN;
+</span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB2ENR <span style="color:#f92672">|=</span> RCC_APB2ENR_IOPAEN;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// TIM3_CH1配置为浮空输入模式
+</span></span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>GPIO_CRL_CNF6;
+</span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">|=</span> GPIO_CRL_CNF6_0;
+</span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>GPIO_CRL_MODE6;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/*时基部分配置*/</span>
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>PSC <span style="color:#f92672">=</span> <span style="color:#ae81ff">72</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>ARR <span style="color:#f92672">=</span> <span style="color:#ae81ff">65536</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CR1_DIR;
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">|=</span> TIM_CR1_ARPE;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">/*输入捕获部分*/</span>
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CR2_TI1S;   <span style="color:#75715e">// 把CH1链接到TI1上
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCER <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CCER_CC1P; <span style="color:#75715e">// 上升沿捕获
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCER <span style="color:#f92672">|=</span> TIM_CCER_CC2P;  <span style="color:#75715e">// 下降沿捕获
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCER <span style="color:#f92672">|=</span> TIM_CCER_CC1E;  <span style="color:#75715e">// 开启捕获使能
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCER <span style="color:#f92672">|=</span> TIM_CCER_CC2E;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CCMR1_CC2S;
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">|=</span> TIM_CCMR1_CC2S_1; <span style="color:#75715e">// 通道1配置为输入，并把信号映射到IC2上
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CCMR1_CC1S;  <span style="color:#75715e">// 通道1配置为输入，并把信号映射到IC1上
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">|=</span> TIM_CCMR1_CC1S_0;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CCMR1_IC2PSC;
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CCMR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_CCMR1_IC1PSC; <span style="color:#75715e">// 输入预分频器不分频
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>SMCR <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_SMCR_TS; <span style="color:#75715e">// 配置触发输入模式
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>SMCR <span style="color:#f92672">|=</span> TIM_SMCR_TS_0;
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>SMCR <span style="color:#f92672">|=</span> TIM_SMCR_TS_2;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>SMCR <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_SMCR_SMS; <span style="color:#75715e">// 配置从控制器为复位模式
+</span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>SMCR <span style="color:#f92672">|=</span> TIM_SMCR_SMS_2;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">|=</span> TIM_CR1_CEN; <span style="color:#75715e">// 开启计数器
+</span></span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyTIM3_GetPWMCycle</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> TIM3<span style="color:#f92672">-&gt;</span>CCR1 <span style="color:#f92672">/</span> <span style="color:#ae81ff">1000.0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyTIM3_GetPWMFreq</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1000000.0</span> <span style="color:#f92672">/</span> TIM3<span style="color:#f92672">-&gt;</span>CCR1;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyTIM3_GetPWMDuty</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> TIM3<span style="color:#f92672">-&gt;</span>CCR2 <span style="color:#f92672">*</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">/</span> TIM3<span style="color:#f92672">-&gt;</span>CCR1;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><h4 id="通用定时器的寄存器配置">通用定时器的寄存器配置<a class="anchor" href="#%e9%80%9a%e7%94%a8%e5%ae%9a%e6%97%b6%e5%99%a8%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h4>
+<h5 id="控制寄存器1timx_cr1-1">控制寄存器1(TIMx_CR1)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a81timx_cr1-1">#</a></h5>
+<p><img src="image-177.png" alt="alt text" />
+<img src="image-178.png" alt="alt text" /></p>
+<h5 id="控制寄存器2timx_cr2-1">控制寄存器2(TIMx_CR2)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a82timx_cr2-1">#</a></h5>
+<p><img src="image-179.png" alt="alt text" /></p>
+<h5 id="从模式控制寄存器timx_smcr">从模式控制寄存器(TIMx_SMCR)<a class="anchor" href="#%e4%bb%8e%e6%a8%a1%e5%bc%8f%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8timx_smcr">#</a></h5>
+<p><img src="image-180.png" alt="alt text" />
+<img src="image-181.png" alt="alt text" /></p>
+<h5 id="dma中断使能寄存器timx_dier-1">DMA/中断使能寄存器(TIMx_DIER)<a class="anchor" href="#dma%e4%b8%ad%e6%96%ad%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8timx_dier-1">#</a></h5>
+<p><img src="image-182.png" alt="alt text" />
+<img src="image-183.png" alt="alt text" /></p>
+<h5 id="状态寄存器timx_sr-1">状态寄存器(TIMx_SR)<a class="anchor" href="#%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8timx_sr-1">#</a></h5>
+<p><img src="image-184.png" alt="alt text" />
+<img src="image-185.png" alt="alt text" /></p>
+<h5 id="事件产生寄存器timx_egr-1">事件产生寄存器(TIMx_EGR)<a class="anchor" href="#%e4%ba%8b%e4%bb%b6%e4%ba%a7%e7%94%9f%e5%af%84%e5%ad%98%e5%99%a8timx_egr-1">#</a></h5>
+<p><img src="image-186.png" alt="alt text" />
+<img src="image-187.png" alt="alt text" /></p>
+<h5 id="捕获比较模式寄存器1timx_ccmr1">捕获/比较模式寄存器1(TIMx_CCMR1)<a class="anchor" href="#%e6%8d%95%e8%8e%b7%e6%af%94%e8%be%83%e6%a8%a1%e5%bc%8f%e5%af%84%e5%ad%98%e5%99%a81timx_ccmr1">#</a></h5>
+<p><img src="image-188.png" alt="alt text" />
+<img src="image-189.png" alt="alt text" />
+<img src="image-190.png" alt="alt text" /></p>
+<h5 id="捕获比较模式寄存器2timx_ccmr2">捕获/比较模式寄存器2(TIMx_CCMR2)<a class="anchor" href="#%e6%8d%95%e8%8e%b7%e6%af%94%e8%be%83%e6%a8%a1%e5%bc%8f%e5%af%84%e5%ad%98%e5%99%a82timx_ccmr2">#</a></h5>
+<p><img src="image-191.png" alt="alt text" />
+<img src="image-192.png" alt="alt text" /></p>
+<h5 id="捕获比较使能寄存器timx_ccer">捕获/比较使能寄存器(TIMx_CCER)<a class="anchor" href="#%e6%8d%95%e8%8e%b7%e6%af%94%e8%be%83%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8timx_ccer">#</a></h5>
+<p><img src="image-193.png" alt="alt text" /></p>
+<h5 id="计数器timx_cnt-1">计数器(TIMx_CNT)<a class="anchor" href="#%e8%ae%a1%e6%95%b0%e5%99%a8timx_cnt-1">#</a></h5>
+<p><img src="image-194.png" alt="alt text" /></p>
+<h5 id="预分频器timx_psc-1">预分频器(TIMx_PSC)<a class="anchor" href="#%e9%a2%84%e5%88%86%e9%a2%91%e5%99%a8timx_psc-1">#</a></h5>
+<p><img src="image-195.png" alt="alt text" /></p>
+<h5 id="自动重装载寄存器timx_arr-1">自动重装载寄存器(TIMx_ARR)<a class="anchor" href="#%e8%87%aa%e5%8a%a8%e9%87%8d%e8%a3%85%e8%bd%bd%e5%af%84%e5%ad%98%e5%99%a8timx_arr-1">#</a></h5>
+<p><img src="image-196.png" alt="alt text" /></p>
+<h5 id="捕获比较寄存器1-4timx_ccr1-4">捕获/比较寄存器1-4(TIMx_CCR1-4)<a class="anchor" href="#%e6%8d%95%e8%8e%b7%e6%af%94%e8%be%83%e5%af%84%e5%ad%98%e5%99%a81-4timx_ccr1-4">#</a></h5>
+<p><img src="image-197.png" alt="alt text" />
+<img src="image-198.png" alt="alt text" />
+<img src="image-199.png" alt="alt text" />
+<img src="image-200.png" alt="alt text" /></p>
+<h5 id="dma控制寄存器timx_dcr">DMA控制寄存器(TIMx_DCR)<a class="anchor" href="#dma%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8timx_dcr">#</a></h5>
+<p><img src="image-201.png" alt="alt text" /></p>
+<h5 id="连续模式的dma地址timx_dmar">连续模式的DMA地址(TIMx_DMAR)<a class="anchor" href="#%e8%bf%9e%e7%bb%ad%e6%a8%a1%e5%bc%8f%e7%9a%84dma%e5%9c%b0%e5%9d%80timx_dmar">#</a></h5>
+<p><img src="image-202.png" alt="alt text" /></p>
+<hr>
+<p><br><br></p>
+<h3 id="高级定时器">高级定时器<a class="anchor" href="#%e9%ab%98%e7%ba%a7%e5%ae%9a%e6%97%b6%e5%99%a8">#</a></h3>
+<p><img src="image-64.png" alt="alt text" /></p>
+<hr>
+<p><br><br></p>
+<h3 id="系统滴答定时器systick">系统滴答定时器(SysTick)<a class="anchor" href="#%e7%b3%bb%e7%bb%9f%e6%bb%b4%e7%ad%94%e5%ae%9a%e6%97%b6%e5%99%a8systick">#</a></h3>
+<h4 id="systick概念">SysTick概念<a class="anchor" href="#systick%e6%a6%82%e5%bf%b5">#</a></h4>
+<p>系统定时器（SysTick系统）是属于CM3内核，内嵌在NVIC中。
+系统定时器是一个24bit的向下递减的计数器，计数器每计数一次的时间为1 / SYSCLK，一般我们设置系统时钟SYSCLK（与AHB相同）等于72M。当重装载数值寄存器的值递减到0的时候，系统定时器就产生一次中断，以此循环往复。</p>
+<p>SysTick定时器能产生中断，CM3为它专门开出一个异常类型，并且在向量表中有它的一席之地。它使操作系统和其它系统软件在CM3器件间的移植变得简单多了，因为在所有CM3产品间SysTick的处理方式都是相同的。</p>
+<h4 id="systick的寄存器配置">SysTick的寄存器配置<a class="anchor" href="#systick%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h4>
+<h5 id="systick控制和状态寄存器stk_ctrl">SysTick控制和状态寄存器(STK_CTRL)<a class="anchor" href="#systick%e6%8e%a7%e5%88%b6%e5%92%8c%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8stk_ctrl">#</a></h5>
+<p><img src="image-45.png" alt="alt text" /></p>
+<h5 id="systick重装载寄存器stk_load">SysTick重装载寄存器(STK_LOAD)<a class="anchor" href="#systick%e9%87%8d%e8%a3%85%e8%bd%bd%e5%af%84%e5%ad%98%e5%99%a8stk_load">#</a></h5>
+<p><img src="image-46.png" alt="alt text" /></p>
+<h5 id="systick当前数值寄存器stk_val">SysTick当前数值寄存器(STK_VAL)<a class="anchor" href="#systick%e5%bd%93%e5%89%8d%e6%95%b0%e5%80%bc%e5%af%84%e5%ad%98%e5%99%a8stk_val">#</a></h5>
+<p><img src="image-47.png" alt="alt text" /></p>
+<h4 id="systick阻塞式延时写法">SysTick阻塞式延时写法<a class="anchor" href="#systick%e9%98%bb%e5%a1%9e%e5%bc%8f%e5%bb%b6%e6%97%b6%e5%86%99%e6%b3%95">#</a></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __DELAY_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define __DELAY_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;stm32f10x.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Delay_us</span>(<span style="color:#66d9ef">uint16_t</span> us);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Delay_ms</span>(<span style="color:#66d9ef">uint16_t</span> ms);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Delay_s</span>(<span style="color:#66d9ef">uint16_t</span> s);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;Delay.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Delay_us</span>(<span style="color:#66d9ef">uint16_t</span> us)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 无中断，使用系统时钟72MHz,1/72us
+</span></span></span><span style="display:flex;"><span>    SysTick<span style="color:#f92672">-&gt;</span>CTRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>SysTick_CTRL_TICKINT_Msk;
+</span></span><span style="display:flex;"><span>    SysTick<span style="color:#f92672">-&gt;</span>CTRL <span style="color:#f92672">|=</span> SysTick_CTRL_CLKSOURCE_Msk;
+</span></span><span style="display:flex;"><span>    SysTick<span style="color:#f92672">-&gt;</span>LOAD <span style="color:#f92672">=</span> <span style="color:#ae81ff">72</span> <span style="color:#f92672">*</span> us;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 清除当前计数值
+</span></span></span><span style="display:flex;"><span>    SysTick<span style="color:#f92672">-&gt;</span>VAL <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    SysTick<span style="color:#f92672">-&gt;</span>CTRL <span style="color:#f92672">|=</span> SysTick_CTRL_ENABLE_Msk;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 阻塞延时
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> ((SysTick<span style="color:#f92672">-&gt;</span>CTRL <span style="color:#f92672">&amp;</span> SysTick_CTRL_COUNTFLAG_Msk) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 关闭定时器
+</span></span></span><span style="display:flex;"><span>    SysTick<span style="color:#f92672">-&gt;</span>CTRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>SysTick_CTRL_ENABLE_Msk;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Delay_ms</span>(<span style="color:#66d9ef">uint16_t</span> ms)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 毫秒延时
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (ms<span style="color:#f92672">--</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Delay_us</span>(<span style="color:#ae81ff">1000</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Delay_s</span>(<span style="color:#66d9ef">uint16_t</span> s)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 秒延时
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (s<span style="color:#f92672">--</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Delay_ms</span>(<span style="color:#ae81ff">1000</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><hr>
+<p><br><br></p>
+<h2 id="直接存储器访问dma">直接存储器访问(DMA)<a class="anchor" href="#%e7%9b%b4%e6%8e%a5%e5%ad%98%e5%82%a8%e5%99%a8%e8%ae%bf%e9%97%aedma">#</a></h2>
+<h3 id="dma概念">DMA概念<a class="anchor" href="#dma%e6%a6%82%e5%bf%b5">#</a></h3>
+<p><strong>DMA可以提供外设和存储器或者存储器和存储器之间的高速数据传输，无需CPU干预，节省了CPU资源。</strong>
+<strong>12个独立可配置的通道：DMA1(7个通道),DMA2(5个通道),每个通道都支持软件触发和特定的硬件触发</strong>
+<strong>STM32F103C8T6只有DMA1</strong></p>
+<h3 id="dma结构图">DMA结构图<a class="anchor" href="#dma%e7%bb%93%e6%9e%84%e5%9b%be">#</a></h3>
+<p><img src="image-204.png" alt="alt text" />
+<img src="image-206.png" alt="alt text" />
+<strong>寄存器是一种特殊的存储器，CPU可以直接对寄存器读写，就像访问内存一样，而寄存器背后连接导线控制引脚的高低电平、导通和断开开关、切换数据选择器、作为数据寄存器。软件读写寄存器，就相当于控制硬件执行，所以寄存器是沟通软件和硬件的桥梁</strong></p>
+<h3 id="dma请求映像">DMA请求映像<a class="anchor" href="#dma%e8%af%b7%e6%b1%82%e6%98%a0%e5%83%8f">#</a></h3>
+<p><img src="image-237.png" alt="alt text" />
+<img src="image-238.png" alt="alt text" />
+<img src="image-239.png" alt="alt text" />
+<img src="image-240.png" alt="alt text" /></p>
+<h3 id="dma的寄存器配置">DMA的寄存器配置<a class="anchor" href="#dma%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
+<h4 id="dma中断状态寄存器dma_isr">DMA中断状态寄存器(DMA_ISR)<a class="anchor" href="#dma%e4%b8%ad%e6%96%ad%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8dma_isr">#</a></h4>
+<p><img src="image-207.png" alt="alt text" />
+<img src="image-208.png" alt="alt text" /></p>
+<h4 id="dma中断标志清除寄存器dma_ifcr">DMA中断标志清除寄存器(DMA_IFCR)<a class="anchor" href="#dma%e4%b8%ad%e6%96%ad%e6%a0%87%e5%bf%97%e6%b8%85%e9%99%a4%e5%af%84%e5%ad%98%e5%99%a8dma_ifcr">#</a></h4>
+<p><img src="image-209.png" alt="alt text" /></p>
+<h4 id="dma通道x配置寄存器dma_ccrxx--17">DMA通道x配置寄存器(DMA_CCRx)(x = 1…7)<a class="anchor" href="#dma%e9%80%9a%e9%81%93x%e9%85%8d%e7%bd%ae%e5%af%84%e5%ad%98%e5%99%a8dma_ccrxx--17">#</a></h4>
+<p><img src="image-210.png" alt="alt text" />
+<img src="image-211.png" alt="alt text" />
+<img src="image-212.png" alt="alt text" /></p>
+<h4 id="dma通道x传输数量寄存器dma_cndtrxx--17">DMA通道x传输数量寄存器(DMA_CNDTRx)(x = 1…7)<a class="anchor" href="#dma%e9%80%9a%e9%81%93x%e4%bc%a0%e8%be%93%e6%95%b0%e9%87%8f%e5%af%84%e5%ad%98%e5%99%a8dma_cndtrxx--17">#</a></h4>
+<p><img src="image-213.png" alt="alt text" /></p>
+<h4 id="dma通道x外设地址寄存器dma_cparxx--17">DMA通道x外设地址寄存器(DMA_CPARx)(x = 1…7)<a class="anchor" href="#dma%e9%80%9a%e9%81%93x%e5%a4%96%e8%ae%be%e5%9c%b0%e5%9d%80%e5%af%84%e5%ad%98%e5%99%a8dma_cparxx--17">#</a></h4>
+<p><img src="image-214.png" alt="alt text" /></p>
+<h4 id="dma通道x存储器地址寄存器dma_cmarxx--17">DMA通道x存储器地址寄存器(DMA_CMARx)(x = 1…7)<a class="anchor" href="#dma%e9%80%9a%e9%81%93x%e5%ad%98%e5%82%a8%e5%99%a8%e5%9c%b0%e5%9d%80%e5%af%84%e5%ad%98%e5%99%a8dma_cmarxx--17">#</a></h4>
+<p><img src="image-215.png" alt="alt text" />
+<img src="image-216.png" alt="alt text" /></p>
+<hr>
+<p><br><br></p>
+<h2 id="模拟-数字转换器adc">模拟-数字转换器(ADC)<a class="anchor" href="#%e6%a8%a1%e6%8b%9f-%e6%95%b0%e5%ad%97%e8%bd%ac%e6%8d%a2%e5%99%a8adc">#</a></h2>
+<h3 id="adc概念">ADC概念<a class="anchor" href="#adc%e6%a6%82%e5%bf%b5">#</a></h3>
+<p><strong>ADC可以将引脚上连续变化的模拟电压转换为内存中存储的数字变量，建立模拟电路到数字电路的桥梁</strong></p>
+<ul>
+<li><strong>12位逐次逼近型ADC，1us转换时间</strong></li>
+<li><strong>输入电压范围为：0-3.3V，转换结果范围：0-4095</strong></li>
+<li><strong>18个输入通道，可测量16个外部和内部信号源</strong></li>
+<li><strong>规则组和注入组两个转换单元</strong></li>
+<li><strong>模拟看门狗自动监测输入电压范围</strong></li>
+</ul>
+<p><strong>STM32F103C8T6有ADC1、ADC2、10个外部输入通道</strong></p>
+<h3 id="adc结构图">ADC结构图<a class="anchor" href="#adc%e7%bb%93%e6%9e%84%e5%9b%be">#</a></h3>
+<p><img src="image-217.png" alt="alt text" />
+<img src="image-219.png" alt="alt text" />
+<strong>规则通道最多4个，转换完存放数据寄存器有4个</strong>
+<strong>注入通道有16个，转换完存放数据寄存器只有一个</strong></p>
+<h3 id="adc输入引脚通道">ADC输入引脚通道<a class="anchor" href="#adc%e8%be%93%e5%85%a5%e5%bc%95%e8%84%9a%e9%80%9a%e9%81%93">#</a></h3>
+<p><img src="image-220.png" alt="alt text" /></p>
+<h3 id="adc转换模式">ADC转换模式<a class="anchor" href="#adc%e8%bd%ac%e6%8d%a2%e6%a8%a1%e5%bc%8f">#</a></h3>
+<ul>
+<li><strong>单次转换，扫描模式</strong></li>
+<li><strong>单次转换，非扫描模式</strong></li>
+<li><strong>连续转换，扫描模式</strong></li>
+<li><strong>连续转换，非扫描模式</strong></li>
+<li><strong>间断模式</strong>
+<strong>单次/连续：转换完一次后是否循环转换</strong>
+<strong>扫描/非扫描:一次转换几个通道</strong>
+<strong>间断：在扫描模式下收到一次触发后转换几个通道</strong></li>
+</ul>
+<h3 id="adc的寄存器配置">ADC的寄存器配置<a class="anchor" href="#adc%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
+<h4 id="adc状态寄存器adc_sr">ADC状态寄存器(ADC_SR)<a class="anchor" href="#adc%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8adc_sr">#</a></h4>
+<p><img src="image-218.png" alt="alt text" /></p>
+<h4 id="adc控制寄存器1adc_cr1">ADC控制寄存器1(ADC_CR1)<a class="anchor" href="#adc%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a81adc_cr1">#</a></h4>
+<p><img src="image-221.png" alt="alt text" />
+<img src="image-222.png" alt="alt text" /></p>
+<h4 id="adc控制寄存器2adc_cr2">ADC控制寄存器2(ADC_CR2)<a class="anchor" href="#adc%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a82adc_cr2">#</a></h4>
+<p><img src="image-223.png" alt="alt text" />
+<img src="image-224.png" alt="alt text" />
+<img src="image-225.png" alt="alt text" /></p>
+<h4 id="adc采样时间寄存器1adc_smpr1">ADC采样时间寄存器1(ADC_SMPR1)<a class="anchor" href="#adc%e9%87%87%e6%a0%b7%e6%97%b6%e9%97%b4%e5%af%84%e5%ad%98%e5%99%a81adc_smpr1">#</a></h4>
+<p><img src="image-226.png" alt="alt text" /></p>
+<h4 id="adc采样时间寄存器2adc_smpr2">ADC采样时间寄存器2(ADC_SMPR2)<a class="anchor" href="#adc%e9%87%87%e6%a0%b7%e6%97%b6%e9%97%b4%e5%af%84%e5%ad%98%e5%99%a82adc_smpr2">#</a></h4>
+<p><img src="image-227.png" alt="alt text" /></p>
+<h4 id="adc注入通道数据偏移寄存器x-adc_jofrxx14">ADC注入通道数据偏移寄存器x (ADC_JOFRx)(x=1..4)<a class="anchor" href="#adc%e6%b3%a8%e5%85%a5%e9%80%9a%e9%81%93%e6%95%b0%e6%8d%ae%e5%81%8f%e7%a7%bb%e5%af%84%e5%ad%98%e5%99%a8x-adc_jofrxx14">#</a></h4>
+<p><img src="image-228.png" alt="alt text" /></p>
+<h4 id="adc看门狗高阈值寄存器adc_htr">ADC看门狗高阈值寄存器(ADC_HTR)<a class="anchor" href="#adc%e7%9c%8b%e9%97%a8%e7%8b%97%e9%ab%98%e9%98%88%e5%80%bc%e5%af%84%e5%ad%98%e5%99%a8adc_htr">#</a></h4>
+<p><img src="image-229.png" alt="alt text" /></p>
+<h4 id="adc看门狗低阀值寄存器adc_lrt">ADC看门狗低阀值寄存器(ADC_LRT)<a class="anchor" href="#adc%e7%9c%8b%e9%97%a8%e7%8b%97%e4%bd%8e%e9%98%80%e5%80%bc%e5%af%84%e5%ad%98%e5%99%a8adc_lrt">#</a></h4>
+<p><img src="image-230.png" alt="alt text" /></p>
+<h4 id="adc规则序列寄存器1-3adc_sqr1-3">ADC规则序列寄存器1-3(ADC_SQR1-3)<a class="anchor" href="#adc%e8%a7%84%e5%88%99%e5%ba%8f%e5%88%97%e5%af%84%e5%ad%98%e5%99%a81-3adc_sqr1-3">#</a></h4>
+<p><img src="image-231.png" alt="alt text" />
+<img src="image-232.png" alt="alt text" />
+<img src="image-233.png" alt="alt text" /></p>
+<h4 id="adc注入序列寄存器adc_jsqr">ADC注入序列寄存器(ADC_JSQR)<a class="anchor" href="#adc%e6%b3%a8%e5%85%a5%e5%ba%8f%e5%88%97%e5%af%84%e5%ad%98%e5%99%a8adc_jsqr">#</a></h4>
+<p><img src="image-234.png" alt="alt text" /></p>
+<h4 id="adc-注入数据寄存器x-adc_jdrx-x-14">ADC 注入数据寄存器x (ADC_JDRx) (x= 1..4)<a class="anchor" href="#adc-%e6%b3%a8%e5%85%a5%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8x-adc_jdrx-x-14">#</a></h4>
+<p><img src="image-235.png" alt="alt text" /></p>
+<h4 id="adc规则数据寄存器adc_dr">ADC规则数据寄存器(ADC_DR)<a class="anchor" href="#adc%e8%a7%84%e5%88%99%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8adc_dr">#</a></h4>
+<p><img src="image-236.png" alt="alt text" /></p>
+<h3 id="adc单通道转换代码示例">ADC单通道转换代码示例<a class="anchor" href="#adc%e5%8d%95%e9%80%9a%e9%81%93%e8%bd%ac%e6%8d%a2%e4%bb%a3%e7%a0%81%e7%a4%ba%e4%be%8b">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __ADC_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define __ADC_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;stm32f10x.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyADC_Init</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyADC_StartConvert</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyADC_GetV</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;ADC.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyADC_Init</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1. 时钟配置
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1.1 ADC1外设使能
+</span></span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB2ENR <span style="color:#f92672">|=</span> RCC_APB2ENR_ADC1EN;
+</span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB2ENR <span style="color:#f92672">|=</span> RCC_APB2ENR_IOPAEN;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1.3 ADC外设时钟分频
+</span></span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>CFGR <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>RCC_CFGR_ADCPRE;
+</span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>CFGR <span style="color:#f92672">|=</span> RCC_CFGR_ADCPRE_DIV6;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2. GPIO配置
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2.1 PA1配置成模拟输入
+</span></span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>GPIO_CRL_CNF1;
+</span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>GPIO_CRL_MODE1;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3 ADC配置
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.1 非扫描模式
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>ADC_CR1_SCAN;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.2 连续转换模式
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_CONT;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.3 数据右对齐
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>ADC_CR2_ALIGN;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.4 设置ADC采样时间
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SMPR2 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>ADC_SMPR2_SMP1;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.5 规则组扫描序列数配置
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SQR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>ADC_SQR1_L;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.6 规则组扫描序列对应通道位配置
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SQR3 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>ADC_SQR3_SQ1;
+</span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SQR3 <span style="color:#f92672">|=</span> ADC_SQR3_SQ1_0;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.7 规则组软件触发模式
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_EXTTRIG;
+</span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_EXTSEL;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.8 ADC校准
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_RSTCAL;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">&amp;</span> ADC_CR2_RSTCAL)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_CAL;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">&amp;</span> ADC_CR2_CAL)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 开始转换
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyADC_StartConvert</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1. ADC外设上电唤醒
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_ADON;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2. 启动AD转换
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_SWSTART;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3. 等待转换完成
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> ((ADC1<span style="color:#f92672">-&gt;</span>SR <span style="color:#f92672">&amp;</span> ADC_SR_EOC) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 读取转换电压
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">double</span> <span style="color:#a6e22e">MyADC_GetV</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ADC1<span style="color:#f92672">-&gt;</span>DR <span style="color:#f92672">*</span> <span style="color:#ae81ff">3.3</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">4095</span>;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><h3 id="adc连续扫描示例代码">ADC连续扫描示例代码<a class="anchor" href="#adc%e8%bf%9e%e7%bb%ad%e6%89%ab%e6%8f%8f%e7%a4%ba%e4%be%8b%e4%bb%a3%e7%a0%81">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __ADC_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define __ADC_H
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;stm32f10x.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyADC_Init</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyADC_StartConvert</span>(<span style="color:#66d9ef">uint32_t</span> desaddr, <span style="color:#66d9ef">uint16_t</span> len);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;ADC.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyADC_Init</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1. 时钟使能
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1.1 ADC时钟使能
+</span></span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB2ENR <span style="color:#f92672">|=</span> RCC_APB2ENR_ADC1EN;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1.2 ADC时钟预分频
+</span></span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>CFGR <span style="color:#f92672">|=</span> RCC_CFGR_ADCPRE_DIV6;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1.3 GPIOA时钟使能
+</span></span></span><span style="display:flex;"><span>    RCC<span style="color:#f92672">-&gt;</span>APB2ENR <span style="color:#f92672">|=</span> RCC_APB2ENR_IOPAEN;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2. 引脚配置
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2.1 PA1、PA2引脚模拟输入模式
+</span></span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>GPIO_CRL_CNF1;
+</span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>GPIO_CRL_MODE1;
+</span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>GPIO_CRL_CNF2;
+</span></span><span style="display:flex;"><span>    GPIOA<span style="color:#f92672">-&gt;</span>CRL <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>GPIO_CRL_MODE2;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3. ADC配置
+</span></span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.1 开启扫描模式
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR1 <span style="color:#f92672">|=</span> ADC_CR1_SCAN;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.2 开启规则组软件触发转换模式
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_EXTTRIG;
+</span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_EXTSEL;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.3 数据右对齐
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>ADC_CR2_ALIGN;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.4 开启DMA输出模式
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_DMA;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.5 开启连续转换模式
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_CONT;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.6 ADC采样时间
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SMPR2 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>ADC_SMPR2_SMP1;
+</span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SMPR2 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>ADC_SMPR2_SMP2;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.7 ADC扫描序列长度
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SQR1 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>ADC_SQR1_L;
+</span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SQR1 <span style="color:#f92672">|=</span> ADC_SQR1_L_0;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.8 ADC扫描序列对应通道
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SQR3 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>ADC_SQR3_SQ1;
+</span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SQR3 <span style="color:#f92672">|=</span> ADC_SQR3_SQ1_0;
+</span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SQR3 <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>ADC_SQR3_SQ2;
+</span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>SQR3 <span style="color:#f92672">|=</span> ADC_SQR3_SQ2_1;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3.9 ADC校准
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_RSTCAL;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">&amp;</span> ADC_CR2_RSTCAL)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_CAL;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">&amp;</span> ADC_CR2_CAL)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 开始转换
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">MyADC_StartConvert</span>(<span style="color:#66d9ef">uint32_t</span> desaddr, <span style="color:#66d9ef">uint16_t</span> len)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1. DMA开启配置
+</span></span></span><span style="display:flex;"><span>    DMA1_Channel1<span style="color:#f92672">-&gt;</span>CPAR <span style="color:#f92672">=</span> (<span style="color:#66d9ef">uint32_t</span>)<span style="color:#f92672">&amp;</span>(ADC1<span style="color:#f92672">-&gt;</span>DR);
+</span></span><span style="display:flex;"><span>    DMA1_Channel1<span style="color:#f92672">-&gt;</span>CMAR <span style="color:#f92672">=</span> (<span style="color:#66d9ef">uint32_t</span>)desaddr;
+</span></span><span style="display:flex;"><span>    DMA1_Channel1<span style="color:#f92672">-&gt;</span>CNDTR <span style="color:#f92672">=</span> len;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2. 上电开启
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_ADON;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2.1 使能DMA
+</span></span></span><span style="display:flex;"><span>    DMA1_Channel1<span style="color:#f92672">-&gt;</span>CCR <span style="color:#f92672">|=</span> DMA_CCR1_EN;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 2.2 ADC开始转换
+</span></span></span><span style="display:flex;"><span>    ADC1<span style="color:#f92672">-&gt;</span>CR2 <span style="color:#f92672">|=</span> ADC_CR2_SWSTART;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 3. 等待首次转换完成
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> ((ADC1<span style="color:#f92672">-&gt;</span>SR <span style="color:#f92672">&amp;</span> ADC_SR_EOC) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><hr>
+<p><br><br></p>
+<h2 id="备份寄存器bkp">备份寄存器(BKP)<a class="anchor" href="#%e5%a4%87%e4%bb%bd%e5%af%84%e5%ad%98%e5%99%a8bkp">#</a></h2>
+<h3 id="bkp概念">BKP概念<a class="anchor" href="#bkp%e6%a6%82%e5%bf%b5">#</a></h3>
+<ul>
+<li><strong>BKP可用于存储用户应用程序数据。当VDD(2.0-3.6V)电源被切断，它们仍然用VBAT(1.8-3.6V)维持供电。当系统在待机模式下被唤醒，或者系统复位或电源复位时，它们也不会被复位</strong></li>
+<li><strong>TAMPER引脚产生的侵入事件将所有备份寄存器内容清除</strong></li>
+<li><strong>RTC引脚输出RTC校准时钟、RTC闹钟脉冲或者秒脉冲</strong></li>
+<li><strong>存储RTC时钟校准寄存器</strong></li>
+<li><strong>用户数据存储容量：20字节(小中容量)/84字节(大容量和互联型)</strong></li>
+</ul>
+<h3 id="bkp的基本结构">BKP的基本结构<a class="anchor" href="#bkp%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%bb%93%e6%9e%84">#</a></h3>
+<p><img src="image-241.png" alt="alt text" /></p>
+<h3 id="bkp的寄存器配置">BKP的寄存器配置<a class="anchor" href="#bkp%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
+<h4 id="备份数据寄存器xbkp_drx-x--1--10">备份数据寄存器x(BKP_DRx) (x = 1 … 10)<a class="anchor" href="#%e5%a4%87%e4%bb%bd%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8xbkp_drx-x--1--10">#</a></h4>
+<p><img src="image-242.png" alt="alt text" /></p>
+<h4 id="rtc时钟校准寄存器bkp_rtccr">RTC时钟校准寄存器(BKP_RTCCR)<a class="anchor" href="#rtc%e6%97%b6%e9%92%9f%e6%a0%a1%e5%87%86%e5%af%84%e5%ad%98%e5%99%a8bkp_rtccr">#</a></h4>
+<p><img src="image-243.png" alt="alt text" /></p>
+<h4 id="备份控制寄存器bkp_cr">备份控制寄存器(BKP_CR)<a class="anchor" href="#%e5%a4%87%e4%bb%bd%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8bkp_cr">#</a></h4>
+<p><img src="image-244.png" alt="alt text" /></p>
+<h4 id="备份控制状态寄存器bkp_csr">备份控制/状态寄存器(BKP_CSR)<a class="anchor" href="#%e5%a4%87%e4%bb%bd%e6%8e%a7%e5%88%b6%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8bkp_csr">#</a></h4>
+<p><img src="image-245.png" alt="alt text" /></p>
+<h4 id="备份控制状态寄存器bkp_csr-1">备份控制/状态寄存器(BKP_CSR)<a class="anchor" href="#%e5%a4%87%e4%bb%bd%e6%8e%a7%e5%88%b6%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8bkp_csr-1">#</a></h4>
+<p><img src="image-246.png" alt="alt text" /></p>
+<h2 id="实时时钟rtc">实时时钟(RTC)<a class="anchor" href="#%e5%ae%9e%e6%97%b6%e6%97%b6%e9%92%9frtc">#</a></h2>
+<h3 id="unix时间戳概念">Unix时间戳概念<a class="anchor" href="#unix%e6%97%b6%e9%97%b4%e6%88%b3%e6%a6%82%e5%bf%b5">#</a></h3>
+<ul>
+<li><strong>Unix时间戳是从UTC/GMT的1970年1月1日0时0分0秒开始所经过的秒数，不考虑闰秒</strong></li>
+<li><strong>时间戳存储在一个秒计数器中，秒计数器为32位/64位的整型变量</strong></li>
+<li><strong>世界上所有时区的秒计数器相同，不同时区通过添加偏移来得到当地时间</strong></li>
+</ul>
+<p><strong>C语言time.h提供了时间获取和时间戳转换的函数，可以进行秒计数器、日期时间和字符串之间的转换</strong></p>
+<h3 id="rtc概念">RTC概念<a class="anchor" href="#rtc%e6%a6%82%e5%bf%b5">#</a></h3>
+<ul>
+<li><strong>RTC是一个独立的定时器，可为系统提供时钟和日历的功能</strong></li>
+<li><strong>RTC和时钟配置系统处于后备区域，系统复位时数据不清零，VDD(2.0-3.6V)断电后可借助VBAT(1.8-3.6V)供电继续走时</strong></li>
+<li><strong>32位的计数器，可对应Unix时间戳的秒计数器</strong></li>
+<li><strong>20位的预分频器，可适应不同频率的输入时钟</strong></li>
+<li><strong>可选择三种RTC时钟源</strong>
+<strong>1.HSE时钟除以128(8MHz/128)</strong>
+<strong>2.LSE时钟(32.768KHz)</strong>
+<strong>3.LSI时钟(40KHz)</strong></li>
+</ul>
+<h3 id="rtc结构图">RTC结构图<a class="anchor" href="#rtc%e7%bb%93%e6%9e%84%e5%9b%be">#</a></h3>
+<p><img src="image-247.png" alt="alt text" />
+<img src="image-248.png" alt="alt text" /></p>
+<h3 id="rtc的寄存器配置">RTC的寄存器配置<a class="anchor" href="#rtc%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
+<h4 id="rtc控制寄存器高位rtc_crh">RTC控制寄存器高位(RTC_CRH)<a class="anchor" href="#rtc%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8%e9%ab%98%e4%bd%8drtc_crh">#</a></h4>
+<p><img src="image-249.png" alt="alt text" /></p>
+<h4 id="rtc控制寄存器低位rtc_crl">RTC控制寄存器低位(RTC_CRL)<a class="anchor" href="#rtc%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8%e4%bd%8e%e4%bd%8drtc_crl">#</a></h4>
+<p><img src="image-250.png" alt="alt text" />
+<img src="image-251.png" alt="alt text" /></p>
+<h4 id="rtc预分频装载寄存器rtc_prlhrtc_prll">RTC预分频装载寄存器(RTC_PRLH/RTC_PRLL)<a class="anchor" href="#rtc%e9%a2%84%e5%88%86%e9%a2%91%e8%a3%85%e8%bd%bd%e5%af%84%e5%ad%98%e5%99%a8rtc_prlhrtc_prll">#</a></h4>
+<p><img src="image-252.png" alt="alt text" />
+<img src="image-253.png" alt="alt text" />
+<img src="image-254.png" alt="alt text" /></p>
+<h4 id="rtc预分频器余数寄存器rtc_divh--rtc_divl">RTC预分频器余数寄存器(RTC_DIVH / RTC_DIVL)<a class="anchor" href="#rtc%e9%a2%84%e5%88%86%e9%a2%91%e5%99%a8%e4%bd%99%e6%95%b0%e5%af%84%e5%ad%98%e5%99%a8rtc_divh--rtc_divl">#</a></h4>
+<p><img src="image-255.png" alt="alt text" /></p>
+<h4 id="rtc计数器寄存器-rtc_cnth--rtc_cntl">RTC计数器寄存器 (RTC_CNTH / RTC_CNTL)<a class="anchor" href="#rtc%e8%ae%a1%e6%95%b0%e5%99%a8%e5%af%84%e5%ad%98%e5%99%a8-rtc_cnth--rtc_cntl">#</a></h4>
+<p><img src="image-256.png" alt="alt text" />
+<img src="image-257.png" alt="alt text" /></p>
+<h4 id="rtc闹钟寄存器rtc_alrhrtc_alrl">RTC闹钟寄存器(RTC_ALRH/RTC_ALRL)<a class="anchor" href="#rtc%e9%97%b9%e9%92%9f%e5%af%84%e5%ad%98%e5%99%a8rtc_alrhrtc_alrl">#</a></h4>
+<p><img src="image-258.png" alt="alt text" /></p>
+<hr>
+<p><br><br></p>
+<h2 id="通讯协议">通讯协议<a class="anchor" href="#%e9%80%9a%e8%ae%af%e5%8d%8f%e8%ae%ae">#</a></h2>
+<p><img src="image-260.png" alt="alt text" /></p>
+<h3 id="usart-2">USART<a class="anchor" href="#usart-2">#</a></h3>
+<h4 id="usart概念">USART概念<a class="anchor" href="#usart%e6%a6%82%e5%bf%b5">#</a></h4>
+<ul>
+<li><strong>USART串口通信，自带波特率发生器，最高达4.5Mbits/s</strong></li>
+<li><strong>可配置数据位长度(8/9)、停止位长度(0.5/1/1.5/2)</strong></li>
+<li><strong>可选校验位(无校验/奇校验/偶校验)</strong></li>
+<li><strong>可支持同步模式、硬件流模式、DMA、智能卡、IrDA、LIN</strong>
+<strong>STM32F103C8T6有USART1、USART2、USART3</strong></li>
+</ul>
+<h4 id="usart参数时序">USART参数时序<a class="anchor" href="#usart%e5%8f%82%e6%95%b0%e6%97%b6%e5%ba%8f">#</a></h4>
+<p><img src="image-259.png" alt="alt text" />
+<strong>波特率9600，每秒发送9600位，每一位时间为1/9600 = 104us</strong>
+<img src="image-261.png" alt="alt text" /></p>
+<h4 id="usart结构图">USART结构图<a class="anchor" href="#usart%e7%bb%93%e6%9e%84%e5%9b%be">#</a></h4>
+<p><img src="image-263.png" alt="alt text" />
+<img src="image-262.png" alt="alt text" /></p>
+<h4 id="usart波特率配置">USART波特率配置<a class="anchor" href="#usart%e6%b3%a2%e7%89%b9%e7%8e%87%e9%85%8d%e7%bd%ae">#</a></h4>
+<p><img src="image-268.png" alt="alt text" />
+<img src="image-270.png" alt="alt text" />
+<img src="image-269.png" alt="alt text" /></p>
+<h4 id="usart寄存器配置">USART寄存器配置<a class="anchor" href="#usart%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h4>
+<h5 id="状态寄存器usart_sr">状态寄存器(USART_SR)<a class="anchor" href="#%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8usart_sr">#</a></h5>
+<p><img src="image-264.png" alt="alt text" />
+<img src="image-265.png" alt="alt text" /></p>
+<h5 id="数据寄存器usart_dr">数据寄存器(USART_DR)<a class="anchor" href="#%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8usart_dr">#</a></h5>
+<p><img src="image-266.png" alt="alt text" />
+<img src="image-267.png" alt="alt text" /></p>
+<h5 id="波特比率寄存器usart_brr">波特比率寄存器(USART_BRR)<a class="anchor" href="#%e6%b3%a2%e7%89%b9%e6%af%94%e7%8e%87%e5%af%84%e5%ad%98%e5%99%a8usart_brr">#</a></h5>
+<p><img src="image-271.png" alt="alt text" /></p>
+<h5 id="控制寄存器1usart_cr1">控制寄存器1(USART_CR1)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a81usart_cr1">#</a></h5>
+<p><img src="image-272.png" alt="alt text" />
+<img src="image-273.png" alt="alt text" />
+<img src="image-274.png" alt="alt text" /></p>
+<h5 id="控制寄存器2usart_cr2">控制寄存器2(USART_CR2)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a82usart_cr2">#</a></h5>
+<p><img src="image-275.png" alt="alt text" />
+<img src="image-276.png" alt="alt text" /></p>
+<h5 id="控制寄存器3usart_cr3">控制寄存器3(USART_CR3)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a83usart_cr3">#</a></h5>
+<p><img src="image-277.png" alt="alt text" />
+<img src="image-278.png" alt="alt text" /></p>
+<h5 id="保护时间和预分频寄存器usart_gtpr">保护时间和预分频寄存器(USART_GTPR)<a class="anchor" href="#%e4%bf%9d%e6%8a%a4%e6%97%b6%e9%97%b4%e5%92%8c%e9%a2%84%e5%88%86%e9%a2%91%e5%af%84%e5%ad%98%e5%99%a8usart_gtpr">#</a></h5>
+<h2 id="alt-text-3"><img src="image-279.png" alt="alt text" />
+<img src="image-280.png" alt="alt text" /><a class="anchor" href="#alt-text-3">#</a></h2>
+<p><br><br></p>
+<h3 id="spi-1">SPI<a class="anchor" href="#spi-1">#</a></h3>
+<h4 id="spi概念">SPI概念<a class="anchor" href="#spi%e6%a6%82%e5%bf%b5">#</a></h4>
+<p><strong>SPI(Serial Perighera interface)串行外围设备接口</strong>
+<strong>SPI是一种高速的，全双工，同步的串行通信总线，只支持一主多从模式</strong></p>
+<h4 id="spi结构图">SPI结构图<a class="anchor" href="#spi%e7%bb%93%e6%9e%84%e5%9b%be">#</a></h4>
+<p><img src="image-281.png" alt="alt text" /></p>
+<h4 id="spi时序">SPI时序<a class="anchor" href="#spi%e6%97%b6%e5%ba%8f">#</a></h4>
+<p><strong>CPOL(时钟极性):置0时，SCK空闲时为低电平。置1时，SCK空闲时为高电平</strong>
+<strong>CPHA(时钟相位):置0时，在SCK第一个边沿采样。置1时，在SCK第二个边沿采样</strong>
+<strong>NSS片选信号拉低时，表该从机被选中，NSS拉高时，表示该从机被释放</strong>
+<strong>MISO每发送一位比特时，MOSI也要发送一位比特以交换数据(即使此时发送的是无效数据)</strong></p>
+<h4 id="spi的寄存器配置">SPI的寄存器配置<a class="anchor" href="#spi%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h4>
+<h5 id="spi控制寄存器1spi_cr1">SPI控制寄存器1(SPI_CR1)<a class="anchor" href="#spi%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a81spi_cr1">#</a></h5>
+<p><img src="image-282.png" alt="alt text" />
+<img src="image-283.png" alt="alt text" /></p>
+<h5 id="spi控制寄存器2spi_cr2">SPI控制寄存器2(SPI_CR2)<a class="anchor" href="#spi%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a82spi_cr2">#</a></h5>
+<p><img src="image-284.png" alt="alt text" />
+<img src="image-285.png" alt="alt text" /></p>
+<h5 id="spi状态寄存器spi_sr">SPI状态寄存器(SPI_SR)<a class="anchor" href="#spi%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8spi_sr">#</a></h5>
+<p><img src="image-286.png" alt="alt text" />
+<img src="image-287.png" alt="alt text" /></p>
+<h5 id="spi-数据寄存器spi_dr">SPI 数据寄存器(SPI_DR)<a class="anchor" href="#spi-%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8spi_dr">#</a></h5>
+<p><img src="image-288.png" alt="alt text" /></p>
+<h5 id="spi-crc多项式寄存器spi_crcpr">SPI CRC多项式寄存器(SPI_CRCPR)<a class="anchor" href="#spi-crc%e5%a4%9a%e9%a1%b9%e5%bc%8f%e5%af%84%e5%ad%98%e5%99%a8spi_crcpr">#</a></h5>
+<p><img src="image-289.png" alt="alt text" /></p>
+<h5 id="spi-rx-crc寄存器spi_rxcrcr">SPI Rx CRC寄存器(SPI_RXCRCR)<a class="anchor" href="#spi-rx-crc%e5%af%84%e5%ad%98%e5%99%a8spi_rxcrcr">#</a></h5>
+<p><img src="image-290.png" alt="alt text" /></p>
+<h5 id="spi-tx-crc寄存器spi_txcrcr">SPI Tx CRC寄存器(SPI_TXCRCR)<a class="anchor" href="#spi-tx-crc%e5%af%84%e5%ad%98%e5%99%a8spi_txcrcr">#</a></h5>
+<p><img src="image-291.png" alt="alt text" /></p>
+<h5 id="spi_i2s配置寄存器spi_i2s_cfgr">SPI_I2S配置寄存器(SPI_I2S_CFGR)<a class="anchor" href="#spi_i2s%e9%85%8d%e7%bd%ae%e5%af%84%e5%ad%98%e5%99%a8spi_i2s_cfgr">#</a></h5>
+<p><img src="image-292.png" alt="alt text" />
+<img src="image-293.png" alt="alt text" /></p>
+<h5 id="spi_i2s预分频寄存器spi_i2spr">SPI_I2S预分频寄存器(SPI_I2SPR)<a class="anchor" href="#spi_i2s%e9%a2%84%e5%88%86%e9%a2%91%e5%af%84%e5%ad%98%e5%99%a8spi_i2spr">#</a></h5>
+<p><img src="image-294.png" alt="alt text" />
+<img src="image-295.png" alt="alt text" /></p>
+<hr>
+<p><br><br></p>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+<div>
+
+</div>
+
+<div>
+
+</div>
+
+</div>
+
+<div class="flex flex-wrap justify-between">
+    <span>
+    
+    </span>
+    <span>
+    
+      <a href="/docs/%E7%AB%A0%E8%8A%82%E4%BA%8C/" class="flex align-center">
+        <span>章节二</span>
+        <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
+      </a>
+    
+    </span>
+  </div>
+
+ 
+        
+  
+ 
+        
+        
+  
+ 
+        
+  
+    <script>(function(){document.querySelectorAll("pre:has(code)").forEach(e=>{e.addEventListener("click",e.focus),e.addEventListener("copy",function(t){if(t.preventDefault(),navigator.clipboard){const t=window.getSelection().toString()||e.textContent;navigator.clipboard.writeText(t)}})})})()</script>
+  
+
+      </footer>
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+  
+  <aside class="book-toc">
+    <div class="book-toc-content">
+      
+  
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#hal图形化配置">Hal图形化配置</a>
+      <ul>
+        <li><a href="#1system内核配置">1.System内核配置</a></li>
+        <li><a href="#2rcc-系统时钟配置">2.RCC 系统时钟配置</a></li>
+        <li><a href="#3gpio配置">3.GPIO配置</a></li>
+        <li><a href="#4usart配置">4.USART配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#hal常用函数">Hal常用函数</a>
+      <ul>
+        <li><a href="#gpio--exti">GPIO &amp; EXTI</a></li>
+        <li><a href="#usart">USART</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#stm32工程文件配置">STM32工程文件配置</a></li>
+    <li><a href="#stm32系统架构">STM32系统架构</a></li>
+    <li><a href="#存储器映像">存储器映像</a></li>
+    <li><a href="#复位与时钟控制rcc">复位与时钟控制(RCC)</a>
+      <ul>
+        <li><a href="#stm32时钟树">STM32时钟树</a></li>
+        <li><a href="#stm32时钟树结构">STM32时钟树结构</a></li>
+        <li><a href="#rcc的寄存器配置">RCC的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#alt-text"><img src="image-127.png" alt="alt text"> <img src="image-128.png" alt="alt text"></a></li>
+    <li><a href="#gpio">GPIO</a>
+      <ul>
+        <li><a href="#gpio的基本结构">GPIO的基本结构</a></li>
+        <li><a href="#gpio的8种工作模式">GPIO的8种工作模式</a></li>
+        <li><a href="#外设的gpio配置">外设的GPIO配置</a></li>
+        <li><a href="#stm32f103c8t6引脚定义">STM32F103C8T6引脚定义</a></li>
+        <li><a href="#gpio的寄存器配置">GPIO的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#alt-text-1"><img src="image-149.png" alt="alt text"></a></li>
+    <li><a href="#afio">AFIO</a>
+      <ul>
+        <li><a href="#afio的寄存器配置">AFIO的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#中断">中断</a>
+      <ul>
+        <li><a href="#中断向量表">中断向量表</a></li>
+        <li><a href="#中断体系架构">中断体系架构</a></li>
+        <li><a href="#nvic嵌套向量中断控制器">NVIC嵌套向量中断控制器</a></li>
+        <li><a href="#exti外部中断控制器">EXTI外部中断控制器</a></li>
+        <li><a href="#exti的寄存器配置">EXTI的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#alt-text-2"><img src="image-166.png" alt="alt text"></a></li>
+    <li><a href="#定时器tim">定时器(TIM)</a>
+      <ul>
+        <li><a href="#基本定时器">基本定时器</a></li>
+        <li><a href="#通用定时器">通用定时器</a></li>
+        <li><a href="#高级定时器">高级定时器</a></li>
+        <li><a href="#系统滴答定时器systick">系统滴答定时器(SysTick)</a></li>
+      </ul>
+    </li>
+    <li><a href="#直接存储器访问dma">直接存储器访问(DMA)</a>
+      <ul>
+        <li><a href="#dma概念">DMA概念</a></li>
+        <li><a href="#dma结构图">DMA结构图</a></li>
+        <li><a href="#dma请求映像">DMA请求映像</a></li>
+        <li><a href="#dma的寄存器配置">DMA的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#模拟-数字转换器adc">模拟-数字转换器(ADC)</a>
+      <ul>
+        <li><a href="#adc概念">ADC概念</a></li>
+        <li><a href="#adc结构图">ADC结构图</a></li>
+        <li><a href="#adc输入引脚通道">ADC输入引脚通道</a></li>
+        <li><a href="#adc转换模式">ADC转换模式</a></li>
+        <li><a href="#adc的寄存器配置">ADC的寄存器配置</a></li>
+        <li><a href="#adc单通道转换代码示例">ADC单通道转换代码示例</a></li>
+        <li><a href="#adc连续扫描示例代码">ADC连续扫描示例代码</a></li>
+      </ul>
+    </li>
+    <li><a href="#备份寄存器bkp">备份寄存器(BKP)</a>
+      <ul>
+        <li><a href="#bkp概念">BKP概念</a></li>
+        <li><a href="#bkp的基本结构">BKP的基本结构</a></li>
+        <li><a href="#bkp的寄存器配置">BKP的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#实时时钟rtc">实时时钟(RTC)</a>
+      <ul>
+        <li><a href="#unix时间戳概念">Unix时间戳概念</a></li>
+        <li><a href="#rtc概念">RTC概念</a></li>
+        <li><a href="#rtc结构图">RTC结构图</a></li>
+        <li><a href="#rtc的寄存器配置">RTC的寄存器配置</a></li>
+      </ul>
+    </li>
+    <li><a href="#通讯协议">通讯协议</a>
+      <ul>
+        <li><a href="#usart-2">USART</a></li>
+      </ul>
+    </li>
+    <li><a href="#alt-text-3"><img src="image-279.png" alt="alt text"> <img src="image-280.png" alt="alt text"></a>
+      <ul>
+        <li><a href="#spi-1">SPI</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+    </div>
+  </aside>
+  
+ 
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

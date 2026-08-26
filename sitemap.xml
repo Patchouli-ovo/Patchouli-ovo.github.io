@@ -2,18 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/docs/%E7%AB%A0%E8%8A%82%E4%B8%80/</loc>
+    <loc>https://Patchouli-ovo.github.io/docs/%E7%AB%A0%E8%8A%82%E4%B8%80/</loc>
   </url><url>
-    <loc>http://localhost:1313/docs/%E7%AB%A0%E8%8A%82%E4%BA%8C/</loc>
+    <loc>https://Patchouli-ovo.github.io/docs/%E7%AB%A0%E8%8A%82%E4%BA%8C/</loc>
   </url><url>
-    <loc>http://localhost:1313/docs/%E7%AB%A0%E8%8A%82%E4%B8%89/</loc>
+    <loc>https://Patchouli-ovo.github.io/docs/%E7%AB%A0%E8%8A%82%E4%B8%89/</loc>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>https://Patchouli-ovo.github.io/docs/%E7%AB%A0%E8%8A%82%E5%9B%9B/</loc>
   </url><url>
-    <loc>http://localhost:1313/docs/</loc>
+    <loc>https://Patchouli-ovo.github.io/categories/</loc>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>https://Patchouli-ovo.github.io/docs/</loc>
   </url><url>
-    <loc>http://localhost:1313/</loc>
+    <loc>https://Patchouli-ovo.github.io/tags/</loc>
+  </url><url>
+    <loc>https://Patchouli-ovo.github.io/</loc>
   </url>
 </urlset>

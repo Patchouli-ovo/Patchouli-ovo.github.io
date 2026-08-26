@@ -39,5 +39,12 @@
 				<guid>https://Patchouli-ovo.github.io/docs/%E7%AB%A0%E8%8A%82%E5%9B%9B/</guid>
 				<description>&lt;p&gt;这是章节四。&lt;/p&gt;&#xA;&lt;h1 id=&#34;一级标题&#34;&gt;一级标题&lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%80%e7%ba%a7%e6%a0%87%e9%a2%98&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;h2 id=&#34;二级标题&#34;&gt;二级标题&lt;a class=&#34;anchor&#34; href=&#34;#%e4%ba%8c%e7%ba%a7%e6%a0%87%e9%a2%98&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;h3 id=&#34;三级标题&#34;&gt;三级标题&lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%89%e7%ba%a7%e6%a0%87%e9%a2%98&#34;&gt;#&lt;/a&gt;&lt;/h3&gt;</description>
 			</item>
+			<item>
+				<title>章节五</title>
+				<link>https://Patchouli-ovo.github.io/docs/%E7%AB%A0%E8%8A%82%E4%BA%94/</link>
+				<pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+				<guid>https://Patchouli-ovo.github.io/docs/%E7%AB%A0%E8%8A%82%E4%BA%94/</guid>
+				<description>&lt;p&gt;这是章节五。&lt;/p&gt;&#xA;&lt;h1 id=&#34;一级标题&#34;&gt;一级标题&lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%80%e7%ba%a7%e6%a0%87%e9%a2%98&#34;&gt;#&lt;/a&gt;&lt;/h1&gt;&#xA;&lt;h2 id=&#34;二级标题&#34;&gt;二级标题&lt;a class=&#34;anchor&#34; href=&#34;#%e4%ba%8c%e7%ba%a7%e6%a0%87%e9%a2%98&#34;&gt;#&lt;/a&gt;&lt;/h2&gt;&#xA;&lt;h3 id=&#34;三级标题&#34;&gt;三级标题&lt;a class=&#34;anchor&#34; href=&#34;#%e4%b8%89%e7%ba%a7%e6%a0%87%e9%a2%98&#34;&gt;#&lt;/a&gt;&lt;/h3&gt;</description>
+			</item>
 	</channel>
 </rss>

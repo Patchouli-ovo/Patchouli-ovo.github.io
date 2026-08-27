@@ -32,7 +32,15 @@ https://github.com/alex-shpak/hugo-book
 
 <link rel="alternate" type="application/rss+xml" href="https://Patchouli-ovo.github.io/index.xml" title="介绍" />
 
-  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.8/dist/medium-zoom.min.css">
+<script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.8/dist/medium-zoom.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        mediumZoom('.book-page img', {
+            background: 'rgba(0,0,0,0.85)'
+        })
+    })
+</script>
 </head>
 <body dir="ltr" class="book-kind-home book-type-page book-layout-landing">
   <input type="checkbox" class="hidden toggle" id="menu-control" />

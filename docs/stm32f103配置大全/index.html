@@ -12,7 +12,7 @@ https://github.com/alex-shpak/hugo-book
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
 <meta name="color-scheme" content="light dark"><meta property="og:url" content="https://Patchouli-ovo.github.io/docs/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/">
-	<meta property="og:site_name" content="n">
+	<meta property="og:site_name" content="Patchouli Knowledge的知识技术手册">
 	<meta property="og:title" content="STM32F103">
 	<meta property="og:description" content="STM32F103C8T6 Hal库配置# Hal图形化配置# 1.System内核配置# 下载器用 ST-Link：选 Serial Wire 2.RCC 系统时钟配置# 开启LSE,HSE外部时钟 时钟树配置 3.GPIO配置# 配置对应输入输出模式和开启引脚，标签和具体功能 4.USART配置# Hal常用函数# GPIO &amp; EXTI# HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);	//写高低电平 HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_15);	//电平翻转 HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);	//读取电平，有返回值 //中断回调函数 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);	__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_1); __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_1);USART# HAL_UART_Transmit(); 串口发送数据，使用超时管理机制 HAL_UART_Receive(); 串口接收数据，使用超时管理机制 HAL_UART_Transmit_IT(); 串口中断模式发送 HAL_UART_Receive_IT(); 串口中断模式接收 HAL_UART_Transmit_DMA(); 串口DMA模式发送 HAL_UART_Transmit_DMA(); 串口DMA模式接收 //重定向 c 库函数 printf 到串口 USARTx，重定向后可使用 printf 函数 int fputc(int ch, FILE *f) { HAL_UART_Transmit(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } //重定向 c 库函数 scanf 到串口 USARTx，重写向后可使用 scanf、getchar 等函数 int fgetc(FILE *f) { int ch; /* 等待串口输入数据 */ while (__HAL_UART_GET_FLAG(&amp;UartHandle, UART_FLAG_RXNE) == RESET); HAL_UART_Receive(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } HAL_UART_GetState(&amp;huart1); //中断回调函数 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart); //发送完成回调函数 void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart); //发送完成过半 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart); //接收完成回调函数 void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart); //接收完成过半 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart); //错误处理回调函数 __HAL_UART_ENABLE_IT(&amp;huart1, UART_IT_IDLE);	//使能中断 __HAL_UART_GET_FLAG(&amp;huart1,UART_FLAG_IDLE);	//过去中断标志位	__HAL_UART_CLEAR_FLAG(&amp;huart1, UART_FLAG_RXNE); //中断标志位清零 /*中断标志位 接收缓冲区非空标志位 (USART_FLAG_RXNE) 发送缓冲区空标志位 (USART_FLAG_TXE) 发送完毕标志位 (USART_FLAG_TC) 奇偶校验错误标志位 (USART_FLAG_PE) 帧错误标志位 (USART_FLAG_FE) 噪声错误标志位 (USART_FLAG_NE) 串口空闲标志位 (USART_FLAG_IDLE) LIN 帧标志位 (USART_FLAG_LBD)*/">
 	<meta property="og:locale" content="en">
@@ -24,7 +24,7 @@ https://github.com/alex-shpak/hugo-book
 	<meta itemprop="description" content="STM32F103C8T6 Hal库配置# Hal图形化配置# 1.System内核配置# 下载器用 ST-Link：选 Serial Wire 2.RCC 系统时钟配置# 开启LSE,HSE外部时钟 时钟树配置 3.GPIO配置# 配置对应输入输出模式和开启引脚，标签和具体功能 4.USART配置# Hal常用函数# GPIO &amp; EXTI# HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);	//写高低电平 HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_15);	//电平翻转 HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);	//读取电平，有返回值 //中断回调函数 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);	__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_1); __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_1);USART# HAL_UART_Transmit(); 串口发送数据，使用超时管理机制 HAL_UART_Receive(); 串口接收数据，使用超时管理机制 HAL_UART_Transmit_IT(); 串口中断模式发送 HAL_UART_Receive_IT(); 串口中断模式接收 HAL_UART_Transmit_DMA(); 串口DMA模式发送 HAL_UART_Transmit_DMA(); 串口DMA模式接收 //重定向 c 库函数 printf 到串口 USARTx，重定向后可使用 printf 函数 int fputc(int ch, FILE *f) { HAL_UART_Transmit(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } //重定向 c 库函数 scanf 到串口 USARTx，重写向后可使用 scanf、getchar 等函数 int fgetc(FILE *f) { int ch; /* 等待串口输入数据 */ while (__HAL_UART_GET_FLAG(&amp;UartHandle, UART_FLAG_RXNE) == RESET); HAL_UART_Receive(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } HAL_UART_GetState(&amp;huart1); //中断回调函数 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart); //发送完成回调函数 void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart); //发送完成过半 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart); //接收完成回调函数 void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart); //接收完成过半 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart); //错误处理回调函数 __HAL_UART_ENABLE_IT(&amp;huart1, UART_IT_IDLE);	//使能中断 __HAL_UART_GET_FLAG(&amp;huart1,UART_FLAG_IDLE);	//过去中断标志位	__HAL_UART_CLEAR_FLAG(&amp;huart1, UART_FLAG_RXNE); //中断标志位清零 /*中断标志位 接收缓冲区非空标志位 (USART_FLAG_RXNE) 发送缓冲区空标志位 (USART_FLAG_TXE) 发送完毕标志位 (USART_FLAG_TC) 奇偶校验错误标志位 (USART_FLAG_PE) 帧错误标志位 (USART_FLAG_FE) 噪声错误标志位 (USART_FLAG_NE) 串口空闲标志位 (USART_FLAG_IDLE) LIN 帧标志位 (USART_FLAG_LBD)*/">
 	<meta itemprop="wordCount" content="1643">
 
-<title>STM32F103 • n</title>
+<title>STM32F103 • Patchouli Knowledge的知识技术手册</title>
 <link rel="icon" href="/favicon.png" >
 <link rel="manifest" href="/manifest.json">
 <link rel="canonical" href="https://Patchouli-ovo.github.io/docs/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/">
@@ -87,7 +87,7 @@ https://github.com/alex-shpak/hugo-book
     
   <nav>
 <h2 class="book-brand">
-  <a class="flex align-center" href="/"><span>n</span>
+  <a class="flex align-center" href="/"><span>Patchouli Knowledge的知识技术手册</span>
   </a>
 </h2>
 

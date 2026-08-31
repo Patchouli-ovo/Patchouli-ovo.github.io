@@ -22,7 +22,7 @@ https://github.com/alex-shpak/hugo-book
 
 	<meta itemprop="name" content="STM32F103">
 	<meta itemprop="description" content="STM32F103C8T6 Hal库配置# Hal图形化配置# 1.System内核配置# 下载器用 ST-Link：选 Serial Wire 2.RCC 系统时钟配置# 开启LSE,HSE外部时钟 时钟树配置 3.GPIO配置# 配置对应输入输出模式和开启引脚，标签和具体功能 4.USART配置# Hal常用函数# GPIO &amp; EXTI# HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);	//写高低电平 HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_15);	//电平翻转 HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);	//读取电平，有返回值 //中断回调函数 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);	__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_1); __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_1);USART# HAL_UART_Transmit(); 串口发送数据，使用超时管理机制 HAL_UART_Receive(); 串口接收数据，使用超时管理机制 HAL_UART_Transmit_IT(); 串口中断模式发送 HAL_UART_Receive_IT(); 串口中断模式接收 HAL_UART_Transmit_DMA(); 串口DMA模式发送 HAL_UART_Transmit_DMA(); 串口DMA模式接收 //重定向 c 库函数 printf 到串口 USARTx，重定向后可使用 printf 函数 int fputc(int ch, FILE *f) { HAL_UART_Transmit(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } //重定向 c 库函数 scanf 到串口 USARTx，重写向后可使用 scanf、getchar 等函数 int fgetc(FILE *f) { int ch; /* 等待串口输入数据 */ while (__HAL_UART_GET_FLAG(&amp;UartHandle, UART_FLAG_RXNE) == RESET); HAL_UART_Receive(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } HAL_UART_GetState(&amp;huart1); //中断回调函数 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart); //发送完成回调函数 void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart); //发送完成过半 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart); //接收完成回调函数 void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart); //接收完成过半 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart); //错误处理回调函数 __HAL_UART_ENABLE_IT(&amp;huart1, UART_IT_IDLE);	//使能中断 __HAL_UART_GET_FLAG(&amp;huart1,UART_FLAG_IDLE);	//过去中断标志位	__HAL_UART_CLEAR_FLAG(&amp;huart1, UART_FLAG_RXNE); //中断标志位清零 /*中断标志位 接收缓冲区非空标志位 (USART_FLAG_RXNE) 发送缓冲区空标志位 (USART_FLAG_TXE) 发送完毕标志位 (USART_FLAG_TC) 奇偶校验错误标志位 (USART_FLAG_PE) 帧错误标志位 (USART_FLAG_FE) 噪声错误标志位 (USART_FLAG_NE) 串口空闲标志位 (USART_FLAG_IDLE) LIN 帧标志位 (USART_FLAG_LBD)*/">
-	<meta itemprop="wordCount" content="1643">
+	<meta itemprop="wordCount" content="1639">
 
 <title>STM32F103 • Patchouli Knowledge的知识技术手册</title>
 <link rel="icon" href="/favicon.png" >
@@ -252,7 +252,6 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#rcc的寄存器配置">RCC的寄存器配置</a></li>
       </ul>
     </li>
-    <li><a href="#alt-text"><img src="image-127.png" alt="alt text"> <img src="image-128.png" alt="alt text"></a></li>
     <li><a href="#gpio">GPIO</a>
       <ul>
         <li><a href="#gpio的基本结构">GPIO的基本结构</a></li>
@@ -262,7 +261,6 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#gpio的寄存器配置">GPIO的寄存器配置</a></li>
       </ul>
     </li>
-    <li><a href="#alt-text-1"><img src="image-149.png" alt="alt text"></a></li>
     <li><a href="#afio">AFIO</a>
       <ul>
         <li><a href="#afio的寄存器配置">AFIO的寄存器配置</a></li>
@@ -277,7 +275,6 @@ https://github.com/alex-shpak/hugo-book
         <li><a href="#exti的寄存器配置">EXTI的寄存器配置</a></li>
       </ul>
     </li>
-    <li><a href="#alt-text-2"><img src="image-166.png" alt="alt text"></a></li>
     <li><a href="#定时器tim">定时器(TIM)</a>
       <ul>
         <li><a href="#基本定时器">基本定时器</a></li>
@@ -323,10 +320,6 @@ https://github.com/alex-shpak/hugo-book
     <li><a href="#通讯协议">通讯协议</a>
       <ul>
         <li><a href="#usart-2">USART</a></li>
-      </ul>
-    </li>
-    <li><a href="#alt-text-3"><img src="image-279.png" alt="alt text"> <img src="image-280.png" alt="alt text"></a>
-      <ul>
         <li><a href="#spi-1">SPI</a></li>
       </ul>
     </li>
@@ -361,7 +354,7 @@ https://github.com/alex-shpak/hugo-book
 <img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-3.png" alt="" />
 <img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-4.png" alt="" /></p>
 <h3 id="4usart配置">4.USART配置<a class="anchor" href="#4usart%e9%85%8d%e7%bd%ae">#</a></h3>
-<p><img src="image-5.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-5.png" alt="" /></p>
 <hr>
 <p><br><br></p>
 <h2 id="hal常用函数">Hal常用函数<a class="anchor" href="#hal%e5%b8%b8%e7%94%a8%e5%87%bd%e6%95%b0">#</a></h2>
@@ -426,26 +419,26 @@ https://github.com/alex-shpak/hugo-book
 <h2 id="stm32工程文件配置">STM32工程文件配置<a class="anchor" href="#stm32%e5%b7%a5%e7%a8%8b%e6%96%87%e4%bb%b6%e9%85%8d%e7%bd%ae">#</a></h2>
 <p><strong>配置启动文件</strong>
 复制对应的文件并放入自己创建的start文件夹中
-<img src="image-10.png" alt="alt text" />
-<img src="image-11.png" alt="alt text" />
-<img src="image-12.png" alt="alt text" />
-<img src="image-13.png" alt="alt text" /></p>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-10.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-11.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-12.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-13.png" alt="" /></p>
 <p><strong>创建工程</strong>
-<img src="image-14.png" alt="alt text" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-14.png" alt="" />
 添加自己创建的对应文件夹
-<img src="image-15.png" alt="alt text" />
-<img src="image-16.png" alt="alt text" /></p>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-15.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-16.png" alt="" /></p>
 <p>选择ST-link下载器
-<img src="image-17.png" alt="alt text" /></p>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-17.png" alt="" /></p>
 <p>勾选下载后自动复位运行新程序
-<img src="image-18.png" alt="alt text" /></p>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-18.png" alt="" /></p>
 <p>配置芯片型号宏定义
-<img src="image-54.png" alt="alt text" /></p>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-54.png" alt="" /></p>
 <hr>
 <p><br><br></p>
 <h2 id="stm32系统架构">STM32系统架构<a class="anchor" href="#stm32%e7%b3%bb%e7%bb%9f%e6%9e%b6%e6%9e%84">#</a></h2>
 <p><strong>图中APB1与APB2位置顺序反了</strong>
-<img src="image-203.png" alt="alt text" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-203.png" alt="" />
 <strong>三个被动单元</strong>(被动接收数据)</p>
 <ul>
 <li><strong>内部SRAM</strong> 存储程序执行时的变量</li>
@@ -467,12 +460,12 @@ https://github.com/alex-shpak/hugo-book
 <hr>
 <p><br><br></p>
 <h2 id="存储器映像">存储器映像<a class="anchor" href="#%e5%ad%98%e5%82%a8%e5%99%a8%e6%98%a0%e5%83%8f">#</a></h2>
-<p><img src="image-205.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-205.png" alt="" /></p>
 <hr>
 <p><br><br></p>
 <h2 id="复位与时钟控制rcc">复位与时钟控制(RCC)<a class="anchor" href="#%e5%a4%8d%e4%bd%8d%e4%b8%8e%e6%97%b6%e9%92%9f%e6%8e%a7%e5%88%b6rcc">#</a></h2>
 <h3 id="stm32时钟树">STM32时钟树<a class="anchor" href="#stm32%e6%97%b6%e9%92%9f%e6%a0%91">#</a></h3>
-<p><img src="image-106.png" alt="alt text" />
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-106.png" alt="" />
 <strong>1. 高速内部时钟（HSI）</strong>
 来源：HSI是STM32F10内部集成的RC振荡器产生的时钟信号。
 频率：通常为8MHz，但可以通过PLL（锁相环）进行倍频以提高系统时钟频率。
@@ -494,7 +487,7 @@ https://github.com/alex-shpak/hugo-book
 特点：LSE时钟具有极高的精度和稳定性，适用于需要精确计时的应用。
 应用：专门用于RTC的时钟源，提供精确的时间基准，以实现日历、闹钟和定时功能。</p>
 <h3 id="stm32时钟树结构">STM32时钟树结构<a class="anchor" href="#stm32%e6%97%b6%e9%92%9f%e6%a0%91%e7%bb%93%e6%9e%84">#</a></h3>
-<p><img src="image-107.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-107.png" alt="" /></p>
 <ul>
 <li><strong>OSC(外部晶振输入输出引脚)</strong> <strong>HSE/LSE(高/低速外部时钟源4-16MHz/32.768kHz)</strong></li>
 <li><strong>MCO(主时钟输出引脚)</strong> <strong>HSI(内部高速时钟源8MHz)</strong> <strong>LSI(低速内部时钟源40kHz)</strong></li>
@@ -519,41 +512,42 @@ https://github.com/alex-shpak/hugo-book
 <p><strong>内部RC震荡产生的时钟不够稳定，一般作为启动上电时钟，应该用外部HSE时钟倍频后时钟作为系统时钟</strong></p>
 <h3 id="rcc的寄存器配置">RCC的寄存器配置<a class="anchor" href="#rcc%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
 <h4 id="时钟控制寄存器rcc_cr">时钟控制寄存器(RCC_CR)<a class="anchor" href="#%e6%97%b6%e9%92%9f%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8rcc_cr">#</a></h4>
-<p><img src="image-108.png" alt="alt text" />
-<img src="image-109.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-108.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-109.png" alt="" /></p>
 <h4 id="时钟配置寄存器rcc_cfgr">时钟配置寄存器(RCC_CFGR)<a class="anchor" href="#%e6%97%b6%e9%92%9f%e9%85%8d%e7%bd%ae%e5%af%84%e5%ad%98%e5%99%a8rcc_cfgr">#</a></h4>
-<p><img src="image-110.png" alt="alt text" />
-<img src="image-111.png" alt="alt text" />
-<img src="image-112.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-110.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-111.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-112.png" alt="" /></p>
 <h4 id="时钟中断寄存器rcc_cir">时钟中断寄存器(RCC_CIR)<a class="anchor" href="#%e6%97%b6%e9%92%9f%e4%b8%ad%e6%96%ad%e5%af%84%e5%ad%98%e5%99%a8rcc_cir">#</a></h4>
-<p><img src="image-113.png" alt="alt text" />
-<img src="image-114.png" alt="alt text" />
-<img src="image-115.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-113.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-114.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-115.png" alt="" /></p>
 <h4 id="apb2外设复位寄存器rcc_apb2rstr">APB2外设复位寄存器(RCC_APB2RSTR)<a class="anchor" href="#apb2%e5%a4%96%e8%ae%be%e5%a4%8d%e4%bd%8d%e5%af%84%e5%ad%98%e5%99%a8rcc_apb2rstr">#</a></h4>
-<p><img src="image-116.png" alt="alt text" />
-<img src="image-117.png" alt="alt text" />
-<img src="image-118.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-116.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-117.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-118.png" alt="" /></p>
 <h4 id="ahb外设时钟使能寄存器rcc_ahbenr">AHB外设时钟使能寄存器(RCC_AHBENR)<a class="anchor" href="#ahb%e5%a4%96%e8%ae%be%e6%97%b6%e9%92%9f%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8rcc_ahbenr">#</a></h4>
 <p><img src="image-119.png" alt="alt text" />
 <img src="image-120.png" alt="alt text" /></p>
 <h4 id="apb2外设时钟使能寄存器rcc_apb2enr">APB2外设时钟使能寄存器(RCC_APB2ENR)<a class="anchor" href="#apb2%e5%a4%96%e8%ae%be%e6%97%b6%e9%92%9f%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8rcc_apb2enr">#</a></h4>
-<p><img src="image-121.png" alt="alt text" />
-<img src="image-122.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-121.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-122.png" alt="" /></p>
 <h4 id="apb1外设时钟使能寄存器rcc_apb1enr">APB1外设时钟使能寄存器(RCC_APB1ENR)<a class="anchor" href="#apb1%e5%a4%96%e8%ae%be%e6%97%b6%e9%92%9f%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8rcc_apb1enr">#</a></h4>
-<p><img src="image-123.png" alt="alt text" />
-<img src="image-124.png" alt="alt text" />
-<img src="image-125.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-123.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-124.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-125.png" alt="" /></p>
 <h4 id="备份域控制寄存器rcc_bdcr">备份域控制寄存器(RCC_BDCR)<a class="anchor" href="#%e5%a4%87%e4%bb%bd%e5%9f%9f%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8rcc_bdcr">#</a></h4>
-<p><img src="image-126.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-126.png" alt="" /></p>
 <h4 id="控制状态寄存器rcc_csr">控制/状态寄存器(RCC_CSR)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8rcc_csr">#</a></h4>
-<h2 id="alt-text"><img src="image-127.png" alt="alt text" />
-<img src="image-128.png" alt="alt text" /><a class="anchor" href="#alt-text">#</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-127.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-128.png" alt="" /></p>
+<hr>
 <p><br><br></p>
 <h2 id="gpio">GPIO<a class="anchor" href="#gpio">#</a></h2>
 <h3 id="gpio的基本结构">GPIO的基本结构<a class="anchor" href="#gpio%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%bb%93%e6%9e%84">#</a></h3>
-<p><img src="image-129.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-129.png" alt="" /></p>
 <h3 id="gpio的8种工作模式">GPIO的8种工作模式<a class="anchor" href="#gpio%e7%9a%848%e7%a7%8d%e5%b7%a5%e4%bd%9c%e6%a8%a1%e5%bc%8f">#</a></h3>
-<p><img src="image-7.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-7.png" alt="" /></p>
 <p>复位期间和刚复位后，复用功能未开启，I/O端口被配置成<strong>浮空输入模式</strong>(CNFx[1:0]=01b，
 MODEx[1:0]=00b)。
 复位后，JTAG引脚被置于输入上拉或下拉模式：</p>
@@ -565,48 +559,49 @@ MODEx[1:0]=00b)。
 </ul>
 <h3 id="外设的gpio配置">外设的GPIO配置<a class="anchor" href="#%e5%a4%96%e8%ae%be%e7%9a%84gpio%e9%85%8d%e7%bd%ae">#</a></h3>
 <h4 id="高级寄存器tim1tim8">高级寄存器TIM1/TIM8<a class="anchor" href="#%e9%ab%98%e7%ba%a7%e5%af%84%e5%ad%98%e5%99%a8tim1tim8">#</a></h4>
-<p><img src="image-130.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-130.png" alt="" /></p>
 <h4 id="通用定时器tim2345">通用定时器TIM2/3/4/5<a class="anchor" href="#%e9%80%9a%e7%94%a8%e5%ae%9a%e6%97%b6%e5%99%a8tim2345">#</a></h4>
-<p><img src="image-131.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-131.png" alt="" /></p>
 <h4 id="usart-1">USART<a class="anchor" href="#usart-1">#</a></h4>
-<p><img src="image-132.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-132.png" alt="" /></p>
 <h4 id="spi">SPI<a class="anchor" href="#spi">#</a></h4>
-<p><img src="image-133.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-133.png" alt="" /></p>
 <h4 id="i2s">I2S<a class="anchor" href="#i2s">#</a></h4>
-<p><img src="image-134.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-134.png" alt="" /></p>
 <h4 id="i2c">I2C<a class="anchor" href="#i2c">#</a></h4>
-<p><img src="image-135.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-135.png" alt="" /></p>
 <h4 id="bxcan">BxCAN<a class="anchor" href="#bxcan">#</a></h4>
-<p><img src="image-136.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-136.png" alt="" /></p>
 <h4 id="usb">USB<a class="anchor" href="#usb">#</a></h4>
-<p><img src="image-137.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-137.png" alt="" /></p>
 <h4 id="全速usb-otg引脚配置">全速USB OTG引脚配置<a class="anchor" href="#%e5%85%a8%e9%80%9fusb-otg%e5%bc%95%e8%84%9a%e9%85%8d%e7%bd%ae">#</a></h4>
-<p><img src="image-138.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-138.png" alt="" /></p>
 <h4 id="sdio">SDIO<a class="anchor" href="#sdio">#</a></h4>
-<p><img src="image-139.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-139.png" alt="" /></p>
 <h4 id="adcdac">ADC/DAC<a class="anchor" href="#adcdac">#</a></h4>
-<p><img src="image-140.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-140.png" alt="" /></p>
 <h4 id="fsmc">FSMC<a class="anchor" href="#fsmc">#</a></h4>
-<p><img src="image-141.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-141.png" alt="" /></p>
 <h4 id="其他io功能">其他I/O功能<a class="anchor" href="#%e5%85%b6%e4%bb%96io%e5%8a%9f%e8%83%bd">#</a></h4>
-<p><img src="image-142.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-142.png" alt="" /></p>
 <h3 id="stm32f103c8t6引脚定义">STM32F103C8T6引脚定义<a class="anchor" href="#stm32f103c8t6%e5%bc%95%e8%84%9a%e5%ae%9a%e4%b9%89">#</a></h3>
-<p><img src="STM32F103C8T6%e5%bc%95%e8%84%9a%e5%ae%9a%e4%b9%89.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/STM32F103C8T6%E5%BC%95%E8%84%9A%E5%AE%9A%E4%B9%89.png" alt="" /></p>
 <h3 id="gpio的寄存器配置">GPIO的寄存器配置<a class="anchor" href="#gpio%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
 <h4 id="端口配置低寄存器gpiox_crl">端口配置低寄存器(GPIOx_CRL)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e9%85%8d%e7%bd%ae%e4%bd%8e%e5%af%84%e5%ad%98%e5%99%a8gpiox_crl">#</a></h4>
-<p><img src="image-143.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-143.png" alt="" /></p>
 <h4 id="端口配置高寄存器gpiox_crh">端口配置高寄存器(GPIOx_CRH)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e9%85%8d%e7%bd%ae%e9%ab%98%e5%af%84%e5%ad%98%e5%99%a8gpiox_crh">#</a></h4>
-<p><img src="image-144.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-144.png" alt="" /></p>
 <h4 id="端口输入数据寄存器gpiox_idr">端口输入数据寄存器(GPIOx_IDR)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e8%be%93%e5%85%a5%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8gpiox_idr">#</a></h4>
-<p><img src="image-145.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-145.png" alt="" /></p>
 <h4 id="端口输出数据寄存器gpiox_odr">端口输出数据寄存器(GPIOx_ODR)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e8%be%93%e5%87%ba%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8gpiox_odr">#</a></h4>
-<p><img src="image-146.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-146.png" alt="" /></p>
 <h4 id="端口位设置清除寄存器gpiox_bsrr">端口位设置/清除寄存器(GPIOx_BSRR)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e4%bd%8d%e8%ae%be%e7%bd%ae%e6%b8%85%e9%99%a4%e5%af%84%e5%ad%98%e5%99%a8gpiox_bsrr">#</a></h4>
-<p><img src="image-147.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-147.png" alt="" /></p>
 <h4 id="端口位清除寄存器gpiox_brr">端口位清除寄存器(GPIOx_BRR)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e4%bd%8d%e6%b8%85%e9%99%a4%e5%af%84%e5%ad%98%e5%99%a8gpiox_brr">#</a></h4>
-<p><img src="image-148.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-148.png" alt="" /></p>
 <h4 id="端口配置锁定寄存器gpiox_lckr">端口配置锁定寄存器(GPIOx_LCKR)<a class="anchor" href="#%e7%ab%af%e5%8f%a3%e9%85%8d%e7%bd%ae%e9%94%81%e5%ae%9a%e5%af%84%e5%ad%98%e5%99%a8gpiox_lckr">#</a></h4>
-<h2 id="alt-text-1"><img src="image-149.png" alt="alt text" /><a class="anchor" href="#alt-text-1">#</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-149.png" alt="" /></p>
+<hr>
 <p><br><br></p>
 <h2 id="afio">AFIO<a class="anchor" href="#afio">#</a></h2>
 <p><strong>复用功能 IO 控制器(Alternate Function I/O)</strong>
@@ -620,16 +615,16 @@ MODEx[1:0]=00b)。
 <h4 id="事件控制寄存器afio_evcr">事件控制寄存器(AFIO_EVCR)<a class="anchor" href="#%e4%ba%8b%e4%bb%b6%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8afio_evcr">#</a></h4>
 <p><img src="image-150.png" alt="alt text" /></p>
 <h4 id="复用重映射和调试io配置寄存器afio_mapr">复用重映射和调试I/O配置寄存器(AFIO_MAPR)<a class="anchor" href="#%e5%a4%8d%e7%94%a8%e9%87%8d%e6%98%a0%e5%b0%84%e5%92%8c%e8%b0%83%e8%af%95io%e9%85%8d%e7%bd%ae%e5%af%84%e5%ad%98%e5%99%a8afio_mapr">#</a></h4>
-<p><img src="image-151.png" alt="alt text" />
-<img src="image-152.png" alt="alt text" />
-<img src="image-153.png" alt="alt text" />
-<img src="image-154.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-151.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-152.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-153.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-154.png" alt="" /></p>
 <h4 id="外部中断配置寄存器1-4afio_exticr1">外部中断配置寄存器1-4(AFIO_EXTICR1)<a class="anchor" href="#%e5%a4%96%e9%83%a8%e4%b8%ad%e6%96%ad%e9%85%8d%e7%bd%ae%e5%af%84%e5%ad%98%e5%99%a81-4afio_exticr1">#</a></h4>
-<p><img src="image-157.png" alt="alt text" />
-<img src="image-156.png" alt="alt text" />
-<img src="image-158.png" alt="alt text" />
-<img src="image-159.png" alt="alt text" />
-<img src="image-160.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-157.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-156.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-158.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-159.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-160.png" alt="" /></p>
 <hr>
 <p><br><br></p>
 <h2 id="中断">中断<a class="anchor" href="#%e4%b8%ad%e6%96%ad">#</a></h2>
@@ -644,14 +639,14 @@ MODEx[1:0]=00b)。
 <li>向量表：目录，只记录函数在哪，体积很小；</li>
 <li>中断服务函数：真正代码，放在 Flash 其他区域，长度无限制。</li>
 </ul>
-<p><img src="image-23.png" alt="alt text" />
-<img src="image-24.png" alt="alt text" />
-<img src="image-25.png" alt="alt text" />
-<img src="image-26.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-23.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-24.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-25.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-26.png" alt="" /></p>
 <hr>
 <p><br><br></p>
 <h3 id="中断体系架构">中断体系架构<a class="anchor" href="#%e4%b8%ad%e6%96%ad%e4%bd%93%e7%b3%bb%e6%9e%b6%e6%9e%84">#</a></h3>
-<p><img src="image-27.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-27.png" alt="" /></p>
 <hr>
 <p><br><br></p>
 <h3 id="nvic嵌套向量中断控制器">NVIC嵌套向量中断控制器<a class="anchor" href="#nvic%e5%b5%8c%e5%a5%97%e5%90%91%e9%87%8f%e4%b8%ad%e6%96%ad%e6%8e%a7%e5%88%b6%e5%99%a8">#</a></h3>
@@ -669,8 +664,8 @@ NVIC为了方便管理中断，可以通过软件给每个中断设置优先级�
 <li>若挂起的优先级（抢占和响应）都一样，则查找中断向量表，值小的先响应。</li>
 <li>NVIC对优先级分了5组，在程序中先对中断进行分组，而且分组只能分一次，若多次分，只有最后一次生效。</li>
 </ul>
-<p><img src="image-28.png" alt="alt text" />
-<img src="image-29.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-28.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-29.png" alt="" /></p>
 <h4 id="nvic库函数配置">NVIC库函数配置<a class="anchor" href="#nvic%e5%ba%93%e5%87%bd%e6%95%b0%e9%85%8d%e7%bd%ae">#</a></h4>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#a6e22e">NVIC_SetPriorityGrouping</span>(<span style="color:#ae81ff">5</span>);	<span style="color:#75715e">//设置NVIC优先级分组为2位抢占优先级，2位响应优先级
 </span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">NVIC_SetPriority</span>(EXTI1_IRQn, <span style="color:#ae81ff">0x20</span>);	<span style="color:#75715e">//设置EXTI1通道优先级抢占优先级0，响应优先级2
@@ -679,29 +674,30 @@ NVIC为了方便管理中断，可以通过软件给每个中断设置优先级�
 </span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">NVIC_SetPriority</span>(EXTI1_IRQn, <span style="color:#ae81ff">0x21</span>);	<span style="color:#75715e">//设置EXTI1通道优先级为3
 </span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">NVIC_EnableIRQ</span>(EXTI1_IRQn);		<span style="color:#75715e">//打开中断通道
 </span></span></span></code></pre></div><h3 id="exti外部中断控制器">EXTI外部中断控制器<a class="anchor" href="#exti%e5%a4%96%e9%83%a8%e4%b8%ad%e6%96%ad%e6%8e%a7%e5%88%b6%e5%99%a8">#</a></h3>
-<p><img src="image-30.png" alt="alt text" />
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-30.png" alt="" />
 AFIO输入信号进入边沿检测电路，通过上升沿下降沿触发选择寄存器选择中断触发方式，
 产生的中断信号在请求挂起寄存器挂起，与中断屏蔽寄存器相与后输出至NVIC中断控制器
 中断请求挂起寄存器在产生中断后要手动清除</p>
 <h3 id="exti的寄存器配置">EXTI的寄存器配置<a class="anchor" href="#exti%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
 <h4 id="中断屏蔽寄存器exti_imr">中断屏蔽寄存器(EXTI_IMR)<a class="anchor" href="#%e4%b8%ad%e6%96%ad%e5%b1%8f%e8%94%bd%e5%af%84%e5%ad%98%e5%99%a8exti_imr">#</a></h4>
-<p><img src="image-161.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-161.png" alt="" /></p>
 <h4 id="事件屏蔽寄存器exti_emr">事件屏蔽寄存器(EXTI_EMR)<a class="anchor" href="#%e4%ba%8b%e4%bb%b6%e5%b1%8f%e8%94%bd%e5%af%84%e5%ad%98%e5%99%a8exti_emr">#</a></h4>
-<p><img src="image-162.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-162.png" alt="" /></p>
 <h4 id="上升沿触发选择寄存器exti_rtsr">上升沿触发选择寄存器(EXTI_RTSR)<a class="anchor" href="#%e4%b8%8a%e5%8d%87%e6%b2%bf%e8%a7%a6%e5%8f%91%e9%80%89%e6%8b%a9%e5%af%84%e5%ad%98%e5%99%a8exti_rtsr">#</a></h4>
-<p><img src="image-163.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-163.png" alt="" /></p>
 <h4 id="下降沿触发选择寄存器exti_ftsr">下降沿触发选择寄存器(EXTI_FTSR)<a class="anchor" href="#%e4%b8%8b%e9%99%8d%e6%b2%bf%e8%a7%a6%e5%8f%91%e9%80%89%e6%8b%a9%e5%af%84%e5%ad%98%e5%99%a8exti_ftsr">#</a></h4>
-<p><img src="image-164.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-164.png" alt="" /></p>
 <h4 id="软件中断事件寄存器exti_swier">软件中断事件寄存器(EXTI_SWIER)<a class="anchor" href="#%e8%bd%af%e4%bb%b6%e4%b8%ad%e6%96%ad%e4%ba%8b%e4%bb%b6%e5%af%84%e5%ad%98%e5%99%a8exti_swier">#</a></h4>
-<p><img src="image-165.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-165.png" alt="" /></p>
 <h4 id="挂起寄存器exti_pr">挂起寄存器(EXTI_PR)<a class="anchor" href="#%e6%8c%82%e8%b5%b7%e5%af%84%e5%ad%98%e5%99%a8exti_pr">#</a></h4>
-<h2 id="alt-text-2"><img src="image-166.png" alt="alt text" /><a class="anchor" href="#alt-text-2">#</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-166.png" alt="" /></p>
+<hr>
 <p><br><br></p>
 <h2 id="定时器tim">定时器(TIM)<a class="anchor" href="#%e5%ae%9a%e6%97%b6%e5%99%a8tim">#</a></h2>
 <ul>
 <li>定时器可以对输入的时钟进行计数，并在计数值到达设定值触发中断</li>
 <li>定时器包含16位计数器，预分频器，自动重装寄存器的时基单元，在72MHz时钟下最大有59.65s定时
-<img src="image-62.png" alt="alt text" /></li>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-62.png" alt="" /></li>
 </ul>
 <hr>
 <p><br><br></p>
@@ -710,7 +706,7 @@ AFIO输入信号进入边沿检测电路，通过上升沿下降沿触发选择�
 <p>基本定时器TIM6和TIM7各包含一个16位自动装载计数器，由APB1驱动时钟，由各自的可编程预分频器驱动。
 这2个定时器是互相独立的，不共享任何资源。
 这个2个基本定时器<strong>只能向上计数</strong>，由于没有外部IO，所以<strong>只能计时，不能对外部脉冲进行计数。</strong></p>
-<p><img src="image-63.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-63.png" alt="" /></p>
 <p><strong>时基单元</strong>包含：
 ● 计数器寄存器(TIMx_CNT)
 ● 预分频寄存器(TIMx_PSC)
@@ -719,34 +715,34 @@ AFIO输入信号进入边沿检测电路，通过上升沿下降沿触发选择�
 <h4 id="计算定时时间">计算定时时间<a class="anchor" href="#%e8%ae%a1%e7%ae%97%e5%ae%9a%e6%97%b6%e6%97%b6%e9%97%b4">#</a></h4>
 <p>计时器一次计时多久溢出
 <strong>1. 求计数器的时钟频率</strong>
-<img src="image-49.png" alt="alt text" /></p>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-49.png" alt="" /></p>
 <p><strong>2.计数器的周期是多少，求累加一次的总时间</strong>
-<img src="image-50.png" alt="alt text" /></p>
-<p><strong>3.计数器累加多少次产生一次更新事件</strong>
-<img src="image-51.png" alt="alt text" /></p>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-50.png" alt="" />
+<strong>3.计数器累加多少次产生一次更新事件</strong>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-51.png" alt="" /></p>
 <p><strong>4.定时时间</strong>
-<img src="image-52.png" alt="alt text" /></p>
-<p><img src="image-53.png" alt="alt text" /></p>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-52.png" alt="" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-53.png" alt="" /></p>
 <h4 id="基本定时器的定时中断">基本定时器的定时中断<a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e5%ae%9a%e6%97%b6%e5%99%a8%e7%9a%84%e5%ae%9a%e6%97%b6%e4%b8%ad%e6%96%ad">#</a></h4>
 <h5 id="基本定时器的寄存器配置">基本定时器的寄存器配置<a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e5%ae%9a%e6%97%b6%e5%99%a8%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h5>
 <h6 id="控制寄存器1timx_cr1">控制寄存器1(TIMx_CR1)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a81timx_cr1">#</a></h6>
-<p><img src="image-167.png" alt="alt text" />
-<img src="image-168.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-167.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-168.png" alt="" /></p>
 <h6 id="控制寄存器2timx_cr2">控制寄存器2(TIMx_CR2)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a82timx_cr2">#</a></h6>
-<p><img src="image-169.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-169.png" alt="" /></p>
 <h6 id="dma中断使能寄存器timx_dier">DMA/中断使能寄存器(TIMx_DIER)<a class="anchor" href="#dma%e4%b8%ad%e6%96%ad%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8timx_dier">#</a></h6>
-<p><img src="image-170.png" alt="alt text" />
-<img src="image-171.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-170.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-171.png" alt="" /></p>
 <h6 id="状态寄存器timx_sr">状态寄存器(TIMx_SR)<a class="anchor" href="#%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8timx_sr">#</a></h6>
-<p><img src="image-172.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-172.png" alt="" /></p>
 <h6 id="事件产生寄存器timx_egr">事件产生寄存器(TIMx_EGR)<a class="anchor" href="#%e4%ba%8b%e4%bb%b6%e4%ba%a7%e7%94%9f%e5%af%84%e5%ad%98%e5%99%a8timx_egr">#</a></h6>
-<p><img src="image-173.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-173.png" alt="" /></p>
 <h6 id="计数器timx_cnt">计数器(TIMx_CNT)<a class="anchor" href="#%e8%ae%a1%e6%95%b0%e5%99%a8timx_cnt">#</a></h6>
-<p><img src="image-174.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-174.png" alt="" /></p>
 <h6 id="预分频器timx_psc">预分频器(TIMx_PSC)<a class="anchor" href="#%e9%a2%84%e5%88%86%e9%a2%91%e5%99%a8timx_psc">#</a></h6>
-<p><img src="image-175.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-175.png" alt="" /></p>
 <h6 id="自动重装载寄存器timx_arr">自动重装载寄存器(TIMx_ARR)<a class="anchor" href="#%e8%87%aa%e5%8a%a8%e9%87%8d%e8%a3%85%e8%bd%bd%e5%af%84%e5%ad%98%e5%99%a8timx_arr">#</a></h6>
-<p><img src="image-176.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-176.png" alt="" /></p>
 <h5 id="基本定时器定时中断配置代码示例">基本定时器定时中断配置代码示例<a class="anchor" href="#%e5%9f%ba%e6%9c%ac%e5%ae%9a%e6%97%b6%e5%99%a8%e5%ae%9a%e6%97%b6%e4%b8%ad%e6%96%ad%e9%85%8d%e7%bd%ae%e4%bb%a3%e7%a0%81%e7%a4%ba%e4%be%8b">#</a></h5>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __DRIVER_TIM6_H
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define __DRIVER_TIM6_H
@@ -822,7 +818,7 @@ AFIO输入信号进入边沿检测电路，通过上升沿下降沿触发选择�
 <li>外部时钟模式2：外部触发输入(ETR)</li>
 <li>内部触发输入(ITRx)：使用一个定时器作为另一个定时器的预分频器，如可以配置一个定时器Timer1而作为另一个定时器Timer2的预分频器。</li>
 </ul>
-<p><img src="image-48.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-48.png" alt="" /></p>
 <h4 id="定时器定时中断示例代码">定时器定时中断示例代码<a class="anchor" href="#%e5%ae%9a%e6%97%b6%e5%99%a8%e5%ae%9a%e6%97%b6%e4%b8%ad%e6%96%ad%e7%a4%ba%e4%be%8b%e4%bb%a3%e7%a0%81">#</a></h4>
 <h5 id="定时器定时中断示例代码-1">定时器定时中断示例代码<a class="anchor" href="#%e5%ae%9a%e6%97%b6%e5%99%a8%e5%ae%9a%e6%97%b6%e4%b8%ad%e6%96%ad%e7%a4%ba%e4%be%8b%e4%bb%a3%e7%a0%81-1">#</a></h5>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __TIM2_H
@@ -928,7 +924,7 @@ AFIO输入信号进入边沿检测电路，通过上升沿下降沿触发选择�
 <h5 id="输入捕获概念">输入捕获概念<a class="anchor" href="#%e8%be%93%e5%85%a5%e6%8d%95%e8%8e%b7%e6%a6%82%e5%bf%b5">#</a></h5>
 <p>捕获输入通道上信号的的上升沿和下降沿
 多用于测量PWM的周期和频率，和占空比
-<img src="image-85.png" alt="alt text" /></p>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-85.png" alt="" /></p>
 <p>假设对计数器时钟做72MHz分频，则计数器时钟频率为1MHz，计数器累加一次1us
 ARR自动重装值设65535，避免溢出</p>
 <ol>
@@ -1001,10 +997,10 @@ ARR自动重装值设65535，避免溢出</p>
 </span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>SR <span style="color:#f92672">&amp;=</span> <span style="color:#f92672">~</span>TIM_SR_CC1IF; <span style="color:#75715e">// 清除中断标志位
 </span></span></span><span style="display:flex;"><span>    TIM3<span style="color:#f92672">-&gt;</span>CNT <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div><h4 id="定时器触发输入和从模式">定时器触发输入和从模式<a class="anchor" href="#%e5%ae%9a%e6%97%b6%e5%99%a8%e8%a7%a6%e5%8f%91%e8%be%93%e5%85%a5%e5%92%8c%e4%bb%8e%e6%a8%a1%e5%bc%8f">#</a></h4>
-<p><img src="image-102.png" alt="alt text" />
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-102.png" alt="" />
 <strong>触发输入信号类型(信号进入从模式控制器实现不同功能)</strong>
 <strong>1.ITR0-4来源于其他定时器的TRGO信号，经过芯片内部连接，来到本定时器的ITR0/1/2/3，内部连接是定死的，不能更改</strong>
-<img src="image-103.png" alt="alt text" /></p>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-103.png" alt="" /></p>
 <p><strong>2.来源于外部触发脚ETR，经过极性选择，边沿检测，预分频器和输入滤波，成为TRGI信号</strong></p>
 <p><strong>3.来源于定时器自身通道1信号，经过输入滤波器和边缘检测器，得到TI1F_ED信号，上升沿和下降沿都会产生TI1F_ED信号，经信号选择器最终成为TRGI信号</strong></p>
 <p><strong>4.来源于定时器自身通道1或通道2信号，经过输入滤波器和边沿检测器，得到TI1FP1和TI2FP2信号，是上升沿或下降沿其中一种，最终成为TRGI信号，可用来同时测量PWM的频率和占空比</strong></p>
@@ -1015,8 +1011,8 @@ ARR自动重装值设65535，避免溢出</p>
 <li><strong>TI1FP1得到IC1信号，在通道1，用来测量周期</strong></li>
 <li><strong>TI1FP2得到IC2信号，在通道2，用来测量高电平时间</strong></li>
 <li><strong>TI1FP1作为触发输入信号，开启从模式中的复位模式</strong>
-<img src="image-104.png" alt="alt text" />
-<img src="image-105.png" alt="alt text" /></li>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-104.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-105.png" alt="" /></li>
 </ul>
 <h5 id="pwm输入模式配置示例代码">PWM输入模式配置示例代码<a class="anchor" href="#pwm%e8%be%93%e5%85%a5%e6%a8%a1%e5%bc%8f%e9%85%8d%e7%bd%ae%e7%a4%ba%e4%be%8b%e4%bb%a3%e7%a0%81">#</a></h5>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __TIM3_H
@@ -1086,50 +1082,50 @@ ARR自动重装值设65535，避免溢出</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> TIM3<span style="color:#f92672">-&gt;</span>CCR2 <span style="color:#f92672">*</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">/</span> TIM3<span style="color:#f92672">-&gt;</span>CCR1;
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div><h4 id="通用定时器的寄存器配置">通用定时器的寄存器配置<a class="anchor" href="#%e9%80%9a%e7%94%a8%e5%ae%9a%e6%97%b6%e5%99%a8%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h4>
 <h5 id="控制寄存器1timx_cr1-1">控制寄存器1(TIMx_CR1)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a81timx_cr1-1">#</a></h5>
-<p><img src="image-177.png" alt="alt text" />
-<img src="image-178.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-177.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-178.png" alt="" /></p>
 <h5 id="控制寄存器2timx_cr2-1">控制寄存器2(TIMx_CR2)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a82timx_cr2-1">#</a></h5>
-<p><img src="image-179.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-179.png" alt="" /></p>
 <h5 id="从模式控制寄存器timx_smcr">从模式控制寄存器(TIMx_SMCR)<a class="anchor" href="#%e4%bb%8e%e6%a8%a1%e5%bc%8f%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8timx_smcr">#</a></h5>
-<p><img src="image-180.png" alt="alt text" />
-<img src="image-181.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-180.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-181.png" alt="" /></p>
 <h5 id="dma中断使能寄存器timx_dier-1">DMA/中断使能寄存器(TIMx_DIER)<a class="anchor" href="#dma%e4%b8%ad%e6%96%ad%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8timx_dier-1">#</a></h5>
-<p><img src="image-182.png" alt="alt text" />
-<img src="image-183.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-182.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-183.png" alt="" /></p>
 <h5 id="状态寄存器timx_sr-1">状态寄存器(TIMx_SR)<a class="anchor" href="#%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8timx_sr-1">#</a></h5>
-<p><img src="image-184.png" alt="alt text" />
-<img src="image-185.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-184.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-185.png" alt="" /></p>
 <h5 id="事件产生寄存器timx_egr-1">事件产生寄存器(TIMx_EGR)<a class="anchor" href="#%e4%ba%8b%e4%bb%b6%e4%ba%a7%e7%94%9f%e5%af%84%e5%ad%98%e5%99%a8timx_egr-1">#</a></h5>
-<p><img src="image-186.png" alt="alt text" />
-<img src="image-187.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-186.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-187.png" alt="" /></p>
 <h5 id="捕获比较模式寄存器1timx_ccmr1">捕获/比较模式寄存器1(TIMx_CCMR1)<a class="anchor" href="#%e6%8d%95%e8%8e%b7%e6%af%94%e8%be%83%e6%a8%a1%e5%bc%8f%e5%af%84%e5%ad%98%e5%99%a81timx_ccmr1">#</a></h5>
-<p><img src="image-188.png" alt="alt text" />
-<img src="image-189.png" alt="alt text" />
-<img src="image-190.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-188.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-189.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-190.png" alt="" /></p>
 <h5 id="捕获比较模式寄存器2timx_ccmr2">捕获/比较模式寄存器2(TIMx_CCMR2)<a class="anchor" href="#%e6%8d%95%e8%8e%b7%e6%af%94%e8%be%83%e6%a8%a1%e5%bc%8f%e5%af%84%e5%ad%98%e5%99%a82timx_ccmr2">#</a></h5>
-<p><img src="image-191.png" alt="alt text" />
-<img src="image-192.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-191.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-192.png" alt="" /></p>
 <h5 id="捕获比较使能寄存器timx_ccer">捕获/比较使能寄存器(TIMx_CCER)<a class="anchor" href="#%e6%8d%95%e8%8e%b7%e6%af%94%e8%be%83%e4%bd%bf%e8%83%bd%e5%af%84%e5%ad%98%e5%99%a8timx_ccer">#</a></h5>
-<p><img src="image-193.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-193.png" alt="" /></p>
 <h5 id="计数器timx_cnt-1">计数器(TIMx_CNT)<a class="anchor" href="#%e8%ae%a1%e6%95%b0%e5%99%a8timx_cnt-1">#</a></h5>
-<p><img src="image-194.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-194.png" alt="" /></p>
 <h5 id="预分频器timx_psc-1">预分频器(TIMx_PSC)<a class="anchor" href="#%e9%a2%84%e5%88%86%e9%a2%91%e5%99%a8timx_psc-1">#</a></h5>
-<p><img src="image-195.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-195.png" alt="" /></p>
 <h5 id="自动重装载寄存器timx_arr-1">自动重装载寄存器(TIMx_ARR)<a class="anchor" href="#%e8%87%aa%e5%8a%a8%e9%87%8d%e8%a3%85%e8%bd%bd%e5%af%84%e5%ad%98%e5%99%a8timx_arr-1">#</a></h5>
-<p><img src="image-196.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-196.png" alt="" /></p>
 <h5 id="捕获比较寄存器1-4timx_ccr1-4">捕获/比较寄存器1-4(TIMx_CCR1-4)<a class="anchor" href="#%e6%8d%95%e8%8e%b7%e6%af%94%e8%be%83%e5%af%84%e5%ad%98%e5%99%a81-4timx_ccr1-4">#</a></h5>
-<p><img src="image-197.png" alt="alt text" />
-<img src="image-198.png" alt="alt text" />
-<img src="image-199.png" alt="alt text" />
-<img src="image-200.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-197.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-198.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-199.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-200.png" alt="" /></p>
 <h5 id="dma控制寄存器timx_dcr">DMA控制寄存器(TIMx_DCR)<a class="anchor" href="#dma%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8timx_dcr">#</a></h5>
-<p><img src="image-201.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-201.png" alt="" /></p>
 <h5 id="连续模式的dma地址timx_dmar">连续模式的DMA地址(TIMx_DMAR)<a class="anchor" href="#%e8%bf%9e%e7%bb%ad%e6%a8%a1%e5%bc%8f%e7%9a%84dma%e5%9c%b0%e5%9d%80timx_dmar">#</a></h5>
-<p><img src="image-202.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-202.png" alt="" /></p>
 <hr>
 <p><br><br></p>
 <h3 id="高级定时器">高级定时器<a class="anchor" href="#%e9%ab%98%e7%ba%a7%e5%ae%9a%e6%97%b6%e5%99%a8">#</a></h3>
-<p><img src="image-64.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-64.png" alt="" /></p>
 <hr>
 <p><br><br></p>
 <h3 id="系统滴答定时器systick">系统滴答定时器(SysTick)<a class="anchor" href="#%e7%b3%bb%e7%bb%9f%e6%bb%b4%e7%ad%94%e5%ae%9a%e6%97%b6%e5%99%a8systick">#</a></h3>
@@ -1139,11 +1135,11 @@ ARR自动重装值设65535，避免溢出</p>
 <p>SysTick定时器能产生中断，CM3为它专门开出一个异常类型，并且在向量表中有它的一席之地。它使操作系统和其它系统软件在CM3器件间的移植变得简单多了，因为在所有CM3产品间SysTick的处理方式都是相同的。</p>
 <h4 id="systick的寄存器配置">SysTick的寄存器配置<a class="anchor" href="#systick%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h4>
 <h5 id="systick控制和状态寄存器stk_ctrl">SysTick控制和状态寄存器(STK_CTRL)<a class="anchor" href="#systick%e6%8e%a7%e5%88%b6%e5%92%8c%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8stk_ctrl">#</a></h5>
-<p><img src="image-45.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-45.png" alt="" /></p>
 <h5 id="systick重装载寄存器stk_load">SysTick重装载寄存器(STK_LOAD)<a class="anchor" href="#systick%e9%87%8d%e8%a3%85%e8%bd%bd%e5%af%84%e5%ad%98%e5%99%a8stk_load">#</a></h5>
-<p><img src="image-46.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-46.png" alt="" /></p>
 <h5 id="systick当前数值寄存器stk_val">SysTick当前数值寄存器(STK_VAL)<a class="anchor" href="#systick%e5%bd%93%e5%89%8d%e6%95%b0%e5%80%bc%e5%af%84%e5%ad%98%e5%99%a8stk_val">#</a></h5>
-<p><img src="image-47.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-47.png" alt="" /></p>
 <h4 id="systick阻塞式延时写法">SysTick阻塞式延时写法<a class="anchor" href="#systick%e9%98%bb%e5%a1%9e%e5%bc%8f%e5%bb%b6%e6%97%b6%e5%86%99%e6%b3%95">#</a></h4>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __DELAY_H
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define __DELAY_H
@@ -1199,31 +1195,31 @@ ARR自动重装值设65535，避免溢出</p>
 <strong>12个独立可配置的通道：DMA1(7个通道),DMA2(5个通道),每个通道都支持软件触发和特定的硬件触发</strong>
 <strong>STM32F103C8T6只有DMA1</strong></p>
 <h3 id="dma结构图">DMA结构图<a class="anchor" href="#dma%e7%bb%93%e6%9e%84%e5%9b%be">#</a></h3>
-<p><img src="image-204.png" alt="alt text" />
-<img src="image-206.png" alt="alt text" />
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-204.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-206.png" alt="" />
 <strong>寄存器是一种特殊的存储器，CPU可以直接对寄存器读写，就像访问内存一样，而寄存器背后连接导线控制引脚的高低电平、导通和断开开关、切换数据选择器、作为数据寄存器。软件读写寄存器，就相当于控制硬件执行，所以寄存器是沟通软件和硬件的桥梁</strong></p>
 <h3 id="dma请求映像">DMA请求映像<a class="anchor" href="#dma%e8%af%b7%e6%b1%82%e6%98%a0%e5%83%8f">#</a></h3>
-<p><img src="image-237.png" alt="alt text" />
-<img src="image-238.png" alt="alt text" />
-<img src="image-239.png" alt="alt text" />
-<img src="image-240.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-237.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-238.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-239.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-240.png" alt="" /></p>
 <h3 id="dma的寄存器配置">DMA的寄存器配置<a class="anchor" href="#dma%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
 <h4 id="dma中断状态寄存器dma_isr">DMA中断状态寄存器(DMA_ISR)<a class="anchor" href="#dma%e4%b8%ad%e6%96%ad%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8dma_isr">#</a></h4>
-<p><img src="image-207.png" alt="alt text" />
-<img src="image-208.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-207.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-208.png" alt="" /></p>
 <h4 id="dma中断标志清除寄存器dma_ifcr">DMA中断标志清除寄存器(DMA_IFCR)<a class="anchor" href="#dma%e4%b8%ad%e6%96%ad%e6%a0%87%e5%bf%97%e6%b8%85%e9%99%a4%e5%af%84%e5%ad%98%e5%99%a8dma_ifcr">#</a></h4>
-<p><img src="image-209.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-209.png" alt="" /></p>
 <h4 id="dma通道x配置寄存器dma_ccrxx--17">DMA通道x配置寄存器(DMA_CCRx)(x = 1…7)<a class="anchor" href="#dma%e9%80%9a%e9%81%93x%e9%85%8d%e7%bd%ae%e5%af%84%e5%ad%98%e5%99%a8dma_ccrxx--17">#</a></h4>
-<p><img src="image-210.png" alt="alt text" />
-<img src="image-211.png" alt="alt text" />
-<img src="image-212.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-209.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-211.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-212.png" alt="" /></p>
 <h4 id="dma通道x传输数量寄存器dma_cndtrxx--17">DMA通道x传输数量寄存器(DMA_CNDTRx)(x = 1…7)<a class="anchor" href="#dma%e9%80%9a%e9%81%93x%e4%bc%a0%e8%be%93%e6%95%b0%e9%87%8f%e5%af%84%e5%ad%98%e5%99%a8dma_cndtrxx--17">#</a></h4>
-<p><img src="image-213.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-213.png" alt="" /></p>
 <h4 id="dma通道x外设地址寄存器dma_cparxx--17">DMA通道x外设地址寄存器(DMA_CPARx)(x = 1…7)<a class="anchor" href="#dma%e9%80%9a%e9%81%93x%e5%a4%96%e8%ae%be%e5%9c%b0%e5%9d%80%e5%af%84%e5%ad%98%e5%99%a8dma_cparxx--17">#</a></h4>
-<p><img src="image-214.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-214.png" alt="" /></p>
 <h4 id="dma通道x存储器地址寄存器dma_cmarxx--17">DMA通道x存储器地址寄存器(DMA_CMARx)(x = 1…7)<a class="anchor" href="#dma%e9%80%9a%e9%81%93x%e5%ad%98%e5%82%a8%e5%99%a8%e5%9c%b0%e5%9d%80%e5%af%84%e5%ad%98%e5%99%a8dma_cmarxx--17">#</a></h4>
-<p><img src="image-215.png" alt="alt text" />
-<img src="image-216.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-215.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-216.png" alt="" /></p>
 <hr>
 <p><br><br></p>
 <h2 id="模拟-数字转换器adc">模拟-数字转换器(ADC)<a class="anchor" href="#%e6%a8%a1%e6%8b%9f-%e6%95%b0%e5%ad%97%e8%bd%ac%e6%8d%a2%e5%99%a8adc">#</a></h2>
@@ -1238,12 +1234,12 @@ ARR自动重装值设65535，避免溢出</p>
 </ul>
 <p><strong>STM32F103C8T6有ADC1、ADC2、10个外部输入通道</strong></p>
 <h3 id="adc结构图">ADC结构图<a class="anchor" href="#adc%e7%bb%93%e6%9e%84%e5%9b%be">#</a></h3>
-<p><img src="image-217.png" alt="alt text" />
-<img src="image-219.png" alt="alt text" />
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-217.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-219.png" alt="" />
 <strong>规则通道最多4个，转换完存放数据寄存器有4个</strong>
 <strong>注入通道有16个，转换完存放数据寄存器只有一个</strong></p>
 <h3 id="adc输入引脚通道">ADC输入引脚通道<a class="anchor" href="#adc%e8%be%93%e5%85%a5%e5%bc%95%e8%84%9a%e9%80%9a%e9%81%93">#</a></h3>
-<p><img src="image-220.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-220.png" alt="" /></p>
 <h3 id="adc转换模式">ADC转换模式<a class="anchor" href="#adc%e8%bd%ac%e6%8d%a2%e6%a8%a1%e5%bc%8f">#</a></h3>
 <ul>
 <li><strong>单次转换，扫描模式</strong></li>
@@ -1257,34 +1253,34 @@ ARR自动重装值设65535，避免溢出</p>
 </ul>
 <h3 id="adc的寄存器配置">ADC的寄存器配置<a class="anchor" href="#adc%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
 <h4 id="adc状态寄存器adc_sr">ADC状态寄存器(ADC_SR)<a class="anchor" href="#adc%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8adc_sr">#</a></h4>
-<p><img src="image-218.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-218.png" alt="" /></p>
 <h4 id="adc控制寄存器1adc_cr1">ADC控制寄存器1(ADC_CR1)<a class="anchor" href="#adc%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a81adc_cr1">#</a></h4>
-<p><img src="image-221.png" alt="alt text" />
-<img src="image-222.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-221.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-222.png" alt="" /></p>
 <h4 id="adc控制寄存器2adc_cr2">ADC控制寄存器2(ADC_CR2)<a class="anchor" href="#adc%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a82adc_cr2">#</a></h4>
-<p><img src="image-223.png" alt="alt text" />
-<img src="image-224.png" alt="alt text" />
-<img src="image-225.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-223.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-224.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-225.png" alt="" /></p>
 <h4 id="adc采样时间寄存器1adc_smpr1">ADC采样时间寄存器1(ADC_SMPR1)<a class="anchor" href="#adc%e9%87%87%e6%a0%b7%e6%97%b6%e9%97%b4%e5%af%84%e5%ad%98%e5%99%a81adc_smpr1">#</a></h4>
-<p><img src="image-226.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-226.png" alt="" /></p>
 <h4 id="adc采样时间寄存器2adc_smpr2">ADC采样时间寄存器2(ADC_SMPR2)<a class="anchor" href="#adc%e9%87%87%e6%a0%b7%e6%97%b6%e9%97%b4%e5%af%84%e5%ad%98%e5%99%a82adc_smpr2">#</a></h4>
-<p><img src="image-227.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-227.png" alt="" /></p>
 <h4 id="adc注入通道数据偏移寄存器x-adc_jofrxx14">ADC注入通道数据偏移寄存器x (ADC_JOFRx)(x=1..4)<a class="anchor" href="#adc%e6%b3%a8%e5%85%a5%e9%80%9a%e9%81%93%e6%95%b0%e6%8d%ae%e5%81%8f%e7%a7%bb%e5%af%84%e5%ad%98%e5%99%a8x-adc_jofrxx14">#</a></h4>
-<p><img src="image-228.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-228.png" alt="" /></p>
 <h4 id="adc看门狗高阈值寄存器adc_htr">ADC看门狗高阈值寄存器(ADC_HTR)<a class="anchor" href="#adc%e7%9c%8b%e9%97%a8%e7%8b%97%e9%ab%98%e9%98%88%e5%80%bc%e5%af%84%e5%ad%98%e5%99%a8adc_htr">#</a></h4>
-<p><img src="image-229.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-229.png" alt="" /></p>
 <h4 id="adc看门狗低阀值寄存器adc_lrt">ADC看门狗低阀值寄存器(ADC_LRT)<a class="anchor" href="#adc%e7%9c%8b%e9%97%a8%e7%8b%97%e4%bd%8e%e9%98%80%e5%80%bc%e5%af%84%e5%ad%98%e5%99%a8adc_lrt">#</a></h4>
-<p><img src="image-230.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-230.png" alt="" /></p>
 <h4 id="adc规则序列寄存器1-3adc_sqr1-3">ADC规则序列寄存器1-3(ADC_SQR1-3)<a class="anchor" href="#adc%e8%a7%84%e5%88%99%e5%ba%8f%e5%88%97%e5%af%84%e5%ad%98%e5%99%a81-3adc_sqr1-3">#</a></h4>
-<p><img src="image-231.png" alt="alt text" />
-<img src="image-232.png" alt="alt text" />
-<img src="image-233.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-231.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-232.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-233.png" alt="" /></p>
 <h4 id="adc注入序列寄存器adc_jsqr">ADC注入序列寄存器(ADC_JSQR)<a class="anchor" href="#adc%e6%b3%a8%e5%85%a5%e5%ba%8f%e5%88%97%e5%af%84%e5%ad%98%e5%99%a8adc_jsqr">#</a></h4>
-<p><img src="image-234.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-234.png" alt="" /></p>
 <h4 id="adc-注入数据寄存器x-adc_jdrx-x-14">ADC 注入数据寄存器x (ADC_JDRx) (x= 1..4)<a class="anchor" href="#adc-%e6%b3%a8%e5%85%a5%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8x-adc_jdrx-x-14">#</a></h4>
-<p><img src="image-235.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-235.png" alt="" /></p>
 <h4 id="adc规则数据寄存器adc_dr">ADC规则数据寄存器(ADC_DR)<a class="anchor" href="#adc%e8%a7%84%e5%88%99%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8adc_dr">#</a></h4>
-<p><img src="image-236.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-236.png" alt="" /></p>
 <h3 id="adc单通道转换代码示例">ADC单通道转换代码示例<a class="anchor" href="#adc%e5%8d%95%e9%80%9a%e9%81%93%e8%bd%ac%e6%8d%a2%e4%bb%a3%e7%a0%81%e7%a4%ba%e4%be%8b">#</a></h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#ifndef __ADC_H
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define __ADC_H
@@ -1446,18 +1442,18 @@ ARR自动重装值设65535，避免溢出</p>
 <li><strong>用户数据存储容量：20字节(小中容量)/84字节(大容量和互联型)</strong></li>
 </ul>
 <h3 id="bkp的基本结构">BKP的基本结构<a class="anchor" href="#bkp%e7%9a%84%e5%9f%ba%e6%9c%ac%e7%bb%93%e6%9e%84">#</a></h3>
-<p><img src="image-241.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-241.png" alt="" /></p>
 <h3 id="bkp的寄存器配置">BKP的寄存器配置<a class="anchor" href="#bkp%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
 <h4 id="备份数据寄存器xbkp_drx-x--1--10">备份数据寄存器x(BKP_DRx) (x = 1 … 10)<a class="anchor" href="#%e5%a4%87%e4%bb%bd%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8xbkp_drx-x--1--10">#</a></h4>
-<p><img src="image-242.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-242.png" alt="" /></p>
 <h4 id="rtc时钟校准寄存器bkp_rtccr">RTC时钟校准寄存器(BKP_RTCCR)<a class="anchor" href="#rtc%e6%97%b6%e9%92%9f%e6%a0%a1%e5%87%86%e5%af%84%e5%ad%98%e5%99%a8bkp_rtccr">#</a></h4>
-<p><img src="image-243.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-243.png" alt="" /></p>
 <h4 id="备份控制寄存器bkp_cr">备份控制寄存器(BKP_CR)<a class="anchor" href="#%e5%a4%87%e4%bb%bd%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8bkp_cr">#</a></h4>
-<p><img src="image-244.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-244.png" alt="" /></p>
 <h4 id="备份控制状态寄存器bkp_csr">备份控制/状态寄存器(BKP_CSR)<a class="anchor" href="#%e5%a4%87%e4%bb%bd%e6%8e%a7%e5%88%b6%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8bkp_csr">#</a></h4>
-<p><img src="image-245.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-245.png" alt="" /></p>
 <h4 id="备份控制状态寄存器bkp_csr-1">备份控制/状态寄存器(BKP_CSR)<a class="anchor" href="#%e5%a4%87%e4%bb%bd%e6%8e%a7%e5%88%b6%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8bkp_csr-1">#</a></h4>
-<p><img src="image-246.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-246.png" alt="" /></p>
 <h2 id="实时时钟rtc">实时时钟(RTC)<a class="anchor" href="#%e5%ae%9e%e6%97%b6%e6%97%b6%e9%92%9frtc">#</a></h2>
 <h3 id="unix时间戳概念">Unix时间戳概念<a class="anchor" href="#unix%e6%97%b6%e9%97%b4%e6%88%b3%e6%a6%82%e5%bf%b5">#</a></h3>
 <ul>
@@ -1478,29 +1474,29 @@ ARR自动重装值设65535，避免溢出</p>
 <strong>3.LSI时钟(40KHz)</strong></li>
 </ul>
 <h3 id="rtc结构图">RTC结构图<a class="anchor" href="#rtc%e7%bb%93%e6%9e%84%e5%9b%be">#</a></h3>
-<p><img src="image-247.png" alt="alt text" />
-<img src="image-248.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-247.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-248.png" alt="" /></p>
 <h3 id="rtc的寄存器配置">RTC的寄存器配置<a class="anchor" href="#rtc%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h3>
 <h4 id="rtc控制寄存器高位rtc_crh">RTC控制寄存器高位(RTC_CRH)<a class="anchor" href="#rtc%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8%e9%ab%98%e4%bd%8drtc_crh">#</a></h4>
-<p><img src="image-249.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-249.png" alt="" /></p>
 <h4 id="rtc控制寄存器低位rtc_crl">RTC控制寄存器低位(RTC_CRL)<a class="anchor" href="#rtc%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a8%e4%bd%8e%e4%bd%8drtc_crl">#</a></h4>
-<p><img src="image-250.png" alt="alt text" />
-<img src="image-251.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-250.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-251.png" alt="" /></p>
 <h4 id="rtc预分频装载寄存器rtc_prlhrtc_prll">RTC预分频装载寄存器(RTC_PRLH/RTC_PRLL)<a class="anchor" href="#rtc%e9%a2%84%e5%88%86%e9%a2%91%e8%a3%85%e8%bd%bd%e5%af%84%e5%ad%98%e5%99%a8rtc_prlhrtc_prll">#</a></h4>
-<p><img src="image-252.png" alt="alt text" />
-<img src="image-253.png" alt="alt text" />
-<img src="image-254.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-252.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-253.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-254.png" alt="" /></p>
 <h4 id="rtc预分频器余数寄存器rtc_divh--rtc_divl">RTC预分频器余数寄存器(RTC_DIVH / RTC_DIVL)<a class="anchor" href="#rtc%e9%a2%84%e5%88%86%e9%a2%91%e5%99%a8%e4%bd%99%e6%95%b0%e5%af%84%e5%ad%98%e5%99%a8rtc_divh--rtc_divl">#</a></h4>
-<p><img src="image-255.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-255.png" alt="" /></p>
 <h4 id="rtc计数器寄存器-rtc_cnth--rtc_cntl">RTC计数器寄存器 (RTC_CNTH / RTC_CNTL)<a class="anchor" href="#rtc%e8%ae%a1%e6%95%b0%e5%99%a8%e5%af%84%e5%ad%98%e5%99%a8-rtc_cnth--rtc_cntl">#</a></h4>
-<p><img src="image-256.png" alt="alt text" />
-<img src="image-257.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-256.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-257.png" alt="" /></p>
 <h4 id="rtc闹钟寄存器rtc_alrhrtc_alrl">RTC闹钟寄存器(RTC_ALRH/RTC_ALRL)<a class="anchor" href="#rtc%e9%97%b9%e9%92%9f%e5%af%84%e5%ad%98%e5%99%a8rtc_alrhrtc_alrl">#</a></h4>
-<p><img src="image-258.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-258.png" alt="" /></p>
 <hr>
 <p><br><br></p>
 <h2 id="通讯协议">通讯协议<a class="anchor" href="#%e9%80%9a%e8%ae%af%e5%8d%8f%e8%ae%ae">#</a></h2>
-<p><img src="image-260.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-260.png" alt="" /></p>
 <h3 id="usart-2">USART<a class="anchor" href="#usart-2">#</a></h3>
 <h4 id="usart概念">USART概念<a class="anchor" href="#usart%e6%a6%82%e5%bf%b5">#</a></h4>
 <ul>
@@ -1511,45 +1507,46 @@ ARR自动重装值设65535，避免溢出</p>
 <strong>STM32F103C8T6有USART1、USART2、USART3</strong></li>
 </ul>
 <h4 id="usart参数时序">USART参数时序<a class="anchor" href="#usart%e5%8f%82%e6%95%b0%e6%97%b6%e5%ba%8f">#</a></h4>
-<p><img src="image-259.png" alt="alt text" />
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-259.png" alt="" />
 <strong>波特率9600，每秒发送9600位，每一位时间为1/9600 = 104us</strong>
-<img src="image-261.png" alt="alt text" /></p>
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-261.png" alt="" /></p>
 <h4 id="usart结构图">USART结构图<a class="anchor" href="#usart%e7%bb%93%e6%9e%84%e5%9b%be">#</a></h4>
-<p><img src="image-263.png" alt="alt text" />
-<img src="image-262.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-263.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-262.png" alt="" /></p>
 <h4 id="usart波特率配置">USART波特率配置<a class="anchor" href="#usart%e6%b3%a2%e7%89%b9%e7%8e%87%e9%85%8d%e7%bd%ae">#</a></h4>
-<p><img src="image-268.png" alt="alt text" />
-<img src="image-270.png" alt="alt text" />
-<img src="image-269.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-268.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-270.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-269.png" alt="" /></p>
 <h4 id="usart寄存器配置">USART寄存器配置<a class="anchor" href="#usart%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h4>
 <h5 id="状态寄存器usart_sr">状态寄存器(USART_SR)<a class="anchor" href="#%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8usart_sr">#</a></h5>
-<p><img src="image-264.png" alt="alt text" />
-<img src="image-265.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-264.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-265.png" alt="" /></p>
 <h5 id="数据寄存器usart_dr">数据寄存器(USART_DR)<a class="anchor" href="#%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8usart_dr">#</a></h5>
-<p><img src="image-266.png" alt="alt text" />
-<img src="image-267.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-266.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-267.png" alt="" /></p>
 <h5 id="波特比率寄存器usart_brr">波特比率寄存器(USART_BRR)<a class="anchor" href="#%e6%b3%a2%e7%89%b9%e6%af%94%e7%8e%87%e5%af%84%e5%ad%98%e5%99%a8usart_brr">#</a></h5>
-<p><img src="image-271.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-271.png" alt="" /></p>
 <h5 id="控制寄存器1usart_cr1">控制寄存器1(USART_CR1)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a81usart_cr1">#</a></h5>
-<p><img src="image-272.png" alt="alt text" />
-<img src="image-273.png" alt="alt text" />
-<img src="image-274.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-272.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-273.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-274.png" alt="" /></p>
 <h5 id="控制寄存器2usart_cr2">控制寄存器2(USART_CR2)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a82usart_cr2">#</a></h5>
-<p><img src="image-275.png" alt="alt text" />
-<img src="image-276.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-275.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-276.png" alt="" /></p>
 <h5 id="控制寄存器3usart_cr3">控制寄存器3(USART_CR3)<a class="anchor" href="#%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a83usart_cr3">#</a></h5>
-<p><img src="image-277.png" alt="alt text" />
-<img src="image-278.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-277.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-278.png" alt="" /></p>
 <h5 id="保护时间和预分频寄存器usart_gtpr">保护时间和预分频寄存器(USART_GTPR)<a class="anchor" href="#%e4%bf%9d%e6%8a%a4%e6%97%b6%e9%97%b4%e5%92%8c%e9%a2%84%e5%88%86%e9%a2%91%e5%af%84%e5%ad%98%e5%99%a8usart_gtpr">#</a></h5>
-<h2 id="alt-text-3"><img src="image-279.png" alt="alt text" />
-<img src="image-280.png" alt="alt text" /><a class="anchor" href="#alt-text-3">#</a></h2>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-279.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-280.png" alt="" /></p>
+<hr>
 <p><br><br></p>
 <h3 id="spi-1">SPI<a class="anchor" href="#spi-1">#</a></h3>
 <h4 id="spi概念">SPI概念<a class="anchor" href="#spi%e6%a6%82%e5%bf%b5">#</a></h4>
 <p><strong>SPI(Serial Perighera interface)串行外围设备接口</strong>
 <strong>SPI是一种高速的，全双工，同步的串行通信总线，只支持一主多从模式</strong></p>
 <h4 id="spi结构图">SPI结构图<a class="anchor" href="#spi%e7%bb%93%e6%9e%84%e5%9b%be">#</a></h4>
-<p><img src="image-281.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-281.png" alt="" /></p>
 <h4 id="spi时序">SPI时序<a class="anchor" href="#spi%e6%97%b6%e5%ba%8f">#</a></h4>
 <p><strong>CPOL(时钟极性):置0时，SCK空闲时为低电平。置1时，SCK空闲时为高电平</strong>
 <strong>CPHA(时钟相位):置0时，在SCK第一个边沿采样。置1时，在SCK第二个边沿采样</strong>
@@ -1557,28 +1554,28 @@ ARR自动重装值设65535，避免溢出</p>
 <strong>MISO每发送一位比特时，MOSI也要发送一位比特以交换数据(即使此时发送的是无效数据)</strong></p>
 <h4 id="spi的寄存器配置">SPI的寄存器配置<a class="anchor" href="#spi%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e9%85%8d%e7%bd%ae">#</a></h4>
 <h5 id="spi控制寄存器1spi_cr1">SPI控制寄存器1(SPI_CR1)<a class="anchor" href="#spi%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a81spi_cr1">#</a></h5>
-<p><img src="image-282.png" alt="alt text" />
-<img src="image-283.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-282.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-283.png" alt="" /></p>
 <h5 id="spi控制寄存器2spi_cr2">SPI控制寄存器2(SPI_CR2)<a class="anchor" href="#spi%e6%8e%a7%e5%88%b6%e5%af%84%e5%ad%98%e5%99%a82spi_cr2">#</a></h5>
-<p><img src="image-284.png" alt="alt text" />
-<img src="image-285.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-284.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-285.png" alt="" /></p>
 <h5 id="spi状态寄存器spi_sr">SPI状态寄存器(SPI_SR)<a class="anchor" href="#spi%e7%8a%b6%e6%80%81%e5%af%84%e5%ad%98%e5%99%a8spi_sr">#</a></h5>
-<p><img src="image-286.png" alt="alt text" />
-<img src="image-287.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-286.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-287.png" alt="" /></p>
 <h5 id="spi-数据寄存器spi_dr">SPI 数据寄存器(SPI_DR)<a class="anchor" href="#spi-%e6%95%b0%e6%8d%ae%e5%af%84%e5%ad%98%e5%99%a8spi_dr">#</a></h5>
-<p><img src="image-288.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-288.png" alt="" /></p>
 <h5 id="spi-crc多项式寄存器spi_crcpr">SPI CRC多项式寄存器(SPI_CRCPR)<a class="anchor" href="#spi-crc%e5%a4%9a%e9%a1%b9%e5%bc%8f%e5%af%84%e5%ad%98%e5%99%a8spi_crcpr">#</a></h5>
-<p><img src="image-289.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-289.png" alt="" /></p>
 <h5 id="spi-rx-crc寄存器spi_rxcrcr">SPI Rx CRC寄存器(SPI_RXCRCR)<a class="anchor" href="#spi-rx-crc%e5%af%84%e5%ad%98%e5%99%a8spi_rxcrcr">#</a></h5>
-<p><img src="image-290.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-290.png" alt="" /></p>
 <h5 id="spi-tx-crc寄存器spi_txcrcr">SPI Tx CRC寄存器(SPI_TXCRCR)<a class="anchor" href="#spi-tx-crc%e5%af%84%e5%ad%98%e5%99%a8spi_txcrcr">#</a></h5>
-<p><img src="image-291.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-291.png" alt="" /></p>
 <h5 id="spi_i2s配置寄存器spi_i2s_cfgr">SPI_I2S配置寄存器(SPI_I2S_CFGR)<a class="anchor" href="#spi_i2s%e9%85%8d%e7%bd%ae%e5%af%84%e5%ad%98%e5%99%a8spi_i2s_cfgr">#</a></h5>
-<p><img src="image-292.png" alt="alt text" />
-<img src="image-293.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-292.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-293.png" alt="" /></p>
 <h5 id="spi_i2s预分频寄存器spi_i2spr">SPI_I2S预分频寄存器(SPI_I2SPR)<a class="anchor" href="#spi_i2s%e9%a2%84%e5%88%86%e9%a2%91%e5%af%84%e5%ad%98%e5%99%a8spi_i2spr">#</a></h5>
-<p><img src="image-294.png" alt="alt text" />
-<img src="image-295.png" alt="alt text" /></p>
+<p><img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-294.png" alt="" />
+<img src="https://cdn.jsdelivr.net/gh/Patchouli-ovo/hugo-img//STM32F103/image-295.png" alt="" /></p>
 <hr>
 <p><br><br></p>
 </article>
@@ -1666,7 +1663,6 @@ ARR自动重装值设65535，避免溢出</p>
         <li><a href="#rcc的寄存器配置">RCC的寄存器配置</a></li>
       </ul>
     </li>
-    <li><a href="#alt-text"><img src="image-127.png" alt="alt text"> <img src="image-128.png" alt="alt text"></a></li>
     <li><a href="#gpio">GPIO</a>
       <ul>
         <li><a href="#gpio的基本结构">GPIO的基本结构</a></li>
@@ -1676,7 +1672,6 @@ ARR自动重装值设65535，避免溢出</p>
         <li><a href="#gpio的寄存器配置">GPIO的寄存器配置</a></li>
       </ul>
     </li>
-    <li><a href="#alt-text-1"><img src="image-149.png" alt="alt text"></a></li>
     <li><a href="#afio">AFIO</a>
       <ul>
         <li><a href="#afio的寄存器配置">AFIO的寄存器配置</a></li>
@@ -1691,7 +1686,6 @@ ARR自动重装值设65535，避免溢出</p>
         <li><a href="#exti的寄存器配置">EXTI的寄存器配置</a></li>
       </ul>
     </li>
-    <li><a href="#alt-text-2"><img src="image-166.png" alt="alt text"></a></li>
     <li><a href="#定时器tim">定时器(TIM)</a>
       <ul>
         <li><a href="#基本定时器">基本定时器</a></li>
@@ -1737,10 +1731,6 @@ ARR自动重装值设65535，避免溢出</p>
     <li><a href="#通讯协议">通讯协议</a>
       <ul>
         <li><a href="#usart-2">USART</a></li>
-      </ul>
-    </li>
-    <li><a href="#alt-text-3"><img src="image-279.png" alt="alt text"> <img src="image-280.png" alt="alt text"></a>
-      <ul>
         <li><a href="#spi-1">SPI</a></li>
       </ul>
     </li>

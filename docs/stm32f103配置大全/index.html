@@ -225,102 +225,325 @@ https://github.com/alex-shpak/hugo-book
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#hal图形化配置">Hal图形化配置</a>
+    <li><a href="#stm32f103c8t6-hal库配置">STM32F103C8T6 Hal库配置</a>
       <ul>
-        <li><a href="#1system内核配置">1.System内核配置</a></li>
-        <li><a href="#2rcc-系统时钟配置">2.RCC 系统时钟配置</a></li>
-        <li><a href="#3gpio配置">3.GPIO配置</a></li>
-        <li><a href="#4usart配置">4.USART配置</a></li>
+        <li><a href="#hal图形化配置">Hal图形化配置</a>
+          <ul>
+            <li><a href="#1system内核配置">1.System内核配置</a></li>
+            <li><a href="#2rcc-系统时钟配置">2.RCC 系统时钟配置</a></li>
+            <li><a href="#3gpio配置">3.GPIO配置</a></li>
+            <li><a href="#4usart配置">4.USART配置</a></li>
+          </ul>
+        </li>
+        <li><a href="#hal常用函数">Hal常用函数</a>
+          <ul>
+            <li><a href="#gpio--exti">GPIO &amp; EXTI</a></li>
+            <li><a href="#usart">USART</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#hal常用函数">Hal常用函数</a>
+    <li><a href="#stm32f103c8t6数据手册">STM32F103C8T6数据手册</a>
       <ul>
-        <li><a href="#gpio--exti">GPIO &amp; EXTI</a></li>
-        <li><a href="#usart">USART</a></li>
-      </ul>
-    </li>
-  </ul>
-
-  <ul>
-    <li><a href="#stm32工程文件配置">STM32工程文件配置</a></li>
-    <li><a href="#stm32系统架构">STM32系统架构</a></li>
-    <li><a href="#存储器映像">存储器映像</a></li>
-    <li><a href="#复位与时钟控制rcc">复位与时钟控制(RCC)</a>
-      <ul>
-        <li><a href="#stm32时钟树">STM32时钟树</a></li>
-        <li><a href="#stm32时钟树结构">STM32时钟树结构</a></li>
-        <li><a href="#rcc的寄存器配置">RCC的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#gpio">GPIO</a>
-      <ul>
-        <li><a href="#gpio的基本结构">GPIO的基本结构</a></li>
-        <li><a href="#gpio的8种工作模式">GPIO的8种工作模式</a></li>
-        <li><a href="#外设的gpio配置">外设的GPIO配置</a></li>
-        <li><a href="#stm32f103c8t6引脚定义">STM32F103C8T6引脚定义</a></li>
-        <li><a href="#gpio的寄存器配置">GPIO的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#afio">AFIO</a>
-      <ul>
-        <li><a href="#afio的寄存器配置">AFIO的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#中断">中断</a>
-      <ul>
-        <li><a href="#中断向量表">中断向量表</a></li>
-        <li><a href="#中断体系架构">中断体系架构</a></li>
-        <li><a href="#nvic嵌套向量中断控制器">NVIC嵌套向量中断控制器</a></li>
-        <li><a href="#exti外部中断控制器">EXTI外部中断控制器</a></li>
-        <li><a href="#exti的寄存器配置">EXTI的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#定时器tim">定时器(TIM)</a>
-      <ul>
-        <li><a href="#基本定时器">基本定时器</a></li>
-        <li><a href="#通用定时器">通用定时器</a></li>
-        <li><a href="#高级定时器">高级定时器</a></li>
-        <li><a href="#系统滴答定时器systick">系统滴答定时器(SysTick)</a></li>
-      </ul>
-    </li>
-    <li><a href="#直接存储器访问dma">直接存储器访问(DMA)</a>
-      <ul>
-        <li><a href="#dma概念">DMA概念</a></li>
-        <li><a href="#dma结构图">DMA结构图</a></li>
-        <li><a href="#dma请求映像">DMA请求映像</a></li>
-        <li><a href="#dma的寄存器配置">DMA的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#模拟-数字转换器adc">模拟-数字转换器(ADC)</a>
-      <ul>
-        <li><a href="#adc概念">ADC概念</a></li>
-        <li><a href="#adc结构图">ADC结构图</a></li>
-        <li><a href="#adc输入引脚通道">ADC输入引脚通道</a></li>
-        <li><a href="#adc转换模式">ADC转换模式</a></li>
-        <li><a href="#adc的寄存器配置">ADC的寄存器配置</a></li>
-        <li><a href="#adc单通道转换代码示例">ADC单通道转换代码示例</a></li>
-        <li><a href="#adc连续扫描示例代码">ADC连续扫描示例代码</a></li>
-      </ul>
-    </li>
-    <li><a href="#备份寄存器bkp">备份寄存器(BKP)</a>
-      <ul>
-        <li><a href="#bkp概念">BKP概念</a></li>
-        <li><a href="#bkp的基本结构">BKP的基本结构</a></li>
-        <li><a href="#bkp的寄存器配置">BKP的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#实时时钟rtc">实时时钟(RTC)</a>
-      <ul>
-        <li><a href="#unix时间戳概念">Unix时间戳概念</a></li>
-        <li><a href="#rtc概念">RTC概念</a></li>
-        <li><a href="#rtc结构图">RTC结构图</a></li>
-        <li><a href="#rtc的寄存器配置">RTC的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#通讯协议">通讯协议</a>
-      <ul>
-        <li><a href="#usart-2">USART</a></li>
-        <li><a href="#spi-1">SPI</a></li>
+        <li><a href="#stm32工程文件配置">STM32工程文件配置</a></li>
+        <li><a href="#stm32系统架构">STM32系统架构</a></li>
+        <li><a href="#存储器映像">存储器映像</a></li>
+        <li><a href="#复位与时钟控制rcc">复位与时钟控制(RCC)</a>
+          <ul>
+            <li><a href="#stm32时钟树">STM32时钟树</a></li>
+            <li><a href="#stm32时钟树结构">STM32时钟树结构</a></li>
+            <li><a href="#rcc的寄存器配置">RCC的寄存器配置</a>
+              <ul>
+                <li><a href="#时钟控制寄存器rcc_cr">时钟控制寄存器(RCC_CR)</a></li>
+                <li><a href="#时钟配置寄存器rcc_cfgr">时钟配置寄存器(RCC_CFGR)</a></li>
+                <li><a href="#时钟中断寄存器rcc_cir">时钟中断寄存器(RCC_CIR)</a></li>
+                <li><a href="#apb2外设复位寄存器rcc_apb2rstr">APB2外设复位寄存器(RCC_APB2RSTR)</a></li>
+                <li><a href="#ahb外设时钟使能寄存器rcc_ahbenr">AHB外设时钟使能寄存器(RCC_AHBENR)</a></li>
+                <li><a href="#apb2外设时钟使能寄存器rcc_apb2enr">APB2外设时钟使能寄存器(RCC_APB2ENR)</a></li>
+                <li><a href="#apb1外设时钟使能寄存器rcc_apb1enr">APB1外设时钟使能寄存器(RCC_APB1ENR)</a></li>
+                <li><a href="#备份域控制寄存器rcc_bdcr">备份域控制寄存器(RCC_BDCR)</a></li>
+                <li><a href="#控制状态寄存器rcc_csr">控制/状态寄存器(RCC_CSR)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#gpio">GPIO</a>
+          <ul>
+            <li><a href="#gpio的基本结构">GPIO的基本结构</a></li>
+            <li><a href="#gpio的8种工作模式">GPIO的8种工作模式</a></li>
+            <li><a href="#外设的gpio配置">外设的GPIO配置</a>
+              <ul>
+                <li><a href="#高级寄存器tim1tim8">高级寄存器TIM1/TIM8</a></li>
+                <li><a href="#通用定时器tim2345">通用定时器TIM2/3/4/5</a></li>
+                <li><a href="#usart-1">USART</a></li>
+                <li><a href="#spi">SPI</a></li>
+                <li><a href="#i2s">I2S</a></li>
+                <li><a href="#i2c">I2C</a></li>
+                <li><a href="#bxcan">BxCAN</a></li>
+                <li><a href="#usb">USB</a></li>
+                <li><a href="#全速usb-otg引脚配置">全速USB OTG引脚配置</a></li>
+                <li><a href="#sdio">SDIO</a></li>
+                <li><a href="#adcdac">ADC/DAC</a></li>
+                <li><a href="#fsmc">FSMC</a></li>
+                <li><a href="#其他io功能">其他I/O功能</a></li>
+              </ul>
+            </li>
+            <li><a href="#stm32f103c8t6引脚定义">STM32F103C8T6引脚定义</a></li>
+            <li><a href="#gpio的寄存器配置">GPIO的寄存器配置</a>
+              <ul>
+                <li><a href="#端口配置低寄存器gpiox_crl">端口配置低寄存器(GPIOx_CRL)</a></li>
+                <li><a href="#端口配置高寄存器gpiox_crh">端口配置高寄存器(GPIOx_CRH)</a></li>
+                <li><a href="#端口输入数据寄存器gpiox_idr">端口输入数据寄存器(GPIOx_IDR)</a></li>
+                <li><a href="#端口输出数据寄存器gpiox_odr">端口输出数据寄存器(GPIOx_ODR)</a></li>
+                <li><a href="#端口位设置清除寄存器gpiox_bsrr">端口位设置/清除寄存器(GPIOx_BSRR)</a></li>
+                <li><a href="#端口位清除寄存器gpiox_brr">端口位清除寄存器(GPIOx_BRR)</a></li>
+                <li><a href="#端口配置锁定寄存器gpiox_lckr">端口配置锁定寄存器(GPIOx_LCKR)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#afio">AFIO</a>
+          <ul>
+            <li><a href="#afio的寄存器配置">AFIO的寄存器配置</a>
+              <ul>
+                <li><a href="#事件控制寄存器afio_evcr">事件控制寄存器(AFIO_EVCR)</a></li>
+                <li><a href="#复用重映射和调试io配置寄存器afio_mapr">复用重映射和调试I/O配置寄存器(AFIO_MAPR)</a></li>
+                <li><a href="#外部中断配置寄存器1-4afio_exticr1">外部中断配置寄存器1-4(AFIO_EXTICR1)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#中断">中断</a>
+          <ul>
+            <li><a href="#中断向量表">中断向量表</a></li>
+            <li><a href="#中断体系架构">中断体系架构</a></li>
+            <li><a href="#nvic嵌套向量中断控制器">NVIC嵌套向量中断控制器</a>
+              <ul>
+                <li><a href="#nvic概念">NVIC概念</a></li>
+                <li><a href="#nvic库函数配置">NVIC库函数配置</a></li>
+              </ul>
+            </li>
+            <li><a href="#exti外部中断控制器">EXTI外部中断控制器</a></li>
+            <li><a href="#exti的寄存器配置">EXTI的寄存器配置</a>
+              <ul>
+                <li><a href="#中断屏蔽寄存器exti_imr">中断屏蔽寄存器(EXTI_IMR)</a></li>
+                <li><a href="#事件屏蔽寄存器exti_emr">事件屏蔽寄存器(EXTI_EMR)</a></li>
+                <li><a href="#上升沿触发选择寄存器exti_rtsr">上升沿触发选择寄存器(EXTI_RTSR)</a></li>
+                <li><a href="#下降沿触发选择寄存器exti_ftsr">下降沿触发选择寄存器(EXTI_FTSR)</a></li>
+                <li><a href="#软件中断事件寄存器exti_swier">软件中断事件寄存器(EXTI_SWIER)</a></li>
+                <li><a href="#挂起寄存器exti_pr">挂起寄存器(EXTI_PR)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#定时器tim">定时器(TIM)</a>
+          <ul>
+            <li><a href="#基本定时器">基本定时器</a>
+              <ul>
+                <li><a href="#基本定时器概念">基本定时器概念</a></li>
+                <li><a href="#计算定时时间">计算定时时间</a></li>
+                <li><a href="#基本定时器的定时中断">基本定时器的定时中断</a>
+                  <ul>
+                    <li><a href="#基本定时器的寄存器配置">基本定时器的寄存器配置</a>
+                      <ul>
+                        <li><a href="#控制寄存器1timx_cr1">控制寄存器1(TIMx_CR1)</a></li>
+                        <li><a href="#控制寄存器2timx_cr2">控制寄存器2(TIMx_CR2)</a></li>
+                        <li><a href="#dma中断使能寄存器timx_dier">DMA/中断使能寄存器(TIMx_DIER)</a></li>
+                        <li><a href="#状态寄存器timx_sr">状态寄存器(TIMx_SR)</a></li>
+                        <li><a href="#事件产生寄存器timx_egr">事件产生寄存器(TIMx_EGR)</a></li>
+                        <li><a href="#计数器timx_cnt">计数器(TIMx_CNT)</a></li>
+                        <li><a href="#预分频器timx_psc">预分频器(TIMx_PSC)</a></li>
+                        <li><a href="#自动重装载寄存器timx_arr">自动重装载寄存器(TIMx_ARR)</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#基本定时器定时中断配置代码示例">基本定时器定时中断配置代码示例</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#通用定时器">通用定时器</a>
+              <ul>
+                <li><a href="#通用定时器概念">通用定时器概念</a></li>
+                <li><a href="#计数模式">计数模式</a></li>
+                <li><a href="#时钟源选择">时钟源选择</a></li>
+                <li><a href="#定时器定时中断示例代码">定时器定时中断示例代码</a>
+                  <ul>
+                    <li><a href="#定时器定时中断示例代码-1">定时器定时中断示例代码</a></li>
+                  </ul>
+                </li>
+                <li><a href="#定时器输出比较">定时器输出比较</a>
+                  <ul>
+                    <li><a href="#pwm原理脉冲宽度调制">PWM原理(脉冲宽度调制)</a></li>
+                    <li><a href="#pwm控制led呼吸灯代码示例">PWM控制LED呼吸灯代码示例</a></li>
+                  </ul>
+                </li>
+                <li><a href="#定时器输入捕获">定时器输入捕获</a>
+                  <ul>
+                    <li><a href="#输入捕获概念">输入捕获概念</a></li>
+                    <li><a href="#定时器输入捕获pwm周期频率示例代码">定时器输入捕获PWM周期频率示例代码</a></li>
+                  </ul>
+                </li>
+                <li><a href="#定时器触发输入和从模式">定时器触发输入和从模式</a>
+                  <ul>
+                    <li><a href="#pwm输入模式">PWM输入模式</a></li>
+                    <li><a href="#pwm输入模式配置示例代码">PWM输入模式配置示例代码</a></li>
+                  </ul>
+                </li>
+                <li><a href="#通用定时器的寄存器配置">通用定时器的寄存器配置</a>
+                  <ul>
+                    <li><a href="#控制寄存器1timx_cr1-1">控制寄存器1(TIMx_CR1)</a></li>
+                    <li><a href="#控制寄存器2timx_cr2-1">控制寄存器2(TIMx_CR2)</a></li>
+                    <li><a href="#从模式控制寄存器timx_smcr">从模式控制寄存器(TIMx_SMCR)</a></li>
+                    <li><a href="#dma中断使能寄存器timx_dier-1">DMA/中断使能寄存器(TIMx_DIER)</a></li>
+                    <li><a href="#状态寄存器timx_sr-1">状态寄存器(TIMx_SR)</a></li>
+                    <li><a href="#事件产生寄存器timx_egr-1">事件产生寄存器(TIMx_EGR)</a></li>
+                    <li><a href="#捕获比较模式寄存器1timx_ccmr1">捕获/比较模式寄存器1(TIMx_CCMR1)</a></li>
+                    <li><a href="#捕获比较模式寄存器2timx_ccmr2">捕获/比较模式寄存器2(TIMx_CCMR2)</a></li>
+                    <li><a href="#捕获比较使能寄存器timx_ccer">捕获/比较使能寄存器(TIMx_CCER)</a></li>
+                    <li><a href="#计数器timx_cnt-1">计数器(TIMx_CNT)</a></li>
+                    <li><a href="#预分频器timx_psc-1">预分频器(TIMx_PSC)</a></li>
+                    <li><a href="#自动重装载寄存器timx_arr-1">自动重装载寄存器(TIMx_ARR)</a></li>
+                    <li><a href="#捕获比较寄存器1-4timx_ccr1-4">捕获/比较寄存器1-4(TIMx_CCR1-4)</a></li>
+                    <li><a href="#dma控制寄存器timx_dcr">DMA控制寄存器(TIMx_DCR)</a></li>
+                    <li><a href="#连续模式的dma地址timx_dmar">连续模式的DMA地址(TIMx_DMAR)</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#高级定时器">高级定时器</a></li>
+            <li><a href="#系统滴答定时器systick">系统滴答定时器(SysTick)</a>
+              <ul>
+                <li><a href="#systick概念">SysTick概念</a></li>
+                <li><a href="#systick的寄存器配置">SysTick的寄存器配置</a>
+                  <ul>
+                    <li><a href="#systick控制和状态寄存器stk_ctrl">SysTick控制和状态寄存器(STK_CTRL)</a></li>
+                    <li><a href="#systick重装载寄存器stk_load">SysTick重装载寄存器(STK_LOAD)</a></li>
+                    <li><a href="#systick当前数值寄存器stk_val">SysTick当前数值寄存器(STK_VAL)</a></li>
+                  </ul>
+                </li>
+                <li><a href="#systick阻塞式延时写法">SysTick阻塞式延时写法</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#直接存储器访问dma">直接存储器访问(DMA)</a>
+          <ul>
+            <li><a href="#dma概念">DMA概念</a></li>
+            <li><a href="#dma结构图">DMA结构图</a></li>
+            <li><a href="#dma请求映像">DMA请求映像</a></li>
+            <li><a href="#dma的寄存器配置">DMA的寄存器配置</a>
+              <ul>
+                <li><a href="#dma中断状态寄存器dma_isr">DMA中断状态寄存器(DMA_ISR)</a></li>
+                <li><a href="#dma中断标志清除寄存器dma_ifcr">DMA中断标志清除寄存器(DMA_IFCR)</a></li>
+                <li><a href="#dma通道x配置寄存器dma_ccrxx--17">DMA通道x配置寄存器(DMA_CCRx)(x = 1…7)</a></li>
+                <li><a href="#dma通道x传输数量寄存器dma_cndtrxx--17">DMA通道x传输数量寄存器(DMA_CNDTRx)(x = 1…7)</a></li>
+                <li><a href="#dma通道x外设地址寄存器dma_cparxx--17">DMA通道x外设地址寄存器(DMA_CPARx)(x = 1…7)</a></li>
+                <li><a href="#dma通道x存储器地址寄存器dma_cmarxx--17">DMA通道x存储器地址寄存器(DMA_CMARx)(x = 1…7)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#模拟-数字转换器adc">模拟-数字转换器(ADC)</a>
+          <ul>
+            <li><a href="#adc概念">ADC概念</a></li>
+            <li><a href="#adc结构图">ADC结构图</a></li>
+            <li><a href="#adc输入引脚通道">ADC输入引脚通道</a></li>
+            <li><a href="#adc转换模式">ADC转换模式</a></li>
+            <li><a href="#adc的寄存器配置">ADC的寄存器配置</a>
+              <ul>
+                <li><a href="#adc状态寄存器adc_sr">ADC状态寄存器(ADC_SR)</a></li>
+                <li><a href="#adc控制寄存器1adc_cr1">ADC控制寄存器1(ADC_CR1)</a></li>
+                <li><a href="#adc控制寄存器2adc_cr2">ADC控制寄存器2(ADC_CR2)</a></li>
+                <li><a href="#adc采样时间寄存器1adc_smpr1">ADC采样时间寄存器1(ADC_SMPR1)</a></li>
+                <li><a href="#adc采样时间寄存器2adc_smpr2">ADC采样时间寄存器2(ADC_SMPR2)</a></li>
+                <li><a href="#adc注入通道数据偏移寄存器x-adc_jofrxx14">ADC注入通道数据偏移寄存器x (ADC_JOFRx)(x=1..4)</a></li>
+                <li><a href="#adc看门狗高阈值寄存器adc_htr">ADC看门狗高阈值寄存器(ADC_HTR)</a></li>
+                <li><a href="#adc看门狗低阀值寄存器adc_lrt">ADC看门狗低阀值寄存器(ADC_LRT)</a></li>
+                <li><a href="#adc规则序列寄存器1-3adc_sqr1-3">ADC规则序列寄存器1-3(ADC_SQR1-3)</a></li>
+                <li><a href="#adc注入序列寄存器adc_jsqr">ADC注入序列寄存器(ADC_JSQR)</a></li>
+                <li><a href="#adc-注入数据寄存器x-adc_jdrx-x-14">ADC 注入数据寄存器x (ADC_JDRx) (x= 1..4)</a></li>
+                <li><a href="#adc规则数据寄存器adc_dr">ADC规则数据寄存器(ADC_DR)</a></li>
+              </ul>
+            </li>
+            <li><a href="#adc单通道转换代码示例">ADC单通道转换代码示例</a></li>
+            <li><a href="#adc连续扫描示例代码">ADC连续扫描示例代码</a></li>
+          </ul>
+        </li>
+        <li><a href="#备份寄存器bkp">备份寄存器(BKP)</a>
+          <ul>
+            <li><a href="#bkp概念">BKP概念</a></li>
+            <li><a href="#bkp的基本结构">BKP的基本结构</a></li>
+            <li><a href="#bkp的寄存器配置">BKP的寄存器配置</a>
+              <ul>
+                <li><a href="#备份数据寄存器xbkp_drx-x--1--10">备份数据寄存器x(BKP_DRx) (x = 1 … 10)</a></li>
+                <li><a href="#rtc时钟校准寄存器bkp_rtccr">RTC时钟校准寄存器(BKP_RTCCR)</a></li>
+                <li><a href="#备份控制寄存器bkp_cr">备份控制寄存器(BKP_CR)</a></li>
+                <li><a href="#备份控制状态寄存器bkp_csr">备份控制/状态寄存器(BKP_CSR)</a></li>
+                <li><a href="#备份控制状态寄存器bkp_csr-1">备份控制/状态寄存器(BKP_CSR)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#实时时钟rtc">实时时钟(RTC)</a>
+          <ul>
+            <li><a href="#unix时间戳概念">Unix时间戳概念</a></li>
+            <li><a href="#rtc概念">RTC概念</a></li>
+            <li><a href="#rtc结构图">RTC结构图</a></li>
+            <li><a href="#rtc的寄存器配置">RTC的寄存器配置</a>
+              <ul>
+                <li><a href="#rtc控制寄存器高位rtc_crh">RTC控制寄存器高位(RTC_CRH)</a></li>
+                <li><a href="#rtc控制寄存器低位rtc_crl">RTC控制寄存器低位(RTC_CRL)</a></li>
+                <li><a href="#rtc预分频装载寄存器rtc_prlhrtc_prll">RTC预分频装载寄存器(RTC_PRLH/RTC_PRLL)</a></li>
+                <li><a href="#rtc预分频器余数寄存器rtc_divh--rtc_divl">RTC预分频器余数寄存器(RTC_DIVH / RTC_DIVL)</a></li>
+                <li><a href="#rtc计数器寄存器-rtc_cnth--rtc_cntl">RTC计数器寄存器 (RTC_CNTH / RTC_CNTL)</a></li>
+                <li><a href="#rtc闹钟寄存器rtc_alrhrtc_alrl">RTC闹钟寄存器(RTC_ALRH/RTC_ALRL)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#通讯协议">通讯协议</a>
+          <ul>
+            <li><a href="#usart-2">USART</a>
+              <ul>
+                <li><a href="#usart概念">USART概念</a></li>
+                <li><a href="#usart参数时序">USART参数时序</a></li>
+                <li><a href="#usart结构图">USART结构图</a></li>
+                <li><a href="#usart波特率配置">USART波特率配置</a></li>
+                <li><a href="#usart寄存器配置">USART寄存器配置</a>
+                  <ul>
+                    <li><a href="#状态寄存器usart_sr">状态寄存器(USART_SR)</a></li>
+                    <li><a href="#数据寄存器usart_dr">数据寄存器(USART_DR)</a></li>
+                    <li><a href="#波特比率寄存器usart_brr">波特比率寄存器(USART_BRR)</a></li>
+                    <li><a href="#控制寄存器1usart_cr1">控制寄存器1(USART_CR1)</a></li>
+                    <li><a href="#控制寄存器2usart_cr2">控制寄存器2(USART_CR2)</a></li>
+                    <li><a href="#控制寄存器3usart_cr3">控制寄存器3(USART_CR3)</a></li>
+                    <li><a href="#保护时间和预分频寄存器usart_gtpr">保护时间和预分频寄存器(USART_GTPR)</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#spi-1">SPI</a>
+              <ul>
+                <li><a href="#spi概念">SPI概念</a></li>
+                <li><a href="#spi结构图">SPI结构图</a></li>
+                <li><a href="#spi时序">SPI时序</a></li>
+                <li><a href="#spi的寄存器配置">SPI的寄存器配置</a>
+                  <ul>
+                    <li><a href="#spi控制寄存器1spi_cr1">SPI控制寄存器1(SPI_CR1)</a></li>
+                    <li><a href="#spi控制寄存器2spi_cr2">SPI控制寄存器2(SPI_CR2)</a></li>
+                    <li><a href="#spi状态寄存器spi_sr">SPI状态寄存器(SPI_SR)</a></li>
+                    <li><a href="#spi-数据寄存器spi_dr">SPI 数据寄存器(SPI_DR)</a></li>
+                    <li><a href="#spi-crc多项式寄存器spi_crcpr">SPI CRC多项式寄存器(SPI_CRCPR)</a></li>
+                    <li><a href="#spi-rx-crc寄存器spi_rxcrcr">SPI Rx CRC寄存器(SPI_RXCRCR)</a></li>
+                    <li><a href="#spi-tx-crc寄存器spi_txcrcr">SPI Tx CRC寄存器(SPI_TXCRCR)</a></li>
+                    <li><a href="#spi_i2s配置寄存器spi_i2s_cfgr">SPI_I2S配置寄存器(SPI_I2S_CFGR)</a></li>
+                    <li><a href="#spi_i2s预分频寄存器spi_i2spr">SPI_I2S预分频寄存器(SPI_I2SPR)</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ul>
@@ -1636,102 +1859,325 @@ ARR自动重装值设65535，避免溢出</p>
   
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#hal图形化配置">Hal图形化配置</a>
+    <li><a href="#stm32f103c8t6-hal库配置">STM32F103C8T6 Hal库配置</a>
       <ul>
-        <li><a href="#1system内核配置">1.System内核配置</a></li>
-        <li><a href="#2rcc-系统时钟配置">2.RCC 系统时钟配置</a></li>
-        <li><a href="#3gpio配置">3.GPIO配置</a></li>
-        <li><a href="#4usart配置">4.USART配置</a></li>
+        <li><a href="#hal图形化配置">Hal图形化配置</a>
+          <ul>
+            <li><a href="#1system内核配置">1.System内核配置</a></li>
+            <li><a href="#2rcc-系统时钟配置">2.RCC 系统时钟配置</a></li>
+            <li><a href="#3gpio配置">3.GPIO配置</a></li>
+            <li><a href="#4usart配置">4.USART配置</a></li>
+          </ul>
+        </li>
+        <li><a href="#hal常用函数">Hal常用函数</a>
+          <ul>
+            <li><a href="#gpio--exti">GPIO &amp; EXTI</a></li>
+            <li><a href="#usart">USART</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-    <li><a href="#hal常用函数">Hal常用函数</a>
+    <li><a href="#stm32f103c8t6数据手册">STM32F103C8T6数据手册</a>
       <ul>
-        <li><a href="#gpio--exti">GPIO &amp; EXTI</a></li>
-        <li><a href="#usart">USART</a></li>
-      </ul>
-    </li>
-  </ul>
-
-  <ul>
-    <li><a href="#stm32工程文件配置">STM32工程文件配置</a></li>
-    <li><a href="#stm32系统架构">STM32系统架构</a></li>
-    <li><a href="#存储器映像">存储器映像</a></li>
-    <li><a href="#复位与时钟控制rcc">复位与时钟控制(RCC)</a>
-      <ul>
-        <li><a href="#stm32时钟树">STM32时钟树</a></li>
-        <li><a href="#stm32时钟树结构">STM32时钟树结构</a></li>
-        <li><a href="#rcc的寄存器配置">RCC的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#gpio">GPIO</a>
-      <ul>
-        <li><a href="#gpio的基本结构">GPIO的基本结构</a></li>
-        <li><a href="#gpio的8种工作模式">GPIO的8种工作模式</a></li>
-        <li><a href="#外设的gpio配置">外设的GPIO配置</a></li>
-        <li><a href="#stm32f103c8t6引脚定义">STM32F103C8T6引脚定义</a></li>
-        <li><a href="#gpio的寄存器配置">GPIO的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#afio">AFIO</a>
-      <ul>
-        <li><a href="#afio的寄存器配置">AFIO的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#中断">中断</a>
-      <ul>
-        <li><a href="#中断向量表">中断向量表</a></li>
-        <li><a href="#中断体系架构">中断体系架构</a></li>
-        <li><a href="#nvic嵌套向量中断控制器">NVIC嵌套向量中断控制器</a></li>
-        <li><a href="#exti外部中断控制器">EXTI外部中断控制器</a></li>
-        <li><a href="#exti的寄存器配置">EXTI的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#定时器tim">定时器(TIM)</a>
-      <ul>
-        <li><a href="#基本定时器">基本定时器</a></li>
-        <li><a href="#通用定时器">通用定时器</a></li>
-        <li><a href="#高级定时器">高级定时器</a></li>
-        <li><a href="#系统滴答定时器systick">系统滴答定时器(SysTick)</a></li>
-      </ul>
-    </li>
-    <li><a href="#直接存储器访问dma">直接存储器访问(DMA)</a>
-      <ul>
-        <li><a href="#dma概念">DMA概念</a></li>
-        <li><a href="#dma结构图">DMA结构图</a></li>
-        <li><a href="#dma请求映像">DMA请求映像</a></li>
-        <li><a href="#dma的寄存器配置">DMA的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#模拟-数字转换器adc">模拟-数字转换器(ADC)</a>
-      <ul>
-        <li><a href="#adc概念">ADC概念</a></li>
-        <li><a href="#adc结构图">ADC结构图</a></li>
-        <li><a href="#adc输入引脚通道">ADC输入引脚通道</a></li>
-        <li><a href="#adc转换模式">ADC转换模式</a></li>
-        <li><a href="#adc的寄存器配置">ADC的寄存器配置</a></li>
-        <li><a href="#adc单通道转换代码示例">ADC单通道转换代码示例</a></li>
-        <li><a href="#adc连续扫描示例代码">ADC连续扫描示例代码</a></li>
-      </ul>
-    </li>
-    <li><a href="#备份寄存器bkp">备份寄存器(BKP)</a>
-      <ul>
-        <li><a href="#bkp概念">BKP概念</a></li>
-        <li><a href="#bkp的基本结构">BKP的基本结构</a></li>
-        <li><a href="#bkp的寄存器配置">BKP的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#实时时钟rtc">实时时钟(RTC)</a>
-      <ul>
-        <li><a href="#unix时间戳概念">Unix时间戳概念</a></li>
-        <li><a href="#rtc概念">RTC概念</a></li>
-        <li><a href="#rtc结构图">RTC结构图</a></li>
-        <li><a href="#rtc的寄存器配置">RTC的寄存器配置</a></li>
-      </ul>
-    </li>
-    <li><a href="#通讯协议">通讯协议</a>
-      <ul>
-        <li><a href="#usart-2">USART</a></li>
-        <li><a href="#spi-1">SPI</a></li>
+        <li><a href="#stm32工程文件配置">STM32工程文件配置</a></li>
+        <li><a href="#stm32系统架构">STM32系统架构</a></li>
+        <li><a href="#存储器映像">存储器映像</a></li>
+        <li><a href="#复位与时钟控制rcc">复位与时钟控制(RCC)</a>
+          <ul>
+            <li><a href="#stm32时钟树">STM32时钟树</a></li>
+            <li><a href="#stm32时钟树结构">STM32时钟树结构</a></li>
+            <li><a href="#rcc的寄存器配置">RCC的寄存器配置</a>
+              <ul>
+                <li><a href="#时钟控制寄存器rcc_cr">时钟控制寄存器(RCC_CR)</a></li>
+                <li><a href="#时钟配置寄存器rcc_cfgr">时钟配置寄存器(RCC_CFGR)</a></li>
+                <li><a href="#时钟中断寄存器rcc_cir">时钟中断寄存器(RCC_CIR)</a></li>
+                <li><a href="#apb2外设复位寄存器rcc_apb2rstr">APB2外设复位寄存器(RCC_APB2RSTR)</a></li>
+                <li><a href="#ahb外设时钟使能寄存器rcc_ahbenr">AHB外设时钟使能寄存器(RCC_AHBENR)</a></li>
+                <li><a href="#apb2外设时钟使能寄存器rcc_apb2enr">APB2外设时钟使能寄存器(RCC_APB2ENR)</a></li>
+                <li><a href="#apb1外设时钟使能寄存器rcc_apb1enr">APB1外设时钟使能寄存器(RCC_APB1ENR)</a></li>
+                <li><a href="#备份域控制寄存器rcc_bdcr">备份域控制寄存器(RCC_BDCR)</a></li>
+                <li><a href="#控制状态寄存器rcc_csr">控制/状态寄存器(RCC_CSR)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#gpio">GPIO</a>
+          <ul>
+            <li><a href="#gpio的基本结构">GPIO的基本结构</a></li>
+            <li><a href="#gpio的8种工作模式">GPIO的8种工作模式</a></li>
+            <li><a href="#外设的gpio配置">外设的GPIO配置</a>
+              <ul>
+                <li><a href="#高级寄存器tim1tim8">高级寄存器TIM1/TIM8</a></li>
+                <li><a href="#通用定时器tim2345">通用定时器TIM2/3/4/5</a></li>
+                <li><a href="#usart-1">USART</a></li>
+                <li><a href="#spi">SPI</a></li>
+                <li><a href="#i2s">I2S</a></li>
+                <li><a href="#i2c">I2C</a></li>
+                <li><a href="#bxcan">BxCAN</a></li>
+                <li><a href="#usb">USB</a></li>
+                <li><a href="#全速usb-otg引脚配置">全速USB OTG引脚配置</a></li>
+                <li><a href="#sdio">SDIO</a></li>
+                <li><a href="#adcdac">ADC/DAC</a></li>
+                <li><a href="#fsmc">FSMC</a></li>
+                <li><a href="#其他io功能">其他I/O功能</a></li>
+              </ul>
+            </li>
+            <li><a href="#stm32f103c8t6引脚定义">STM32F103C8T6引脚定义</a></li>
+            <li><a href="#gpio的寄存器配置">GPIO的寄存器配置</a>
+              <ul>
+                <li><a href="#端口配置低寄存器gpiox_crl">端口配置低寄存器(GPIOx_CRL)</a></li>
+                <li><a href="#端口配置高寄存器gpiox_crh">端口配置高寄存器(GPIOx_CRH)</a></li>
+                <li><a href="#端口输入数据寄存器gpiox_idr">端口输入数据寄存器(GPIOx_IDR)</a></li>
+                <li><a href="#端口输出数据寄存器gpiox_odr">端口输出数据寄存器(GPIOx_ODR)</a></li>
+                <li><a href="#端口位设置清除寄存器gpiox_bsrr">端口位设置/清除寄存器(GPIOx_BSRR)</a></li>
+                <li><a href="#端口位清除寄存器gpiox_brr">端口位清除寄存器(GPIOx_BRR)</a></li>
+                <li><a href="#端口配置锁定寄存器gpiox_lckr">端口配置锁定寄存器(GPIOx_LCKR)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#afio">AFIO</a>
+          <ul>
+            <li><a href="#afio的寄存器配置">AFIO的寄存器配置</a>
+              <ul>
+                <li><a href="#事件控制寄存器afio_evcr">事件控制寄存器(AFIO_EVCR)</a></li>
+                <li><a href="#复用重映射和调试io配置寄存器afio_mapr">复用重映射和调试I/O配置寄存器(AFIO_MAPR)</a></li>
+                <li><a href="#外部中断配置寄存器1-4afio_exticr1">外部中断配置寄存器1-4(AFIO_EXTICR1)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#中断">中断</a>
+          <ul>
+            <li><a href="#中断向量表">中断向量表</a></li>
+            <li><a href="#中断体系架构">中断体系架构</a></li>
+            <li><a href="#nvic嵌套向量中断控制器">NVIC嵌套向量中断控制器</a>
+              <ul>
+                <li><a href="#nvic概念">NVIC概念</a></li>
+                <li><a href="#nvic库函数配置">NVIC库函数配置</a></li>
+              </ul>
+            </li>
+            <li><a href="#exti外部中断控制器">EXTI外部中断控制器</a></li>
+            <li><a href="#exti的寄存器配置">EXTI的寄存器配置</a>
+              <ul>
+                <li><a href="#中断屏蔽寄存器exti_imr">中断屏蔽寄存器(EXTI_IMR)</a></li>
+                <li><a href="#事件屏蔽寄存器exti_emr">事件屏蔽寄存器(EXTI_EMR)</a></li>
+                <li><a href="#上升沿触发选择寄存器exti_rtsr">上升沿触发选择寄存器(EXTI_RTSR)</a></li>
+                <li><a href="#下降沿触发选择寄存器exti_ftsr">下降沿触发选择寄存器(EXTI_FTSR)</a></li>
+                <li><a href="#软件中断事件寄存器exti_swier">软件中断事件寄存器(EXTI_SWIER)</a></li>
+                <li><a href="#挂起寄存器exti_pr">挂起寄存器(EXTI_PR)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#定时器tim">定时器(TIM)</a>
+          <ul>
+            <li><a href="#基本定时器">基本定时器</a>
+              <ul>
+                <li><a href="#基本定时器概念">基本定时器概念</a></li>
+                <li><a href="#计算定时时间">计算定时时间</a></li>
+                <li><a href="#基本定时器的定时中断">基本定时器的定时中断</a>
+                  <ul>
+                    <li><a href="#基本定时器的寄存器配置">基本定时器的寄存器配置</a>
+                      <ul>
+                        <li><a href="#控制寄存器1timx_cr1">控制寄存器1(TIMx_CR1)</a></li>
+                        <li><a href="#控制寄存器2timx_cr2">控制寄存器2(TIMx_CR2)</a></li>
+                        <li><a href="#dma中断使能寄存器timx_dier">DMA/中断使能寄存器(TIMx_DIER)</a></li>
+                        <li><a href="#状态寄存器timx_sr">状态寄存器(TIMx_SR)</a></li>
+                        <li><a href="#事件产生寄存器timx_egr">事件产生寄存器(TIMx_EGR)</a></li>
+                        <li><a href="#计数器timx_cnt">计数器(TIMx_CNT)</a></li>
+                        <li><a href="#预分频器timx_psc">预分频器(TIMx_PSC)</a></li>
+                        <li><a href="#自动重装载寄存器timx_arr">自动重装载寄存器(TIMx_ARR)</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#基本定时器定时中断配置代码示例">基本定时器定时中断配置代码示例</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#通用定时器">通用定时器</a>
+              <ul>
+                <li><a href="#通用定时器概念">通用定时器概念</a></li>
+                <li><a href="#计数模式">计数模式</a></li>
+                <li><a href="#时钟源选择">时钟源选择</a></li>
+                <li><a href="#定时器定时中断示例代码">定时器定时中断示例代码</a>
+                  <ul>
+                    <li><a href="#定时器定时中断示例代码-1">定时器定时中断示例代码</a></li>
+                  </ul>
+                </li>
+                <li><a href="#定时器输出比较">定时器输出比较</a>
+                  <ul>
+                    <li><a href="#pwm原理脉冲宽度调制">PWM原理(脉冲宽度调制)</a></li>
+                    <li><a href="#pwm控制led呼吸灯代码示例">PWM控制LED呼吸灯代码示例</a></li>
+                  </ul>
+                </li>
+                <li><a href="#定时器输入捕获">定时器输入捕获</a>
+                  <ul>
+                    <li><a href="#输入捕获概念">输入捕获概念</a></li>
+                    <li><a href="#定时器输入捕获pwm周期频率示例代码">定时器输入捕获PWM周期频率示例代码</a></li>
+                  </ul>
+                </li>
+                <li><a href="#定时器触发输入和从模式">定时器触发输入和从模式</a>
+                  <ul>
+                    <li><a href="#pwm输入模式">PWM输入模式</a></li>
+                    <li><a href="#pwm输入模式配置示例代码">PWM输入模式配置示例代码</a></li>
+                  </ul>
+                </li>
+                <li><a href="#通用定时器的寄存器配置">通用定时器的寄存器配置</a>
+                  <ul>
+                    <li><a href="#控制寄存器1timx_cr1-1">控制寄存器1(TIMx_CR1)</a></li>
+                    <li><a href="#控制寄存器2timx_cr2-1">控制寄存器2(TIMx_CR2)</a></li>
+                    <li><a href="#从模式控制寄存器timx_smcr">从模式控制寄存器(TIMx_SMCR)</a></li>
+                    <li><a href="#dma中断使能寄存器timx_dier-1">DMA/中断使能寄存器(TIMx_DIER)</a></li>
+                    <li><a href="#状态寄存器timx_sr-1">状态寄存器(TIMx_SR)</a></li>
+                    <li><a href="#事件产生寄存器timx_egr-1">事件产生寄存器(TIMx_EGR)</a></li>
+                    <li><a href="#捕获比较模式寄存器1timx_ccmr1">捕获/比较模式寄存器1(TIMx_CCMR1)</a></li>
+                    <li><a href="#捕获比较模式寄存器2timx_ccmr2">捕获/比较模式寄存器2(TIMx_CCMR2)</a></li>
+                    <li><a href="#捕获比较使能寄存器timx_ccer">捕获/比较使能寄存器(TIMx_CCER)</a></li>
+                    <li><a href="#计数器timx_cnt-1">计数器(TIMx_CNT)</a></li>
+                    <li><a href="#预分频器timx_psc-1">预分频器(TIMx_PSC)</a></li>
+                    <li><a href="#自动重装载寄存器timx_arr-1">自动重装载寄存器(TIMx_ARR)</a></li>
+                    <li><a href="#捕获比较寄存器1-4timx_ccr1-4">捕获/比较寄存器1-4(TIMx_CCR1-4)</a></li>
+                    <li><a href="#dma控制寄存器timx_dcr">DMA控制寄存器(TIMx_DCR)</a></li>
+                    <li><a href="#连续模式的dma地址timx_dmar">连续模式的DMA地址(TIMx_DMAR)</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#高级定时器">高级定时器</a></li>
+            <li><a href="#系统滴答定时器systick">系统滴答定时器(SysTick)</a>
+              <ul>
+                <li><a href="#systick概念">SysTick概念</a></li>
+                <li><a href="#systick的寄存器配置">SysTick的寄存器配置</a>
+                  <ul>
+                    <li><a href="#systick控制和状态寄存器stk_ctrl">SysTick控制和状态寄存器(STK_CTRL)</a></li>
+                    <li><a href="#systick重装载寄存器stk_load">SysTick重装载寄存器(STK_LOAD)</a></li>
+                    <li><a href="#systick当前数值寄存器stk_val">SysTick当前数值寄存器(STK_VAL)</a></li>
+                  </ul>
+                </li>
+                <li><a href="#systick阻塞式延时写法">SysTick阻塞式延时写法</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#直接存储器访问dma">直接存储器访问(DMA)</a>
+          <ul>
+            <li><a href="#dma概念">DMA概念</a></li>
+            <li><a href="#dma结构图">DMA结构图</a></li>
+            <li><a href="#dma请求映像">DMA请求映像</a></li>
+            <li><a href="#dma的寄存器配置">DMA的寄存器配置</a>
+              <ul>
+                <li><a href="#dma中断状态寄存器dma_isr">DMA中断状态寄存器(DMA_ISR)</a></li>
+                <li><a href="#dma中断标志清除寄存器dma_ifcr">DMA中断标志清除寄存器(DMA_IFCR)</a></li>
+                <li><a href="#dma通道x配置寄存器dma_ccrxx--17">DMA通道x配置寄存器(DMA_CCRx)(x = 1…7)</a></li>
+                <li><a href="#dma通道x传输数量寄存器dma_cndtrxx--17">DMA通道x传输数量寄存器(DMA_CNDTRx)(x = 1…7)</a></li>
+                <li><a href="#dma通道x外设地址寄存器dma_cparxx--17">DMA通道x外设地址寄存器(DMA_CPARx)(x = 1…7)</a></li>
+                <li><a href="#dma通道x存储器地址寄存器dma_cmarxx--17">DMA通道x存储器地址寄存器(DMA_CMARx)(x = 1…7)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#模拟-数字转换器adc">模拟-数字转换器(ADC)</a>
+          <ul>
+            <li><a href="#adc概念">ADC概念</a></li>
+            <li><a href="#adc结构图">ADC结构图</a></li>
+            <li><a href="#adc输入引脚通道">ADC输入引脚通道</a></li>
+            <li><a href="#adc转换模式">ADC转换模式</a></li>
+            <li><a href="#adc的寄存器配置">ADC的寄存器配置</a>
+              <ul>
+                <li><a href="#adc状态寄存器adc_sr">ADC状态寄存器(ADC_SR)</a></li>
+                <li><a href="#adc控制寄存器1adc_cr1">ADC控制寄存器1(ADC_CR1)</a></li>
+                <li><a href="#adc控制寄存器2adc_cr2">ADC控制寄存器2(ADC_CR2)</a></li>
+                <li><a href="#adc采样时间寄存器1adc_smpr1">ADC采样时间寄存器1(ADC_SMPR1)</a></li>
+                <li><a href="#adc采样时间寄存器2adc_smpr2">ADC采样时间寄存器2(ADC_SMPR2)</a></li>
+                <li><a href="#adc注入通道数据偏移寄存器x-adc_jofrxx14">ADC注入通道数据偏移寄存器x (ADC_JOFRx)(x=1..4)</a></li>
+                <li><a href="#adc看门狗高阈值寄存器adc_htr">ADC看门狗高阈值寄存器(ADC_HTR)</a></li>
+                <li><a href="#adc看门狗低阀值寄存器adc_lrt">ADC看门狗低阀值寄存器(ADC_LRT)</a></li>
+                <li><a href="#adc规则序列寄存器1-3adc_sqr1-3">ADC规则序列寄存器1-3(ADC_SQR1-3)</a></li>
+                <li><a href="#adc注入序列寄存器adc_jsqr">ADC注入序列寄存器(ADC_JSQR)</a></li>
+                <li><a href="#adc-注入数据寄存器x-adc_jdrx-x-14">ADC 注入数据寄存器x (ADC_JDRx) (x= 1..4)</a></li>
+                <li><a href="#adc规则数据寄存器adc_dr">ADC规则数据寄存器(ADC_DR)</a></li>
+              </ul>
+            </li>
+            <li><a href="#adc单通道转换代码示例">ADC单通道转换代码示例</a></li>
+            <li><a href="#adc连续扫描示例代码">ADC连续扫描示例代码</a></li>
+          </ul>
+        </li>
+        <li><a href="#备份寄存器bkp">备份寄存器(BKP)</a>
+          <ul>
+            <li><a href="#bkp概念">BKP概念</a></li>
+            <li><a href="#bkp的基本结构">BKP的基本结构</a></li>
+            <li><a href="#bkp的寄存器配置">BKP的寄存器配置</a>
+              <ul>
+                <li><a href="#备份数据寄存器xbkp_drx-x--1--10">备份数据寄存器x(BKP_DRx) (x = 1 … 10)</a></li>
+                <li><a href="#rtc时钟校准寄存器bkp_rtccr">RTC时钟校准寄存器(BKP_RTCCR)</a></li>
+                <li><a href="#备份控制寄存器bkp_cr">备份控制寄存器(BKP_CR)</a></li>
+                <li><a href="#备份控制状态寄存器bkp_csr">备份控制/状态寄存器(BKP_CSR)</a></li>
+                <li><a href="#备份控制状态寄存器bkp_csr-1">备份控制/状态寄存器(BKP_CSR)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#实时时钟rtc">实时时钟(RTC)</a>
+          <ul>
+            <li><a href="#unix时间戳概念">Unix时间戳概念</a></li>
+            <li><a href="#rtc概念">RTC概念</a></li>
+            <li><a href="#rtc结构图">RTC结构图</a></li>
+            <li><a href="#rtc的寄存器配置">RTC的寄存器配置</a>
+              <ul>
+                <li><a href="#rtc控制寄存器高位rtc_crh">RTC控制寄存器高位(RTC_CRH)</a></li>
+                <li><a href="#rtc控制寄存器低位rtc_crl">RTC控制寄存器低位(RTC_CRL)</a></li>
+                <li><a href="#rtc预分频装载寄存器rtc_prlhrtc_prll">RTC预分频装载寄存器(RTC_PRLH/RTC_PRLL)</a></li>
+                <li><a href="#rtc预分频器余数寄存器rtc_divh--rtc_divl">RTC预分频器余数寄存器(RTC_DIVH / RTC_DIVL)</a></li>
+                <li><a href="#rtc计数器寄存器-rtc_cnth--rtc_cntl">RTC计数器寄存器 (RTC_CNTH / RTC_CNTL)</a></li>
+                <li><a href="#rtc闹钟寄存器rtc_alrhrtc_alrl">RTC闹钟寄存器(RTC_ALRH/RTC_ALRL)</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#通讯协议">通讯协议</a>
+          <ul>
+            <li><a href="#usart-2">USART</a>
+              <ul>
+                <li><a href="#usart概念">USART概念</a></li>
+                <li><a href="#usart参数时序">USART参数时序</a></li>
+                <li><a href="#usart结构图">USART结构图</a></li>
+                <li><a href="#usart波特率配置">USART波特率配置</a></li>
+                <li><a href="#usart寄存器配置">USART寄存器配置</a>
+                  <ul>
+                    <li><a href="#状态寄存器usart_sr">状态寄存器(USART_SR)</a></li>
+                    <li><a href="#数据寄存器usart_dr">数据寄存器(USART_DR)</a></li>
+                    <li><a href="#波特比率寄存器usart_brr">波特比率寄存器(USART_BRR)</a></li>
+                    <li><a href="#控制寄存器1usart_cr1">控制寄存器1(USART_CR1)</a></li>
+                    <li><a href="#控制寄存器2usart_cr2">控制寄存器2(USART_CR2)</a></li>
+                    <li><a href="#控制寄存器3usart_cr3">控制寄存器3(USART_CR3)</a></li>
+                    <li><a href="#保护时间和预分频寄存器usart_gtpr">保护时间和预分频寄存器(USART_GTPR)</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#spi-1">SPI</a>
+              <ul>
+                <li><a href="#spi概念">SPI概念</a></li>
+                <li><a href="#spi结构图">SPI结构图</a></li>
+                <li><a href="#spi时序">SPI时序</a></li>
+                <li><a href="#spi的寄存器配置">SPI的寄存器配置</a>
+                  <ul>
+                    <li><a href="#spi控制寄存器1spi_cr1">SPI控制寄存器1(SPI_CR1)</a></li>
+                    <li><a href="#spi控制寄存器2spi_cr2">SPI控制寄存器2(SPI_CR2)</a></li>
+                    <li><a href="#spi状态寄存器spi_sr">SPI状态寄存器(SPI_SR)</a></li>
+                    <li><a href="#spi-数据寄存器spi_dr">SPI 数据寄存器(SPI_DR)</a></li>
+                    <li><a href="#spi-crc多项式寄存器spi_crcpr">SPI CRC多项式寄存器(SPI_CRCPR)</a></li>
+                    <li><a href="#spi-rx-crc寄存器spi_rxcrcr">SPI Rx CRC寄存器(SPI_RXCRCR)</a></li>
+                    <li><a href="#spi-tx-crc寄存器spi_txcrcr">SPI Tx CRC寄存器(SPI_TXCRCR)</a></li>
+                    <li><a href="#spi_i2s配置寄存器spi_i2s_cfgr">SPI_I2S配置寄存器(SPI_I2S_CFGR)</a></li>
+                    <li><a href="#spi_i2s预分频寄存器spi_i2spr">SPI_I2S预分频寄存器(SPI_I2SPR)</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
       </ul>
     </li>
   </ul>

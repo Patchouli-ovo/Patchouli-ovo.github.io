@@ -11,23 +11,23 @@ https://github.com/alex-shpak/hugo-book
 <meta name="description" content="STM32F103C8T6 Hal库配置# Hal图形化配置# 1.System内核配置# 下载器用 ST-Link：选 Serial Wire 2.RCC 系统时钟配置# 开启LSE,HSE外部时钟 时钟树配置 3.GPIO配置# 配置对应输入输出模式和开启引脚，标签和具体功能 4.USART配置# Hal常用函数# GPIO &amp; EXTI# HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);	//写高低电平 HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_15);	//电平翻转 HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);	//读取电平，有返回值 //中断回调函数 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);	__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_1); __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_1);USART# HAL_UART_Transmit(); 串口发送数据，使用超时管理机制 HAL_UART_Receive(); 串口接收数据，使用超时管理机制 HAL_UART_Transmit_IT(); 串口中断模式发送 HAL_UART_Receive_IT(); 串口中断模式接收 HAL_UART_Transmit_DMA(); 串口DMA模式发送 HAL_UART_Transmit_DMA(); 串口DMA模式接收 //重定向 c 库函数 printf 到串口 USARTx，重定向后可使用 printf 函数 int fputc(int ch, FILE *f) { HAL_UART_Transmit(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } //重定向 c 库函数 scanf 到串口 USARTx，重写向后可使用 scanf、getchar 等函数 int fgetc(FILE *f) { int ch; /* 等待串口输入数据 */ while (__HAL_UART_GET_FLAG(&amp;UartHandle, UART_FLAG_RXNE) == RESET); HAL_UART_Receive(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } HAL_UART_GetState(&amp;huart1); //中断回调函数 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart); //发送完成回调函数 void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart); //发送完成过半 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart); //接收完成回调函数 void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart); //接收完成过半 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart); //错误处理回调函数 __HAL_UART_ENABLE_IT(&amp;huart1, UART_IT_IDLE);	//使能中断 __HAL_UART_GET_FLAG(&amp;huart1,UART_FLAG_IDLE);	//过去中断标志位	__HAL_UART_CLEAR_FLAG(&amp;huart1, UART_FLAG_RXNE); //中断标志位清零 /*中断标志位 接收缓冲区非空标志位 (USART_FLAG_RXNE) 发送缓冲区空标志位 (USART_FLAG_TXE) 发送完毕标志位 (USART_FLAG_TC) 奇偶校验错误标志位 (USART_FLAG_PE) 帧错误标志位 (USART_FLAG_FE) 噪声错误标志位 (USART_FLAG_NE) 串口空闲标志位 (USART_FLAG_IDLE) LIN 帧标志位 (USART_FLAG_LBD)*/ ">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
-<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://Patchouli-ovo.github.io/docs/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://Patchouli-ovo.github.io/docs/%E7%A1%AC%E4%BB%B6%E4%B8%8E%E5%BA%95%E5%B1%82/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/">
 	<meta property="og:site_name" content="Patchouli Knowledge的知识技术手册">
-	<meta property="og:title" content="STM32F103">
+	<meta property="og:title" content="STM32F103参考手册">
 	<meta property="og:description" content="STM32F103C8T6 Hal库配置# Hal图形化配置# 1.System内核配置# 下载器用 ST-Link：选 Serial Wire 2.RCC 系统时钟配置# 开启LSE,HSE外部时钟 时钟树配置 3.GPIO配置# 配置对应输入输出模式和开启引脚，标签和具体功能 4.USART配置# Hal常用函数# GPIO &amp; EXTI# HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);	//写高低电平 HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_15);	//电平翻转 HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);	//读取电平，有返回值 //中断回调函数 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);	__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_1); __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_1);USART# HAL_UART_Transmit(); 串口发送数据，使用超时管理机制 HAL_UART_Receive(); 串口接收数据，使用超时管理机制 HAL_UART_Transmit_IT(); 串口中断模式发送 HAL_UART_Receive_IT(); 串口中断模式接收 HAL_UART_Transmit_DMA(); 串口DMA模式发送 HAL_UART_Transmit_DMA(); 串口DMA模式接收 //重定向 c 库函数 printf 到串口 USARTx，重定向后可使用 printf 函数 int fputc(int ch, FILE *f) { HAL_UART_Transmit(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } //重定向 c 库函数 scanf 到串口 USARTx，重写向后可使用 scanf、getchar 等函数 int fgetc(FILE *f) { int ch; /* 等待串口输入数据 */ while (__HAL_UART_GET_FLAG(&amp;UartHandle, UART_FLAG_RXNE) == RESET); HAL_UART_Receive(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } HAL_UART_GetState(&amp;huart1); //中断回调函数 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart); //发送完成回调函数 void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart); //发送完成过半 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart); //接收完成回调函数 void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart); //接收完成过半 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart); //错误处理回调函数 __HAL_UART_ENABLE_IT(&amp;huart1, UART_IT_IDLE);	//使能中断 __HAL_UART_GET_FLAG(&amp;huart1,UART_FLAG_IDLE);	//过去中断标志位	__HAL_UART_CLEAR_FLAG(&amp;huart1, UART_FLAG_RXNE); //中断标志位清零 /*中断标志位 接收缓冲区非空标志位 (USART_FLAG_RXNE) 发送缓冲区空标志位 (USART_FLAG_TXE) 发送完毕标志位 (USART_FLAG_TC) 奇偶校验错误标志位 (USART_FLAG_PE) 帧错误标志位 (USART_FLAG_FE) 噪声错误标志位 (USART_FLAG_NE) 串口空闲标志位 (USART_FLAG_IDLE) LIN 帧标志位 (USART_FLAG_LBD)*/">
 	<meta property="og:locale" content="en">
 	<meta property="og:type" content="article">
 		<meta property="article:section" content="docs">
 
 
-	<meta itemprop="name" content="STM32F103">
+	<meta itemprop="name" content="STM32F103参考手册">
 	<meta itemprop="description" content="STM32F103C8T6 Hal库配置# Hal图形化配置# 1.System内核配置# 下载器用 ST-Link：选 Serial Wire 2.RCC 系统时钟配置# 开启LSE,HSE外部时钟 时钟树配置 3.GPIO配置# 配置对应输入输出模式和开启引脚，标签和具体功能 4.USART配置# Hal常用函数# GPIO &amp; EXTI# HAL_GPIO_WritePin(GPIOE,GPIO_PIN_15,GPIO_PIN_RESET);	//写高低电平 HAL_GPIO_TogglePin(GPIOE, GPIO_PIN_15);	//电平翻转 HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_4);	//读取电平，有返回值 //中断回调函数 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin);	__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_1); __HAL_GPIO_EXTI_CLEAR_IT(GPIO_PIN_1);USART# HAL_UART_Transmit(); 串口发送数据，使用超时管理机制 HAL_UART_Receive(); 串口接收数据，使用超时管理机制 HAL_UART_Transmit_IT(); 串口中断模式发送 HAL_UART_Receive_IT(); 串口中断模式接收 HAL_UART_Transmit_DMA(); 串口DMA模式发送 HAL_UART_Transmit_DMA(); 串口DMA模式接收 //重定向 c 库函数 printf 到串口 USARTx，重定向后可使用 printf 函数 int fputc(int ch, FILE *f) { HAL_UART_Transmit(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } //重定向 c 库函数 scanf 到串口 USARTx，重写向后可使用 scanf、getchar 等函数 int fgetc(FILE *f) { int ch; /* 等待串口输入数据 */ while (__HAL_UART_GET_FLAG(&amp;UartHandle, UART_FLAG_RXNE) == RESET); HAL_UART_Receive(&amp;UartHandle, (uint8_t *)&amp;ch, 1, 0xFFFF); return (ch); } HAL_UART_GetState(&amp;huart1); //中断回调函数 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart); //发送完成回调函数 void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart); //发送完成过半 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart); //接收完成回调函数 void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart); //接收完成过半 void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart); //错误处理回调函数 __HAL_UART_ENABLE_IT(&amp;huart1, UART_IT_IDLE);	//使能中断 __HAL_UART_GET_FLAG(&amp;huart1,UART_FLAG_IDLE);	//过去中断标志位	__HAL_UART_CLEAR_FLAG(&amp;huart1, UART_FLAG_RXNE); //中断标志位清零 /*中断标志位 接收缓冲区非空标志位 (USART_FLAG_RXNE) 发送缓冲区空标志位 (USART_FLAG_TXE) 发送完毕标志位 (USART_FLAG_TC) 奇偶校验错误标志位 (USART_FLAG_PE) 帧错误标志位 (USART_FLAG_FE) 噪声错误标志位 (USART_FLAG_NE) 串口空闲标志位 (USART_FLAG_IDLE) LIN 帧标志位 (USART_FLAG_LBD)*/">
 	<meta itemprop="wordCount" content="1639">
 
-<title>STM32F103 • Patchouli Knowledge的知识技术手册</title>
+<title>STM32F103参考手册 • Patchouli Knowledge的知识技术手册</title>
 <link rel="icon" href="/favicon.png" >
 <link rel="manifest" href="/manifest.json">
-<link rel="canonical" href="https://Patchouli-ovo.github.io/docs/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/">
+<link rel="canonical" href="https://Patchouli-ovo.github.io/docs/%E7%A1%AC%E4%BB%B6%E4%B8%8E%E5%BA%95%E5%B1%82/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/">
 <link rel="stylesheet" href="/book.min.b40f9323c2bd696e72b5634db2fe9e4547a911d3de99a6af1fd8fd0348bda410.css" integrity="sha256-tA&#43;TI8K9aW5ytWNNsv6eRUepEdPemaavH9j9A0i9pBA=" crossorigin="anonymous">
 
 
@@ -111,8 +111,22 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/docs/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/" class="active">
-      STM32F103</a>
+    <a>
+      硬件与底层</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E7%A1%AC%E4%BB%B6%E4%B8%8E%E5%BA%95%E5%B1%82/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/" class="active">
+      STM32F103参考手册</a>
   
 
         </li>
@@ -125,8 +139,74 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/docs/%E7%AB%A0%E8%8A%82%E4%BA%8C/" class="">
-      章节二</a>
+    <a href="/docs/%E7%A1%AC%E4%BB%B6%E4%B8%8E%E5%BA%95%E5%B1%82/arm%E6%9E%B6%E6%9E%84%E4%BD%93%E7%B3%BB/" class="">
+      ARM架构体系</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      操作系统与系统编程</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E4%B8%8E%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/freertos%E6%BA%90%E7%A0%81%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="">
+      FreeRTOS源码学习笔记</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      编程语言</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/c%E8%AF%AD%E8%A8%80%E5%9F%BA%E7%A1%80/" class="">
+      C语言基础</a>
   
 
         </li>
@@ -139,8 +219,41 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/docs/%E7%AB%A0%E8%8A%82%E4%B8%89/" class="">
-      章节三</a>
+    <a href="/docs/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/c&#43;&#43;%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" class="">
+      C&#43;&#43;与数据结构</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      开发工具与工程化</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%8C%96/git%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7/" class="">
+      Git管理工具</a>
   
 
         </li>
@@ -153,9 +266,14 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/docs/%E7%AB%A0%E8%8A%82%E5%9B%9B/" class="">
-      章节四</a>
+    <a href="/docs/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E5%B7%A5%E7%A8%8B%E5%8C%96/cmake%E4%B8%8Emakefile/" class="">
+      CMake与Makefile</a>
   
+
+        </li>
+      
+    
+  </ul>
 
         </li>
       
@@ -167,9 +285,61 @@ https://github.com/alex-shpak/hugo-book
   
 
   
-    <a href="/docs/%E7%AB%A0%E8%8A%82%E4%BA%94/" class="">
-      章节五</a>
+    <a>
+      计算机基础</a>
   
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%9F%BA%E7%A1%80/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" class="">
+      计算机网络</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a>
+      八股文与刷题</a>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/docs/%E5%85%AB%E8%82%A1%E6%96%87%E4%B8%8E%E5%88%B7%E9%A2%98/leetcode%E5%88%B7%E9%A2%98%E8%AE%B0%E5%BD%95/" class="">
+      Leetcode刷题记录</a>
+  
+
+        </li>
+      
+    
+  </ul>
 
         </li>
       
@@ -209,7 +379,7 @@ https://github.com/alex-shpak/hugo-book
     <img src="/icons/menu.svg" class="book-icon" alt="Menu" />
   </label>
 
-  <h3>STM32F103</h3>
+  <h3>STM32F103参考手册</h3>
 
   <label for="toc-control">
     
@@ -1825,8 +1995,8 @@ ARR自动重装值设65535，避免溢出</p>
     </span>
     <span>
     
-      <a href="/docs/%E7%AB%A0%E8%8A%82%E4%BA%8C/" class="flex align-center">
-        <span>章节二</span>
+      <a href="/docs/%E7%A1%AC%E4%BB%B6%E4%B8%8E%E5%BA%95%E5%B1%82/arm%E6%9E%B6%E6%9E%84%E4%BD%93%E7%B3%BB/" class="flex align-center">
+        <span>ARM架构体系</span>
         <img src="/icons/forward.svg" class="book-icon" alt="Forward" />
       </a>
     

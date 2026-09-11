@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-	<meta name="generator" content="Hugo 0.165.0">
+	<meta name="generator" content="Hugo 0.166.0">
   <!--
 Made with Book Theme
 https://github.com/alex-shpak/hugo-book
@@ -9,32 +9,45 @@ https://github.com/alex-shpak/hugo-book
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Patchouli Knowledge的知识技术手册# 硬件与外设# STM32F1xx参考手册 CortexM3内核知识 硬件W25Q64
-嵌入式系统# Freertos源码学习笔记
+<meta name="description" content="Patchouli Knowledge的知识技术手册# 一个记录从底层硬件到应用开发的全栈知识库# 硬件与底层# STM32F1xx参考手册
+ARM架构体系
+操作系统与系统编程# FreeRTOS源码学习笔记
 编程语言# C语言基础
-开发工具# git使用方法
-跳转">
+C&#43;&#43;与数据结构
+开发工具与工程化# Git管理工具
+CMake与Makefile
+计算机基础# 计算机网络
+八股文与刷题# LeetCode刷题记录
+">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#2e3440">
 <meta name="color-scheme" content="light dark"><meta property="og:url" content="https://Patchouli-ovo.github.io/">
 	<meta property="og:site_name" content="Patchouli Knowledge的知识技术手册">
 	<meta property="og:title" content="Patchouli Knowledge的知识技术手册">
-	<meta property="og:description" content="Patchouli Knowledge的知识技术手册# 硬件与外设# STM32F1xx参考手册 CortexM3内核知识 硬件W25Q64
-嵌入式系统# Freertos源码学习笔记
+	<meta property="og:description" content="Patchouli Knowledge的知识技术手册# 一个记录从底层硬件到应用开发的全栈知识库# 硬件与底层# STM32F1xx参考手册
+ARM架构体系
+操作系统与系统编程# FreeRTOS源码学习笔记
 编程语言# C语言基础
-开发工具# git使用方法
-跳转">
+C&#43;&#43;与数据结构
+开发工具与工程化# Git管理工具
+CMake与Makefile
+计算机基础# 计算机网络
+八股文与刷题# LeetCode刷题记录">
 	<meta property="og:locale" content="en">
 	<meta property="og:type" content="website">
 
 
 	<meta itemprop="name" content="Patchouli Knowledge的知识技术手册">
-	<meta itemprop="description" content="Patchouli Knowledge的知识技术手册# 硬件与外设# STM32F1xx参考手册 CortexM3内核知识 硬件W25Q64
-嵌入式系统# Freertos源码学习笔记
+	<meta itemprop="description" content="Patchouli Knowledge的知识技术手册# 一个记录从底层硬件到应用开发的全栈知识库# 硬件与底层# STM32F1xx参考手册
+ARM架构体系
+操作系统与系统编程# FreeRTOS源码学习笔记
 编程语言# C语言基础
-开发工具# git使用方法
-跳转">
-	<meta itemprop="wordCount" content="13">
+C&#43;&#43;与数据结构
+开发工具与工程化# Git管理工具
+CMake与Makefile
+计算机基础# 计算机网络
+八股文与刷题# LeetCode刷题记录">
+	<meta itemprop="wordCount" content="18">
 
 <title>Patchouli Knowledge的知识技术手册 • Patchouli Knowledge的知识技术手册</title>
 <link rel="icon" href="/favicon.png" >
@@ -112,18 +125,41 @@ https://github.com/alex-shpak/hugo-book
       
       
   <article class="markdown book-article"><h1 id="patchouli-knowledge的知识技术手册">Patchouli Knowledge的知识技术手册<a class="anchor" href="#patchouli-knowledge%e7%9a%84%e7%9f%a5%e8%af%86%e6%8a%80%e6%9c%af%e6%89%8b%e5%86%8c">#</a></h1>
-<h2 id="硬件与外设">硬件与外设<a class="anchor" href="#%e7%a1%ac%e4%bb%b6%e4%b8%8e%e5%a4%96%e8%ae%be">#</a></h2>
-<p>STM32F1xx参考手册
-CortexM3内核知识
-硬件W25Q64</p>
-<h2 id="嵌入式系统">嵌入式系统<a class="anchor" href="#%e5%b5%8c%e5%85%a5%e5%bc%8f%e7%b3%bb%e7%bb%9f">#</a></h2>
-<p>Freertos源码学习笔记</p>
-<h2 id="编程语言">编程语言<a class="anchor" href="#%e7%bc%96%e7%a8%8b%e8%af%ad%e8%a8%80">#</a></h2>
-<p>C语言基础</p>
-<h2 id="开发工具">开发工具<a class="anchor" href="#%e5%bc%80%e5%8f%91%e5%b7%a5%e5%85%b7">#</a></h2>
-<p>git使用方法</p>
-<a class="book-btn" href="/docs/stm32f103%E9%85%8D%E7%BD%AE%E5%A4%A7%E5%85%A8/" >跳转</a>
-</article>
+<h2 id="一个记录从底层硬件到应用开发的全栈知识库">一个记录从底层硬件到应用开发的全栈知识库<a class="anchor" href="#%e4%b8%80%e4%b8%aa%e8%ae%b0%e5%bd%95%e4%bb%8e%e5%ba%95%e5%b1%82%e7%a1%ac%e4%bb%b6%e5%88%b0%e5%ba%94%e7%94%a8%e5%bc%80%e5%8f%91%e7%9a%84%e5%85%a8%e6%a0%88%e7%9f%a5%e8%af%86%e5%ba%93">#</a></h2>
+<div class="book-columns" id="book-columns-1" >
+<ul>
+<li>
+<h3 id="硬件与底层">硬件与底层<a class="anchor" href="#%e7%a1%ac%e4%bb%b6%e4%b8%8e%e5%ba%95%e5%b1%82">#</a></h3>
+<p><a href="./docs/%e7%a1%ac%e4%bb%b6%e4%b8%8e%e5%ba%95%e5%b1%82/stm32f103%e9%85%8d%e7%bd%ae%e5%a4%a7%e5%85%a8">STM32F1xx参考手册</a><br>
+<a href="./docs/%e7%a1%ac%e4%bb%b6%e4%b8%8e%e5%ba%95%e5%b1%82/ARM%e6%9e%b6%e6%9e%84%e4%bd%93%e7%b3%bb">ARM架构体系</a></p>
+</li>
+<li>
+<h3 id="操作系统与系统编程">操作系统与系统编程<a class="anchor" href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e4%b8%8e%e7%b3%bb%e7%bb%9f%e7%bc%96%e7%a8%8b">#</a></h3>
+<p><a href="./docs/%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e4%b8%8e%e7%b3%bb%e7%bb%9f%e7%bc%96%e7%a8%8b/FreeRTOS%e6%ba%90%e7%a0%81%e5%ad%a6%e4%b9%a0%e7%ac%94%e8%ae%b0">FreeRTOS源码学习笔记</a></p>
+</li>
+<li>
+<h3 id="编程语言">编程语言<a class="anchor" href="#%e7%bc%96%e7%a8%8b%e8%af%ad%e8%a8%80">#</a></h3>
+<p><a href="./docs/%e7%bc%96%e7%a8%8b%e8%af%ad%e8%a8%80/C%e8%af%ad%e8%a8%80%e5%9f%ba%e7%a1%80">C语言基础</a><br>
+<a href="./docs/%e7%bc%96%e7%a8%8b%e8%af%ad%e8%a8%80/C&#43;&#43;%e4%b8%8e%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84">C++与数据结构</a></p>
+</li>
+</ul>
+<p><br><br><br><br></p>
+<ul>
+<li>
+<h3 id="开发工具与工程化">开发工具与工程化<a class="anchor" href="#%e5%bc%80%e5%8f%91%e5%b7%a5%e5%85%b7%e4%b8%8e%e5%b7%a5%e7%a8%8b%e5%8c%96">#</a></h3>
+<p><a href="./docs/%e5%bc%80%e5%8f%91%e5%b7%a5%e5%85%b7%e4%b8%8e%e5%b7%a5%e7%a8%8b%e5%8c%96/Git%e7%ae%a1%e7%90%86%e5%b7%a5%e5%85%b7">Git管理工具</a><br>
+<a href="./docs/%e5%bc%80%e5%8f%91%e5%b7%a5%e5%85%b7%e4%b8%8e%e5%b7%a5%e7%a8%8b%e5%8c%96/CMake%e4%b8%8eMakefile">CMake与Makefile</a></p>
+</li>
+<li>
+<h3 id="计算机基础">计算机基础<a class="anchor" href="#%e8%ae%a1%e7%ae%97%e6%9c%ba%e5%9f%ba%e7%a1%80">#</a></h3>
+<p><a href="./docs/%e8%ae%a1%e7%ae%97%e6%9c%ba%e5%9f%ba%e7%a1%80/%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%bd%91%e7%bb%9c">计算机网络</a></p>
+</li>
+<li>
+<h3 id="八股文与刷题">八股文与刷题<a class="anchor" href="#%e5%85%ab%e8%82%a1%e6%96%87%e4%b8%8e%e5%88%b7%e9%a2%98">#</a></h3>
+<p><a href="./docs/%e5%85%ab%e8%82%a1%e6%96%87%e4%b8%8e%e5%88%b7%e9%a2%98/LeetCode%e5%88%b7%e9%a2%98%e8%ae%b0%e5%bd%95">LeetCode刷题记录</a></p>
+</li>
+</ul>
+</div></article>
  
       
 

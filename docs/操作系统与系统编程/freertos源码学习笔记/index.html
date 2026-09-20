@@ -41,7 +41,7 @@ PSP 是线程堆栈指针，任务执行时 PSP 指向当前任务栈栈顶。�
 上下文切换# 任务运行时用到的全部寄存器：R0-R15、xPSR、LR等，就是任务上下文。每个独立任务都有自己一套上下文，保存在任务栈(PSP)中。
 上下文切换本质：暂停当前正在执行的任务，，把它的所有寄存器存入自己的任务栈中，挑选另一个高优先级的任务，从它的栈里恢复所有寄存器。
 PSP 是线程堆栈指针，任务执行时 PSP 指向当前任务栈栈顶。触发 PendSV 进入 Handler 模式时，CPU 先借助 PSP 把 8 个寄存器压入旧任务栈，随后 CPU 切换活跃 SP 为 MSP 运行中断代码；在 PendSV 内手动保存剩余寄存器，并把最终 PSP 存入旧任务 TCB。调度选中新任务后，从新任务 TCB 读取栈地址恢复到 PSP，手动恢复 R4~R11；退出异常时硬件自动弹出剩余寄存器，完成切换。">
-	<meta itemprop="wordCount" content="1717">
+	<meta itemprop="wordCount" content="1716">
 
 <title>FreeRTOS源码学习笔记 • Patchouli Knowledge的知识技术手册</title>
 <link rel="icon" href="/favicon.png" >
@@ -675,14 +675,6 @@ PSP 是线程堆栈指针，任务执行时 PSP 指向当前任务栈栈顶。�
             <li><a href="#源码实现-7">源码实现</a>
               <ul>
                 <li><a href="#任务通知类型">任务通知类型</a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li><a href="#"><img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-168.png" alt=""> <img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-169.png" alt=""> <img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-170.png" alt=""></a>
-          <ul>
-            <li>
-              <ul>
                 <li><a href="#发送任务通知">发送任务通知</a></li>
                 <li><a href="#信号量专用任务通知">信号量专用任务通知</a></li>
                 <li><a href="#获取任务通知">获取任务通知</a></li>
@@ -1941,9 +1933,10 @@ PSP 是线程堆栈指针，任务执行时 PSP 指向当前任务栈栈顶。�
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">uint32_t</span> ulOldValue;
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">xTaskNotifyAndQuery</span>( xTaskHandle, <span style="color:#ae81ff">0x1234</span>, eSetValueWithOverwrite, <span style="color:#f92672">&amp;</span>ulOldValue );</span></span></code></pre></div><h3 id="源码实现-7">源码实现<a class="anchor" href="#%e6%ba%90%e7%a0%81%e5%ae%9e%e7%8e%b0-7">#</a></h3>
 <h4 id="任务通知类型">任务通知类型<a class="anchor" href="#%e4%bb%bb%e5%8a%a1%e9%80%9a%e7%9f%a5%e7%b1%bb%e5%9e%8b">#</a></h4>
-<h2 id=""><img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-168.png" alt="" />
+<p><img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-168.png" alt="" />
 <img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-169.png" alt="" />
-<img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-170.png" alt="" /><a class="anchor" href="#">#</a></h2>
+<img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-170.png" alt="" /></p>
+<hr>
 <h4 id="发送任务通知">发送任务通知<a class="anchor" href="#%e5%8f%91%e9%80%81%e4%bb%bb%e5%8a%a1%e9%80%9a%e7%9f%a5">#</a></h4>
 <p><img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-171.png" alt="" />
 <img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-172.png" alt="" />
@@ -2283,14 +2276,6 @@ PSP 是线程堆栈指针，任务执行时 PSP 指向当前任务栈栈顶。�
             <li><a href="#源码实现-7">源码实现</a>
               <ul>
                 <li><a href="#任务通知类型">任务通知类型</a></li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li><a href="#"><img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-168.png" alt=""> <img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-169.png" alt=""> <img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-170.png" alt=""></a>
-          <ul>
-            <li>
-              <ul>
                 <li><a href="#发送任务通知">发送任务通知</a></li>
                 <li><a href="#信号量专用任务通知">信号量专用任务通知</a></li>
                 <li><a href="#获取任务通知">获取任务通知</a></li>

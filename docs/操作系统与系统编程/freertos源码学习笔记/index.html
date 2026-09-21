@@ -41,7 +41,7 @@ PSP 是线程堆栈指针，任务执行时 PSP 指向当前任务栈栈顶。�
 上下文切换# 任务运行时用到的全部寄存器：R0-R15、xPSR、LR等，就是任务上下文。每个独立任务都有自己一套上下文，保存在任务栈(PSP)中。
 上下文切换本质：暂停当前正在执行的任务，，把它的所有寄存器存入自己的任务栈中，挑选另一个高优先级的任务，从它的栈里恢复所有寄存器。
 PSP 是线程堆栈指针，任务执行时 PSP 指向当前任务栈栈顶。触发 PendSV 进入 Handler 模式时，CPU 先借助 PSP 把 8 个寄存器压入旧任务栈，随后 CPU 切换活跃 SP 为 MSP 运行中断代码；在 PendSV 内手动保存剩余寄存器，并把最终 PSP 存入旧任务 TCB。调度选中新任务后，从新任务 TCB 读取栈地址恢复到 PSP，手动恢复 R4~R11；退出异常时硬件自动弹出剩余寄存器，完成切换。">
-	<meta itemprop="wordCount" content="1716">
+	<meta itemprop="wordCount" content="1719">
 
 <title>FreeRTOS源码学习笔记 • Patchouli Knowledge的知识技术手册</title>
 <link rel="icon" href="/favicon.png" >
@@ -1323,6 +1323,9 @@ PSP 是线程堆栈指针，任务执行时 PSP 指向当前任务栈栈顶。�
 <h4 id="启动调度器">启动调度器<a class="anchor" href="#%e5%90%af%e5%8a%a8%e8%b0%83%e5%ba%a6%e5%99%a8">#</a></h4>
 <p><strong>调度器能实现任务的切换，从就绪列表中找到优先级最高的任务执行。</strong>
 <strong>创建空闲任务，配置SysTick中断，将MSP指针位置初始化到原始栈顶的位置，此后的中断保存现场存放在MSP栈中，随后进入SVC异常，切换成线程模式把TCB栈顶指针赋给PSP，启动第一个任务</strong></p>
+<p><strong>创建任务时，先伪造现场，高地址模拟硬件压栈R0-R3、R12、PC、LR、XPSR，随后模拟软件压栈R4-R11；当要启动第一个任务时，进入SVC异常，会先把当前CPU对应寄存器压入MSP栈中，随后进入异常
+执行汇编代码，找到TCB栈顶指针，此时里面放着保存好的TCB伪造现场的寄存器。从高地址到低地址
+分别是硬件压的寄存器和软件压的寄存器。先把软件保存的寄存器弹回CPU，再手动修改LR值，使得异常返回时使用PSP栈指针，而此时的PSP指针值被修改为任务栈弹出软件保存寄存器后的位置。退出异常时，把PSP指针当前的位置（也就是栈顶）的硬件保存寄存器弹出到CPU，完成第一次任务启动。</strong></p>
 <p><img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-68.png" alt="" />
 <img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-69.png" alt="" />
 <img src="https://gcore.jsdelivr.net/gh/Patchouli-ovo/hugo-img//FreeRTOS/image-70.png" alt="" />
